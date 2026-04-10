@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Catalogo de aros SANGRIA." />
+    <title>Aros | SANGRIA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600;6..96,700&family=Inter:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-category-page="aros">
+    <header class="category-page-shell">
+      <nav class="topbar" aria-label="Principal">
+        <div class="topbar-left"><button class="menu-button" type="button" data-toggle-menu aria-expanded="false"><span></span><span></span><span></span><span class="sr-only">Abrir catalogo lateral</span></button><a class="brand" href="./index.html">SANGRIA</a></div>
+        <div class="topbar-right"><form class="search-shell" data-search-form><button class="icon-button" type="button" data-toggle-search aria-label="Abrir buscador"><span class="icon-search"></span></button><input class="search-input" type="search" name="search" placeholder="Buscar anillos, collares..." data-search-input /></form><a class="icon-button" href="./login.html" aria-label="Ir a iniciar sesion"><span class="icon-user"></span></a><button class="cart-button icon-button" type="button" data-toggle-cart aria-label="Abrir carrito"><span class="icon-bag"></span><span id="cart-count">0</span></button></div>
+      </nav>
+      <section class="subpage-hero"><article class="subpage-copy"><span class="breadcrumb">Inicio / Aros</span><h1 id="category-title">Aros</h1></article></section>
+    </header>
+    <main class="section"><div class="product-grid" id="category-grid" aria-live="polite"></div></main>
+    <aside class="menu-drawer" id="menu-drawer" aria-hidden="true"><div class="menu-head"><a class="brand brand-side" href="./index.html">SANGRIA</a><button class="menu-close" type="button" data-toggle-menu aria-label="Cerrar menu">×</button></div><div class="menu-links"><a href="./anillos.html">anillos</a><a href="./pulseras.html">pulseras</a><a href="./aros.html">aros</a><a href="./collares.html">collares</a><a href="./index.html#catalogo">inicio</a></div></aside>
+    <aside class="cart-drawer" id="cart-drawer" aria-labelledby="cart-title" aria-hidden="true"><div class="cart-header"><div><p class="section-tag">Tu seleccion</p><h2 id="cart-title">Carrito</h2></div><button class="ghost-button compact" type="button" data-toggle-cart>Cerrar</button></div><div class="cart-items" id="cart-items"></div><div class="cart-footer"><div class="cart-total"><span>Total</span><strong id="cart-total">$0</strong></div><button class="primary-button full-width" type="button">Finalizar compra</button></div></aside>
+    <div class="overlay" id="overlay" hidden></div>
+    <footer class="site-footer shop-footer"><div class="footer-columns"><div><h2>ayuda</h2><a href="./contacto.html">contactanos</a><a href="./login.html">envios</a><a href="./login.html">cambios y devoluciones</a><a href="./login.html">guia de tallas</a></div><div><h2>legal</h2><a href="./login.html">aviso legal</a><a href="./login.html">politica de devoluciones</a><a href="./login.html">terminos del servicio</a></div><div><h2>siguenos</h2><div class="social-row"><a href="./index.html" aria-label="Instagram">ig</a><a href="./index.html" aria-label="TikTok">tk</a></div></div></div><div class="footer-bottom"><div class="currency-switch"><button type="button" data-currency="ARS">ARS $</button><button type="button" data-currency="USD">USD $</button></div><div class="payment-block" aria-label="Medios de pago"><strong>Medios de pago</strong><div class="payment-row"><img class="payment-logo-img" src="./assets/payments/mercado-pago.svg" alt="Mercado Pago" /><img class="payment-logo-img" src="./assets/payments/apple-pay.svg" alt="Apple Pay" /><img class="payment-logo-img" src="./assets/payments/visa.svg" alt="Visa" /><img class="payment-logo-img" src="./assets/payments/mastercard.svg" alt="Mastercard" /><img class="payment-logo-img" src="./assets/payments/amex.svg" alt="American Express" /><img class="payment-logo-img" src="./assets/payments/naranja.svg" alt="Naranja" /></div></div></div><p class="footer-signature">SANGRIA</p></footer>
+    <script type="module" src="./js/category.js"></script>
+  </body>
+</html>

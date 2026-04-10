@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="44" viewBox="0 0 120 44" fill="none">
+  <rect width="120" height="44" rx="10" fill="#0B78B8"/>
+  <path d="M18 22l8-8 8 8-8 8-8-8Z" fill="#fff"/>
+  <path d="M22 22l4-4 4 4-4 4-4-4Z" fill="#0B78B8"/>
+  <text x="40" y="27" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#fff">CABAL</text>
+</svg>

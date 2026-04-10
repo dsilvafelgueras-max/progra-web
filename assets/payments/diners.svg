@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="44" viewBox="0 0 120 44" fill="none">
+  <rect width="120" height="44" rx="10" fill="#fff"/>
+  <circle cx="23" cy="22" r="12" fill="none" stroke="#0B84D8" stroke-width="2.5"/>
+  <path d="M17 22h12" stroke="#0B84D8" stroke-width="2"/>
+  <path d="M23 16c3 2 3 10 0 12-3-2-3-10 0-12Z" fill="#0B84D8"/>
+  <text x="42" y="21" font-family="Georgia, serif" font-size="8" font-weight="700" fill="#111">Diners Club</text>
+  <text x="42" y="30" font-family="Georgia, serif" font-size="7" font-weight="700" fill="#111">INTERNATIONAL</text>
+</svg>

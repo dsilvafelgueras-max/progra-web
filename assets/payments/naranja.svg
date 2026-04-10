@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="44" viewBox="0 0 120 44" fill="none">
+  <rect width="120" height="44" rx="10" fill="#FFF4EC"/>
+  <path d="M26 30V14h4l8 10V14h4v16h-4l-8-10v10h-4Z" fill="#F26A21"/>
+  <text x="50" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="800" fill="#F26A21">Naranja</text>
+</svg>
