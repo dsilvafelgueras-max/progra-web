@@ -1,4 +1,5 @@
 ﻿import {
+  fetchUsdToArsRate,
   formatPrice,
   getProductsBySlug,
   getProductById,
@@ -31,6 +32,8 @@ const els = {
   searchForm: document.querySelector("[data-search-form]"),
   searchInput: document.querySelector("[data-search-input]"),
   currencyButtons: Array.from(document.querySelectorAll("[data-currency]")),
+  currencySwitch: document.querySelector(".currency-switch"),
+  topbarRight: document.querySelector(".topbar-right"),
 };
 
 const pageCopy = {
@@ -68,6 +71,12 @@ function renderCurrencyButtons() {
   els.currencyButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.currency === state.currency);
   });
+}
+
+function mountCurrencySwitch() {
+  if (!els.currencySwitch || !els.topbarRight) return;
+  els.currencySwitch.classList.add("topbar-currency");
+  els.topbarRight.appendChild(els.currencySwitch);
 }
 
 function renderPageHeader(items) {
@@ -228,6 +237,14 @@ function init() {
   renderProducts();
   renderCart();
   bindEvents();
+  fetchUsdToArsRate().then(() => {
+    renderProducts();
+    renderCart();
+  });
 }
 
 init();
+
+
+
+

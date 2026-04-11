@@ -77,7 +77,9 @@
 export const filters = ["Todas", "Anillos", "Pulseras", "Aros", "Collares"];
 export const storageKey = "sangria-cart";
 export const currencyStorageKey = "sangria-currency";
-export const usdRate = 1000;
+export const usdRateStorageKey = "sangria-usd-rate";
+const defaultUsdRate = 1400;
+let usdRate = loadUsdRate();
 
 export function loadCart() {
   try {
@@ -100,9 +102,42 @@ export function saveCurrency(currency) {
   localStorage.setItem(currencyStorageKey, currency);
 }
 
-export function formatPrice(value, currency = "ARS") {
+export function loadUsdRate() {
+  const saved = Number(localStorage.getItem(usdRateStorageKey));
+  return Number.isFinite(saved) && saved > 0 ? saved : defaultUsdRate;
+}
+
+export function saveUsdRate(rate) {
+  usdRate = rate;
+  localStorage.setItem(usdRateStorageKey, String(rate));
+}
+
+export async function fetchUsdToArsRate() {
+  try {
+    const response = await fetch(
+      "https://api.frankfurter.dev/v1/latest?base=USD&symbols=ARS"
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    const rate = Number(data?.rates?.ARS);
+
+    if (!Number.isFinite(rate) || rate <= 0) {
+      throw new Error("Invalid rate");
+    }
+
+    saveUsdRate(rate);
+    return rate;
+  } catch {
+    return usdRate;
+  }
+}
+
+export function formatPrice(value, currency = "ARS", rate = usdRate) {
   if (currency === "USD") {
-    return `USD ${Math.round(value / usdRate).toLocaleString("en-US")}`;
+    return `USD ${Math.round(value / rate).toLocaleString("en-US")}`;
   }
 
   return `ARS ${value.toLocaleString("es-AR")}`;

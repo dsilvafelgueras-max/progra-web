@@ -1,4 +1,5 @@
 ﻿import {
+  fetchUsdToArsRate,
   filters,
   formatPrice,
   getProductsByCategory,
@@ -262,8 +263,13 @@ function bindEvents() {
     if (toggleMenuTrigger) return setMenuOpen(!state.menuOpen);
     const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
     if (toggleSearchTrigger) {
+      if (document.body.classList.contains("home-page")) {
+        els.searchInput?.focus();
+        return;
+      }
       els.searchForm?.classList.toggle("is-open");
       els.searchInput?.focus();
+      return;
     }
   });
 
@@ -279,6 +285,12 @@ function init() {
   renderProducts();
   renderCart();
   bindEvents();
+  fetchUsdToArsRate().then(() => {
+    renderProducts();
+    renderCart();
+  });
 }
 
 init();
+
+

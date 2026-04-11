@@ -43,11 +43,12 @@
             <button class="icon-button" type="button" data-toggle-search aria-label="Abrir buscador">
               <span class="icon-search"></span>
             </button>
+            <span class="search-label">Buscar</span>
             <input
               class="search-input"
               type="search"
               name="search"
-              placeholder="Buscar anillos, collares..."
+              placeholder=""
               data-search-input
             />
           </form>
@@ -58,16 +59,18 @@
             <span class="icon-bag"></span>
             <span id="cart-count">0</span>
           </button>
+          <div class="currency-switch topbar-currency">
+            <button type="button" data-currency="ARS">ARS</button>
+            <button type="button" data-currency="USD">USD</button>
+          </div>
         </div>
       </nav>
 
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
+          <p class="hero-slogan">handmade jewelery</p>
           <div class="hero-actions">
             <a class="primary-button button-link" href="./anillos.html">Ver anillos</a>
-            <button class="secondary-button" type="button" data-toggle-menu>
-              Abrir menu
-            </button>
           </div>
         </div>
       </section>
@@ -146,28 +149,27 @@
         <div>
           <h2>siguenos</h2>
           <div class="social-row">
-            <a href="#top" aria-label="Instagram">ig</a>
-            <a href="#top" aria-label="TikTok">tk</a>
+            <a href="#top" aria-label="Instagram"><span class="social-icon social-instagram" aria-hidden="true"></span></a>
+            <a href="#top" aria-label="TikTok"><span class="social-icon social-tiktok" aria-hidden="true"></span></a>
           </div>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <div class="currency-switch">
-          <button type="button" data-currency="ARS">ARS $</button>
-          <button type="button" data-currency="USD">USD $</button>
-        </div>
         <div class="payment-block" aria-label="Medios de pago">
           <strong>Medios de pago</strong>
           <div class="payment-row">
-            <img class="payment-logo-img" src="./assets/payments/mercado-pago.svg" alt="Mercado Pago" />
-            <img class="payment-logo-img" src="./assets/payments/apple-pay.svg" alt="Apple Pay" />
-            <img class="payment-logo-img" src="./assets/payments/visa.svg" alt="Visa" />
+            <img class="payment-logo-img" src="./assets/payments/mercado-pago.webp" alt="Mercado Pago" />
+            <img class="payment-logo-img" src="./assets/payments/apple-pay.png" alt="Apple Pay" />
+            <img class="payment-logo-img" src="./assets/payments/visa.png" alt="Visa" />
             <img class="payment-logo-img" src="./assets/payments/mastercard.svg" alt="Mastercard" />
             <img class="payment-logo-img" src="./assets/payments/amex.svg" alt="American Express" />
-            <img class="payment-logo-img" src="./assets/payments/naranja.svg" alt="Naranja" />
+            <img class="payment-logo-img" src="./assets/payments/naranja.png" alt="Naranja" />
           </div>
         </div>
+      </div>
+      <div class="footer-regret">
+        <a class="regret-button" href="./arrepentimiento.html">Botón de arrepentimiento</a>
       </div>
       <p class="footer-signature">SANGRIA</p>
     </footer>
