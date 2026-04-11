@@ -119,3 +119,7 @@ export function getProductsByCategory(category) {
 export function getProductsBySlug(slug) {
   return products.filter((product) => product.slug === slug);
 }
+
+export function getProductById(id) {
+  return products.find((product) => product.id === id) ?? null;
+}

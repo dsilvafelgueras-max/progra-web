@@ -1,7 +1,5 @@
-﻿import {
-  filters,
+import {
   formatPrice,
-  getProductsByCategory,
   getProductById,
   loadCart,
   loadCurrency,
@@ -11,7 +9,6 @@
 } from "./data.js";
 
 const state = {
-  activeFilter: "Todas",
   cart: loadCart(),
   currency: loadCurrency(),
   cartOpen: false,
@@ -19,8 +16,7 @@ const state = {
 };
 
 const els = {
-  filters: document.querySelector("#filters"),
-  productGrid: document.querySelector("#product-grid"),
+  root: document.querySelector("#product-page-root"),
   cartCount: document.querySelector("#cart-count"),
   cartDrawer: document.querySelector("#cart-drawer"),
   cartItems: document.querySelector("#cart-items"),
@@ -47,91 +43,83 @@ function normalize(value) {
 function handleSearchSubmit(rawValue) {
   const value = normalize(rawValue.trim());
   if (!value) return;
-
   const match = searchRoutes.find((route) =>
     route.keywords.some((keyword) => value.includes(keyword))
   );
-
   window.location.href = match?.href ?? "./anillos.html";
 }
 
-function goToProduct(productId) {
-  const product = getProductById(productId);
-  if (!product) return;
-  window.location.href = `./producto.html?id=${product.id}`;
+function getCurrentProduct() {
+  const params = new URLSearchParams(window.location.search);
+  return getProductById(params.get("id"));
+}
+
+function getDetailMeta(product) {
+  const material = product.id.includes("dorado") ? "Baño dorado" : "Plata";
+  const availability = "Disponible";
+  const delivery = "Envio a todo el pais";
+  return { material, availability, delivery };
+}
+
+function renderProduct() {
+  if (!els.root) return;
+  const product = getCurrentProduct();
+
+  if (!product) {
+    els.root.innerHTML = `
+      <section class="product-page-card">
+        <p class="breadcrumb">Producto</p>
+        <h1>Producto no encontrado</h1>
+        <a class="primary-button button-link" href="./index.html">Volver a la tienda</a>
+      </section>
+    `;
+    return;
+  }
+
+  const meta = getDetailMeta(product);
+  document.title = `${product.name} | SANGRIA`;
+
+  els.root.innerHTML = `
+    <section class="product-page-card fade-in">
+      <div class="product-page-media">
+        <div class="product-page-image-shell">
+          <img src="${product.image}" alt="${product.name}" class="${product.imageClass ?? ""}" id="detail-main-image" />
+        </div>
+        ${
+          product.hoverImage
+            ? `<button class="product-thumb is-active" type="button" data-image-src="${product.image}" data-image-alt="${product.name}">
+                <img src="${product.image}" alt="${product.name}" class="${product.imageClass ?? ""}" />
+              </button>
+              <button class="product-thumb" type="button" data-image-src="${product.hoverImage}" data-image-alt="${product.name} vista alternativa">
+                <img src="${product.hoverImage}" alt="${product.name} vista alternativa" class="${product.hoverImageClass ?? ""}" />
+              </button>`
+            : ""
+        }
+      </div>
+      <div class="product-page-copy">
+        <p class="breadcrumb">Inicio / ${product.category} / ${product.name}</p>
+        <p class="product-category">${product.category}</p>
+        <h1>${product.name}</h1>
+        <p class="product-page-price">${formatPrice(product.price, state.currency)}</p>
+        <p class="product-page-description">${product.description}</p>
+        <div class="product-page-meta">
+          <div><span>Material</span><strong>${meta.material}</strong></div>
+          <div><span>Estado</span><strong>${meta.availability}</strong></div>
+          <div><span>Envio</span><strong>${meta.delivery}</strong></div>
+        </div>
+        <div class="product-page-actions">
+          <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar al carrito</button>
+          <a class="secondary-button button-link" href="./${product.slug}.html">Ver mas ${product.category.toLowerCase()}</a>
+        </div>
+      </div>
+    </section>
+  `;
 }
 
 function renderCurrencyButtons() {
   els.currencyButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.currency === state.currency);
   });
-}
-
-function renderFilters() {
-  if (!els.filters) return;
-
-  els.filters.innerHTML = filters
-    .map(
-      (filter) => `
-        <button
-          class="filter-button ${filter === state.activeFilter ? "active" : ""}"
-          type="button"
-          data-filter="${filter}"
-          aria-pressed="${filter === state.activeFilter}"
-        >
-          ${filter}
-        </button>
-      `
-    )
-    .join("");
-}
-
-function renderProducts() {
-  if (!els.productGrid) return;
-
-  const visible = getProductsByCategory(state.activeFilter);
-
-  if (visible.length === 0) {
-    els.productGrid.innerHTML = `
-      <article class="product-card fade-in">
-        <div class="product-body">
-          <p class="product-category">Proximamente</p>
-          <h3>Esta categoria todavia no tiene productos cargados</h3>
-          <p>Cuando agreguemos nuevas piezas, van a aparecer aca.</p>
-        </div>
-      </article>
-    `;
-    return;
-  }
-
-  els.productGrid.innerHTML = visible
-    .map(
-      (product, index) => `
-        <article class="product-card fade-in" style="animation-delay: ${index * 40}ms">
-          <button class="product-image product-image-button" type="button" data-view-product="${product.id}" aria-label="Ver ${product.name}">
-            ${
-              product.hoverImage
-                ? `
-            <div class="product-image-stack">
-              <img src="${product.image}" alt="${product.name}" class="product-image-primary ${product.imageClass ?? ""}" />
-              <img src="${product.hoverImage}" alt="${product.name} vista alternativa" class="product-image-hover ${product.hoverImageClass ?? ""}" />
-            </div>
-            `
-                : `<img src="${product.image}" alt="${product.name}" class="${product.imageClass ?? ""}" />`
-            }
-          </button>
-          <div class="product-body">
-            <p class="product-category">${product.category}</p>
-            <h3><button class="product-link" type="button" data-view-product="${product.id}">${product.name}</button></h3>
-            <div class="product-footer">
-              <span class="price">${formatPrice(product.price, state.currency)}</span>
-              <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar</button>
-            </div>
-          </div>
-        </article>
-      `
-    )
-    .join("");
 }
 
 function getCartDetailed() {
@@ -224,7 +212,7 @@ function bindEvents() {
       state.currency = button.dataset.currency;
       saveCurrency(state.currency);
       renderCurrencyButtons();
-      renderProducts();
+      renderProduct();
       renderCart();
     });
   });
@@ -234,26 +222,9 @@ function bindEvents() {
     handleSearchSubmit(els.searchInput?.value ?? "");
   });
 
-  els.filters?.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-filter]");
-    if (!button) return;
-    state.activeFilter = button.dataset.filter;
-    renderFilters();
-    renderProducts();
-  });
-
   document.addEventListener("click", (event) => {
-    const scrollTrigger = event.target.closest("[data-scroll]");
-    if (scrollTrigger) {
-      const target = document.querySelector(scrollTrigger.dataset.scroll);
-      setMenuOpen(false);
-      target?.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
     const addTrigger = event.target.closest("[data-add-cart]");
     if (addTrigger) return addToCart(addTrigger.dataset.addCart);
-    const viewTrigger = event.target.closest("[data-view-product]");
-    if (viewTrigger) return goToProduct(viewTrigger.dataset.viewProduct);
     const removeTrigger = event.target.closest("[data-remove-cart]");
     if (removeTrigger) return removeFromCart(removeTrigger.dataset.removeCart);
     const toggleCartTrigger = event.target.closest("[data-toggle-cart]");
@@ -264,6 +235,19 @@ function bindEvents() {
     if (toggleSearchTrigger) {
       els.searchForm?.classList.toggle("is-open");
       els.searchInput?.focus();
+      return;
+    }
+    const thumbTrigger = event.target.closest("[data-image-src]");
+    if (thumbTrigger) {
+      const mainImage = document.querySelector("#detail-main-image");
+      const thumbButtons = Array.from(document.querySelectorAll(".product-thumb"));
+      if (mainImage) {
+        mainImage.src = thumbTrigger.dataset.imageSrc;
+        mainImage.alt = thumbTrigger.dataset.imageAlt;
+      }
+      thumbButtons.forEach((button) =>
+        button.classList.toggle("is-active", button === thumbTrigger)
+      );
     }
   });
 
@@ -275,8 +259,7 @@ function bindEvents() {
 
 function init() {
   renderCurrencyButtons();
-  renderFilters();
-  renderProducts();
+  renderProduct();
   renderCart();
   bindEvents();
 }

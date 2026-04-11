@@ -1,6 +1,7 @@
 ﻿import {
   formatPrice,
   getProductsBySlug,
+  getProductById,
   loadCart,
   loadCurrency,
   products,
@@ -57,6 +58,12 @@ function handleSearchSubmit(rawValue) {
   window.location.href = match?.href ?? "./anillos.html";
 }
 
+function goToProduct(productId) {
+  const product = getProductById(productId);
+  if (!product) return;
+  window.location.href = `./producto.html?id=${product.id}`;
+}
+
 function renderCurrencyButtons() {
   els.currencyButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.currency === state.currency);
@@ -83,7 +90,7 @@ function renderProducts() {
     .map(
       (product, index) => `
         <article class="product-card fade-in" style="animation-delay: ${index * 40}ms">
-          <div class="product-image">${
+          <button class="product-image product-image-button" type="button" data-view-product="${product.id}" aria-label="Ver ${product.name}">${
             product.hoverImage
               ? `
             <div class="product-image-stack">
@@ -92,10 +99,10 @@ function renderProducts() {
             </div>
           `
               : `<img src="${product.image}" alt="${product.name}" class="${product.imageClass ?? ""}" />`
-          }</div>
+          }</button>
           <div class="product-body">
             <p class="product-category">${product.category}</p>
-            <h3>${product.name}</h3>
+            <h3><button class="product-link" type="button" data-view-product="${product.id}">${product.name}</button></h3>
             <div class="product-footer">
               <span class="price">${formatPrice(product.price, state.currency)}</span>
               <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar</button>
@@ -195,6 +202,8 @@ function bindEvents() {
   document.addEventListener("click", (event) => {
     const addTrigger = event.target.closest("[data-add-cart]");
     if (addTrigger) return addToCart(addTrigger.dataset.addCart);
+    const viewTrigger = event.target.closest("[data-view-product]");
+    if (viewTrigger) return goToProduct(viewTrigger.dataset.viewProduct);
     const removeTrigger = event.target.closest("[data-remove-cart]");
     if (removeTrigger) return removeFromCart(removeTrigger.dataset.removeCart);
     const toggleCartTrigger = event.target.closest("[data-toggle-cart]");
