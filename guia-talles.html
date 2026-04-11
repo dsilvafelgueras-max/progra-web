@@ -3,11 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Formulario de arrepentimiento de compra de SANGRIA."
-    />
-    <title>Arrepentimiento | SANGRIA</title>
+    <meta name="description" content="Guia de talles SANGRIA para anillos." />
+    <title>Guia de Talles | SANGRIA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,7 +13,7 @@
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body class="contact-page">
+  <body class="size-guide-page">
     <header class="category-page-shell">
       <nav class="topbar" aria-label="Principal">
         <div class="topbar-left">
@@ -30,41 +27,26 @@
       </nav>
     </header>
 
-    <main class="contact-shell">
-      <section class="contact-page-card regret-page-card">
-        <div class="contact-copy regret-copy">
-          <p class="section-tag">Arrepentimiento</p>
-          <h1>Cancelar compra</h1>
-          <p>
-            Si te arrepentiste de una compra, podes pedir la cancelacion enviando
-            este formulario <strong>con tu numero de orden</strong>. Tenes como
-            maximo hasta 10 dias corridos desde que recibiste el producto.
-          </p>
+    <main class="size-guide-shell">
+      <section class="size-guide-card">
+        <div class="contact-copy">
+          <p class="section-tag">Guia de talles</p>
+          <h1>Como saber la medida de un anillo</h1>
+          <p>Usa esta referencia para medir circunferencia, diametro y elegir tu talle.</p>
         </div>
 
-        <form class="contact-form contact-form-page regret-form">
-          <label>
-            <span>Nombre</span>
-            <input type="text" placeholder="ej.: Maria Perez" />
-          </label>
-          <label>
-            <span>Email</span>
-            <input type="email" placeholder="ej.: tuemail@email.com" />
-          </label>
-          <label>
-            <span>Telefono</span>
-            <input type="tel" placeholder="ej.: 1123445567" />
-          </label>
-          <label>
-            <span>Numero de orden</span>
-            <input type="text" placeholder="ej.: SG-1024" />
-          </label>
-          <label class="full-row">
-            <span>Mensaje</span>
-            <textarea rows="7" placeholder="ej.: Tu mensaje"></textarea>
-          </label>
-          <button class="primary-button full-width" type="button">Enviar solicitud</button>
-        </form>
+        <div class="size-guide-image-wrap">
+          <img
+            class="size-guide-image"
+            src="./assets/size-guide.png"
+            alt="Guia de talles para medir anillos con tabla de talles y referencias visuales"
+          />
+        </div>
+
+        <div class="size-guide-actions">
+          <a class="secondary-button button-link" href="./contacto.html">Necesito ayuda</a>
+          <a class="primary-button button-link" href="./anillos.html">Ver anillos</a>
+        </div>
       </section>
     </main>
 

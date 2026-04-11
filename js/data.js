@@ -1,5 +1,59 @@
 ﻿export const products = [
   {
+    id: "gift-card-50000",
+    name: "Gift Card 50.000",
+    category: "Tarjetas Regalo",
+    slug: "tarjeta-regalo",
+    price: 50000,
+    priceLabel: "$50.000",
+    image: "./assets/products/gift-card-sangria.svg",
+    description: "Tarjeta regalo digital para usar online en SANGRIA.",
+    isGiftCard: true,
+  },
+  {
+    id: "gift-card-75000",
+    name: "Gift Card 75.000",
+    category: "Tarjetas Regalo",
+    slug: "tarjeta-regalo",
+    price: 75000,
+    priceLabel: "$75.000",
+    image: "./assets/products/gift-card-sangria.svg",
+    description: "Tarjeta regalo digital para usar online en SANGRIA.",
+    isGiftCard: true,
+  },
+  {
+    id: "gift-card-100000",
+    name: "Gift Card 100.000",
+    category: "Tarjetas Regalo",
+    slug: "tarjeta-regalo",
+    price: 100000,
+    priceLabel: "$100.000",
+    image: "./assets/products/gift-card-sangria.svg",
+    description: "Tarjeta regalo digital para usar online en SANGRIA.",
+    isGiftCard: true,
+  },
+  {
+    id: "gift-card-150000",
+    name: "Gift Card 150.000",
+    category: "Tarjetas Regalo",
+    slug: "tarjeta-regalo",
+    price: 150000,
+    priceLabel: "$150.000",
+    image: "./assets/products/gift-card-sangria.svg",
+    description: "Tarjeta regalo digital para usar online en SANGRIA.",
+    isGiftCard: true,
+  },
+  {
+    id: "gift-card-200000",
+    name: "Gift Card 200.000",
+    category: "Tarjetas Regalo",
+    slug: "tarjeta-regalo",
+    price: 200000,
+    priceLabel: "$200.000",
+    image: "./assets/products/gift-card-sangria.svg",
+    description: "Tarjeta regalo digital para usar online en SANGRIA.",
+    isGiftCard: true,
+  },  {
     id: "pulsera-onda",
     name: "Pulsera Onda",
     category: "Pulseras",
@@ -145,7 +199,7 @@ export function formatPrice(value, currency = "ARS", rate = usdRate) {
 
 export function getProductsByCategory(category) {
   if (category === "Todas") {
-    return products;
+    return products.filter((product) => !product.isGiftCard);
   }
 
   return products.filter((product) => product.category === category);
@@ -158,3 +212,7 @@ export function getProductsBySlug(slug) {
 export function getProductById(id) {
   return products.find((product) => product.id === id) ?? null;
 }
+
+
+
+

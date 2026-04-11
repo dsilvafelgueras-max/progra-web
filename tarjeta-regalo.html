@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Tarjetas regalo SANGRIA." />
+    <title>Tarjeta Regalo | SANGRIA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600;6..96,700&family=Inter:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="gift-card-page">
+    <header class="category-page-shell">
+      <nav class="topbar" aria-label="Principal">
+        <div class="topbar-left">
+          <button class="menu-button" type="button" data-toggle-menu aria-expanded="false">
+            <span></span><span></span><span></span>
+            <span class="sr-only">Abrir catalogo lateral</span>
+          </button>
+          <a class="brand" href="./index.html">SANGRIA</a>
+        </div>
+        <div class="topbar-right"></div>
+      </nav>
+    </header>
+
+    <main class="gift-card-shell">
+      <section class="gift-card-page-card">
+        <div class="contact-copy">
+          <p class="section-tag">Tarjeta regalo</p>
+          <h1>Regala SANGRIA</h1>
+          <p>Elige un monto y regalale una pieza para que la persona elija su favorita.</p>
+        </div>
+
+        <div class="gift-card-grid">
+          <a class="gift-card-option" href="./producto.html?id=gift-card-50000">
+            <span class="gift-card-brand">SANGRIA</span>
+            <span class="gift-card-title">GIFT CARD</span>
+            <strong>$50.000 ARS</strong>
+          </a>
+          <a class="gift-card-option" href="./producto.html?id=gift-card-75000">
+            <span class="gift-card-brand">SANGRIA</span>
+            <span class="gift-card-title">GIFT CARD</span>
+            <strong>$75.000 ARS</strong>
+          </a>
+          <a class="gift-card-option" href="./producto.html?id=gift-card-100000">
+            <span class="gift-card-brand">SANGRIA</span>
+            <span class="gift-card-title">GIFT CARD</span>
+            <strong>$100.000 ARS</strong>
+          </a>
+          <a class="gift-card-option" href="./producto.html?id=gift-card-150000">
+            <span class="gift-card-brand">SANGRIA</span>
+            <span class="gift-card-title">GIFT CARD</span>
+            <strong>$150.000 ARS</strong>
+          </a>
+          <a class="gift-card-option" href="./producto.html?id=gift-card-200000">
+            <span class="gift-card-brand">SANGRIA</span>
+            <span class="gift-card-title">GIFT CARD</span>
+            <strong>$200.000 ARS</strong>
+          </a>
+        </div>
+
+        <div class="size-guide-actions">
+          <a class="secondary-button button-link" href="./contacto.html">Necesito ayuda</a>
+          <a class="primary-button button-link" href="./anillos.html">Ver anillos</a>
+        </div>
+      </section>
+    </main>
+
+    <aside class="menu-drawer" id="menu-drawer" aria-hidden="true">
+      <div class="menu-head">
+        <a class="brand brand-side" href="./index.html">SANGRIA</a>
+        <button class="menu-close" type="button" data-toggle-menu aria-label="Cerrar menu">×</button>
+      </div>
+      <div class="menu-links">
+        <a href="./anillos.html">anillos</a>
+        <a href="./pulseras.html">pulseras</a>
+        <a href="./aros.html">aros</a>
+        <a href="./collares.html">collares</a>
+        <a href="./index.html#catalogo">productos</a>
+        <a href="./guia-talles.html">guia de talles</a>
+        <a href="./tarjeta-regalo.html">tarjeta regalo</a>
+        <a href="./contacto.html">conocenos</a>
+      </div>
+    </aside>
+
+    <div class="overlay" id="overlay" hidden></div>
+    <script type="module" src="./js/static-menu.js"></script>
+  </body>
+</html>

@@ -70,7 +70,15 @@ function getCurrentProduct() {
 }
 
 function getDetailMeta(product) {
-  const material = product.id.includes("dorado") ? "BaÃ±o dorado" : "Plata";
+  if (product.isGiftCard) {
+    return {
+      material: "Digital",
+      availability: "Disponible",
+      delivery: "Online",
+    };
+  }
+
+  const material = product.id.includes("dorado") ? "Bano dorado" : "Plata";
   const availability = "Disponible";
   const delivery = "Envio a todo el pais";
   return { material, availability, delivery };
@@ -130,6 +138,23 @@ function getPaymentLogoMarkup(name) {
   };
 
   return `<img class="payment-option-logo" src="./assets/payments/${name}.${extensions[name]}" alt="${labels[name]}" />`;
+}
+
+function getGiftCardInfoMarkup(product) {
+  if (!product?.isGiftCard) return "";
+
+  return `
+    <div class="gift-card-info-box">
+      <p class="gift-card-info-kicker">GIFT CARD ONLINE</p>
+      <h2>Como usarla?</h2>
+      <ul class="gift-card-info-list">
+        <li>Visita nuestra tienda online.</li>
+        <li>Elige tus piezas favoritas.</li>
+        <li>Ingresa el codigo al finalizar tu compra.</li>
+        <li>Si tienes alguna duda, no dudes en escribirnos.</li>
+      </ul>
+    </div>
+  `;
 }
 
 function renderProduct() {
@@ -193,6 +218,7 @@ function renderProduct() {
             <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar al carrito</button>
           </div>
         </div>
+        ${getGiftCardInfoMarkup(product)}
         <div class="product-page-actions">
           <a class="secondary-button button-link" href="./${product.slug}.html">Ver mas ${product.category.toLowerCase()}</a>
         </div>
@@ -449,5 +475,8 @@ function init() {
 }
 
 init();
+
+
+
 
 

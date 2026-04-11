@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -17,9 +17,21 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body class="contact-page">
+    <header class="category-page-shell">
+      <nav class="topbar" aria-label="Principal">
+        <div class="topbar-left">
+          <button class="menu-button" type="button" data-toggle-menu aria-expanded="false">
+            <span></span><span></span><span></span>
+            <span class="sr-only">Abrir catalogo lateral</span>
+          </button>
+          <a class="brand" href="./index.html">SANGRIA</a>
+        </div>
+        <div class="topbar-right"></div>
+      </nav>
+    </header>
+
     <main class="contact-shell">
       <section class="contact-page-card">
-        <a class="brand contact-brand" href="./index.html">SANGRIA</a>
         <div class="contact-copy">
           <p class="section-tag">Contacto</p>
           <h1>Consulta personalizada</h1>
@@ -47,5 +59,26 @@
         </form>
       </section>
     </main>
+
+    <aside class="menu-drawer" id="menu-drawer" aria-hidden="true">
+      <div class="menu-head">
+        <a class="brand brand-side" href="./index.html">SANGRIA</a>
+        <button class="menu-close" type="button" data-toggle-menu aria-label="Cerrar menu">Ã—</button>
+      </div>
+      <div class="menu-links">
+        <a href="./anillos.html">anillos</a>
+        <a href="./pulseras.html">pulseras</a>
+        <a href="./aros.html">aros</a>
+        <a href="./collares.html">collares</a>
+        <a href="./index.html#catalogo">productos</a>
+        <a href="./guia-talles.html">guia de talles</a>
+        <a href="./tarjeta-regalo.html">tarjeta regalo</a>
+        <a href="./contacto.html">conocenos</a>
+      </div>
+    </aside>
+
+    <div class="overlay" id="overlay" hidden></div>
+    <script type="module" src="./js/static-menu.js"></script>
   </body>
 </html>
+
