@@ -22,10 +22,13 @@ const state = {
 const els = {
   filters: document.querySelector("#filters"),
   productGrid: document.querySelector("#product-grid"),
+  carouselPrev: document.querySelector("[data-carousel-prev]"),
+  carouselNext: document.querySelector("[data-carousel-next]"),
   cartCount: document.querySelector("#cart-count"),
   cartDrawer: document.querySelector("#cart-drawer"),
   cartItems: document.querySelector("#cart-items"),
   cartTotal: document.querySelector("#cart-total"),
+  cartFooter: document.querySelector(".cart-footer"),
   menuDrawer: document.querySelector("#menu-drawer"),
   overlay: document.querySelector("#overlay"),
   menuButtons: Array.from(document.querySelectorAll(".menu-button")),
@@ -34,11 +37,23 @@ const els = {
   currencyButtons: Array.from(document.querySelectorAll("[data-currency]")),
 };
 
+function ensureClearCartButton() {
+  if (!els.cartFooter || els.cartFooter.querySelector("[data-clear-cart]")) return;
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "ghost-button full-width clear-cart-button";
+  button.dataset.clearCart = "true";
+  button.textContent = "Vaciar carrito";
+  els.cartFooter.prepend(button);
+}
+
 const searchRoutes = [
   { keywords: ["anillo", "anillos", "ring"], href: "./anillos.html" },
   { keywords: ["pulsera", "pulseras", "bracelet"], href: "./pulseras.html" },
   { keywords: ["collar", "collares", "colgante"], href: "./collares.html" },
   { keywords: ["aro", "aros", "earring"], href: "./aros.html" },
+  { keywords: ["earcuff", "ear cuff", "cuff"], href: "./earcuff.html" },
 ];
 
 function normalize(value) {
@@ -133,6 +148,33 @@ function renderProducts() {
       `
     )
     .join("");
+
+  requestAnimationFrame(updateCarouselControls);
+}
+
+function getCarouselStep() {
+  if (!els.productGrid) return 320;
+  const firstCard = els.productGrid.querySelector(".product-card");
+  if (!firstCard) return 320;
+  const gap = Number.parseFloat(window.getComputedStyle(els.productGrid).columnGap || window.getComputedStyle(els.productGrid).gap || "16");
+  return firstCard.getBoundingClientRect().width + gap;
+}
+
+function updateCarouselControls() {
+  if (!document.body.classList.contains("home-page") || !els.productGrid) return;
+  if (!els.carouselPrev || !els.carouselNext) return;
+
+  const maxScroll = Math.max(0, els.productGrid.scrollWidth - els.productGrid.clientWidth);
+  const current = els.productGrid.scrollLeft;
+
+  els.carouselPrev.disabled = current <= 4;
+  els.carouselNext.disabled = current >= maxScroll - 4;
+}
+
+function scrollCarousel(direction) {
+  if (!els.productGrid) return;
+  els.productGrid.scrollBy({ left: getCarouselStep() * direction, behavior: "smooth" });
+  window.setTimeout(updateCarouselControls, 220);
 }
 
 function getCartDetailed() {
@@ -152,6 +194,8 @@ function renderCart() {
 
   if (els.cartCount) els.cartCount.textContent = String(totalCount);
   if (els.cartTotal) els.cartTotal.textContent = formatPrice(totalPrice, state.currency);
+  const clearButton = els.cartFooter?.querySelector("[data-clear-cart]");
+  if (clearButton) clearButton.disabled = items.length === 0;
   if (!els.cartItems) return;
 
   if (items.length === 0) {
@@ -194,6 +238,12 @@ function removeFromCart(productId) {
   renderCart();
 }
 
+function clearCart() {
+  state.cart = [];
+  saveCart(state.cart);
+  renderCart();
+}
+
 function syncOverlay() {
   if (els.overlay) els.overlay.hidden = !(state.cartOpen || state.menuOpen);
 }
@@ -220,6 +270,17 @@ function setMenuOpen(nextValue, sync = true) {
 }
 
 function bindEvents() {
+  if (document.body.classList.contains("home-page")) {
+    els.searchForm?.addEventListener("pointerdown", (event) => {
+      if (event.target === els.searchInput) return;
+      event.preventDefault();
+      requestAnimationFrame(() => {
+        els.searchInput?.focus();
+        els.searchInput?.select();
+      });
+    });
+  }
+
   els.currencyButtons.forEach((button) => {
     button.addEventListener("click", () => {
       state.currency = button.dataset.currency;
@@ -243,6 +304,11 @@ function bindEvents() {
     renderProducts();
   });
 
+  els.carouselPrev?.addEventListener("click", () => scrollCarousel(-1));
+  els.carouselNext?.addEventListener("click", () => scrollCarousel(1));
+  els.productGrid?.addEventListener("scroll", updateCarouselControls, { passive: true });
+  window.addEventListener("resize", updateCarouselControls);
+
   document.addEventListener("click", (event) => {
     const scrollTrigger = event.target.closest("[data-scroll]");
     if (scrollTrigger) {
@@ -257,6 +323,8 @@ function bindEvents() {
     if (viewTrigger) return goToProduct(viewTrigger.dataset.viewProduct);
     const removeTrigger = event.target.closest("[data-remove-cart]");
     if (removeTrigger) return removeFromCart(removeTrigger.dataset.removeCart);
+    const clearTrigger = event.target.closest("[data-clear-cart]");
+    if (clearTrigger) return clearCart();
     const toggleCartTrigger = event.target.closest("[data-toggle-cart]");
     if (toggleCartTrigger) return setCartOpen(!state.cartOpen);
     const toggleMenuTrigger = event.target.closest("[data-toggle-menu]");
@@ -264,7 +332,10 @@ function bindEvents() {
     const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
     if (toggleSearchTrigger) {
       if (document.body.classList.contains("home-page")) {
-        els.searchInput?.focus();
+        requestAnimationFrame(() => {
+          els.searchInput?.focus();
+          els.searchInput?.select();
+        });
         return;
       }
       els.searchForm?.classList.toggle("is-open");
@@ -280,6 +351,7 @@ function bindEvents() {
 }
 
 function init() {
+  ensureClearCartButton();
   renderCurrencyButtons();
   renderFilters();
   renderProducts();

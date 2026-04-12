@@ -86,7 +86,11 @@
           <div class="filter-row" id="filters" role="toolbar" aria-label="Filtrar productos"></div>
         </div>
 
-        <div class="product-grid" id="product-grid" aria-live="polite"></div>
+        <div class="catalog-carousel">
+          <button class="catalog-arrow" type="button" data-carousel-prev aria-label="Ver productos anteriores">‹</button>
+          <div class="product-grid product-carousel" id="product-grid" aria-live="polite"></div>
+          <button class="catalog-arrow" type="button" data-carousel-next aria-label="Ver mas productos">›</button>
+        </div>
       </section>
 
     </main>
@@ -97,14 +101,19 @@
         <button class="menu-close" type="button" data-toggle-menu aria-label="Cerrar menu">×</button>
       </div>
       <div class="menu-links">
-        <a href="./anillos.html">anillos</a>
-        <a href="./pulseras.html">pulseras</a>
-        <a href="./aros.html">aros</a>
-        <a href="./collares.html">collares</a>
-        <button type="button" data-scroll="#catalogo">productos</button>
-        <a href="./guia-talles.html">guia de talles</a>
-        <a href="./tarjeta-regalo.html">tarjeta regalo</a>
-        <a href="./contacto.html">conocenos</a>
+        <details class="menu-group">
+          <summary>Productos</summary>
+          <div class="menu-submenu">
+            <a href="./anillos.html">Anillos</a>
+            <a href="./pulseras.html">Pulseras</a>
+            <a href="./aros.html">Aros</a>
+            <a href="./earcuff.html">Earcuff</a>
+            <a href="./collares.html">Collares</a>
+          </div>
+        </details>
+        <a href="./guia-talles.html">Guia de Talles</a>
+        <a href="./tarjeta-regalo.html">Tarjeta Regalo</a>
+        <a href="./contacto.html">Conocenos</a>
       </div>
     </aside>
 
@@ -141,9 +150,7 @@
         </div>
         <div>
           <h2>legal</h2>
-          <a href="./contacto.html">aviso legal</a>
-          <a href="./contacto.html">politica de devoluciones</a>
-          <a href="./contacto.html">terminos del servicio</a>
+          <a class="regret-button footer-regret-inline" href="./arrepentimiento.html">Boton de arrepentimiento</a>
         </div>
         <div>
           <h2>siguenos</h2>
@@ -166,9 +173,6 @@
             <img class="payment-logo-img" src="./assets/payments/naranja.png" alt="Naranja" />
           </div>
         </div>
-      </div>
-      <div class="footer-regret">
-        <a class="regret-button" href="./arrepentimiento.html">Botón de arrepentimiento</a>
       </div>
       <p class="footer-signature">SANGRIA</p>
     </footer>

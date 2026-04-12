@@ -26,6 +26,7 @@ const els = {
   cartDrawer: document.querySelector("#cart-drawer"),
   cartItems: document.querySelector("#cart-items"),
   cartTotal: document.querySelector("#cart-total"),
+  cartFooter: document.querySelector(".cart-footer"),
   menuDrawer: document.querySelector("#menu-drawer"),
   overlay: document.querySelector("#overlay"),
   menuButtons: Array.from(document.querySelectorAll(".menu-button")),
@@ -36,11 +37,23 @@ const els = {
   topbarRight: document.querySelector(".topbar-right"),
 };
 
+function ensureClearCartButton() {
+  if (!els.cartFooter || els.cartFooter.querySelector("[data-clear-cart]")) return;
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "ghost-button full-width clear-cart-button";
+  button.dataset.clearCart = "true";
+  button.textContent = "Vaciar carrito";
+  els.cartFooter.prepend(button);
+}
+
 const pageCopy = {
   anillos: { title: "Anillos", subtitle: "Todos los anillos de SANGRIA en una pantalla propia." },
   pulseras: { title: "Pulseras", subtitle: "Pulseras escultoricas y de gran presencia visual." },
   collares: { title: "Collares", subtitle: "Collares con colgantes y piezas de identidad marcada." },
   aros: { title: "Aros", subtitle: "Categoria preparada para las proximas incorporaciones." },
+  earcuff: { title: "Earcuff", subtitle: "Piezas envolventes para sumar textura y volumen a la oreja." },
 };
 
 const searchRoutes = [
@@ -48,6 +61,7 @@ const searchRoutes = [
   { keywords: ["pulsera", "pulseras", "bracelet"], href: "./pulseras.html" },
   { keywords: ["collar", "collares", "colgante"], href: "./collares.html" },
   { keywords: ["aro", "aros", "earring"], href: "./aros.html" },
+  { keywords: ["earcuff", "ear cuff", "cuff"], href: "./earcuff.html" },
 ];
 
 function normalize(value) {
@@ -138,6 +152,8 @@ function renderCart() {
 
   els.cartCount.textContent = String(totalCount);
   els.cartTotal.textContent = formatPrice(totalPrice, state.currency);
+  const clearButton = els.cartFooter?.querySelector("[data-clear-cart]");
+  if (clearButton) clearButton.disabled = items.length === 0;
 
   if (items.length === 0) {
     els.cartItems.innerHTML = `<div class="empty-state">Todavia no agregaste productos. Selecciona una pieza del catalogo para guardarla aca.</div>`;
@@ -163,6 +179,12 @@ function addToCart(productId) {
 
 function removeFromCart(productId) {
   state.cart = state.cart.map((item) => item.id === productId ? { ...item, quantity: item.quantity - 1 } : item).filter((item) => item.quantity > 0);
+  saveCart(state.cart);
+  renderCart();
+}
+
+function clearCart() {
+  state.cart = [];
   saveCart(state.cart);
   renderCart();
 }
@@ -215,6 +237,8 @@ function bindEvents() {
     if (viewTrigger) return goToProduct(viewTrigger.dataset.viewProduct);
     const removeTrigger = event.target.closest("[data-remove-cart]");
     if (removeTrigger) return removeFromCart(removeTrigger.dataset.removeCart);
+    const clearTrigger = event.target.closest("[data-clear-cart]");
+    if (clearTrigger) return clearCart();
     const toggleCartTrigger = event.target.closest("[data-toggle-cart]");
     if (toggleCartTrigger) return setCartOpen(!state.cartOpen);
     const toggleMenuTrigger = event.target.closest("[data-toggle-menu]");
@@ -233,6 +257,7 @@ function bindEvents() {
 }
 
 function init() {
+  ensureClearCartButton();
   renderCurrencyButtons();
   renderProducts();
   renderCart();

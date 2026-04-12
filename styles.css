@@ -142,26 +142,34 @@ p {
 .search-shell {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.2rem;
+  gap: 0.45rem;
+  min-width: 250px;
+  padding: 0.48rem 0.9rem;
   border-radius: 999px;
+  background: rgba(122, 23, 49, 0.08);
+  border: 1px solid rgba(122, 23, 49, 0.16);
 }
 
 .search-label {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent-blue);
+  font-size: 0.96rem;
+  font-weight: 600;
+  transition: opacity 160ms ease, width 160ms ease, margin 160ms ease;
 }
 
 .search-shell.is-open {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(122, 23, 49, 0.08);
+  border: 1px solid rgba(122, 23, 49, 0.16);
 }
 
 .search-input {
-  width: 0;
-  opacity: 0;
+  width: 112px;
+  opacity: 1;
   border: none;
   background: transparent;
-  color: #E8D5C4;
+  color: var(--accent-blue);
   outline: none;
   transition: width 180ms ease, opacity 180ms ease;
 }
@@ -172,7 +180,7 @@ p {
 }
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(122, 23, 49, 0.72);
 }
 
 .search-input::-webkit-search-cancel-button {
@@ -181,30 +189,25 @@ p {
 }
 
 .home-page .search-shell {
-  gap: 0.2rem;
-  padding: 0.3rem 0.45rem 0.3rem 0.2rem;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  gap: 0.45rem;
+  min-width: 250px;
+  padding: 0.48rem 0.9rem;
+  background: rgba(122, 23, 49, 0.08);
+  border: 1px solid rgba(122, 23, 49, 0.16);
   backdrop-filter: blur(8px);
 }
 
 .home-page .search-label {
-  display: inline-flex;
-  align-items: center;
-  color: #C4B8AE;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: opacity 160ms ease, width 160ms ease, margin 160ms ease;
+  color: var(--accent-blue);
 }
 
 .home-page .search-input {
-  width: min(140px, 14vw);
-  opacity: 1;
-  color: #C4B8AE;
+  width: 112px;
+  color: var(--accent-blue);
 }
 
 .home-page .search-input::placeholder {
-  color: #C4B8AE;
+  color: rgba(122, 23, 49, 0.72);
 }
 
 .home-page .search-shell:focus-within .search-label {
@@ -219,7 +222,7 @@ p {
 }
 
 .home-page .search-input::-webkit-search-cancel-button {
-  filter: brightness(0) invert(1);
+  filter: none;
 }
 
 .brand {
@@ -241,6 +244,8 @@ p {
   border: none;
   background: transparent;
   color: var(--text);
+  font-size: 0;
+  line-height: 1;
 }
 
 .menu-button {
@@ -368,23 +373,34 @@ p {
 }
 
 .home-page .icon-search {
-  border-color: #E8D5C4;
+  border-color: var(--accent-blue);
 }
 
 .home-page .icon-search::after {
-  background: #ffffff;
+  background: var(--accent-blue);
 }
 
 .home-page .icon-user::before,
 .home-page .icon-user::after,
 .home-page .icon-bag,
 .home-page .icon-bag::before {
-  border-color: #E8D5C4;
+  border-color: var(--accent-blue);
 }
 
 .home-page .cart-button #cart-count {
-  background: rgba(255, 255, 255, 0.14);
-  color: #E8D5C4;
+  background: rgba(122, 23, 49, 0.12);
+  color: var(--accent-blue);
+}
+
+.search-shell:focus-within .search-label {
+  opacity: 0;
+  width: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.search-shell:focus-within .search-input {
+  width: min(220px, 32vw);
 }
 
 .hero {
@@ -592,6 +608,48 @@ p {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.catalog-carousel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  background: transparent;
+}
+
+.catalog-arrow {
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(122, 23, 49, 0.16);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--accent-blue);
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.catalog-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.home-page .product-carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 320px);
+  grid-template-columns: none;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-bottom: 0.2rem;
+  background: #ece7df;
+}
+
+.home-page .product-carousel::-webkit-scrollbar {
+  display: none;
+}
+
 .product-card {
   overflow: hidden;
 }
@@ -774,8 +832,17 @@ p {
 }
 
 .menu-close {
-  font-size: 2rem;
+  font-size: 0;
   color: var(--accent-blue);
+}
+
+.menu-close::before,
+.payment-modal-close::before {
+  content: "×";
+}
+
+.menu-close::before {
+  font-size: 2rem;
 }
 
 .menu-links {
@@ -784,6 +851,35 @@ p {
   max-height: calc(100vh - 100px);
   overflow: auto;
   padding: 1.4rem 1.8rem 2rem;
+}
+
+.menu-group {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.menu-group summary {
+  list-style: none;
+  cursor: pointer;
+  color: var(--accent-blue);
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-weight: 600;
+}
+
+.menu-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.menu-submenu {
+  display: grid;
+  gap: 0.5rem;
+  padding-left: 1rem;
+}
+
+.menu-submenu a {
+  font-size: clamp(1.02rem, 1.4vw, 1.28rem);
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .menu-links button,
@@ -820,6 +916,16 @@ p {
 .cart-total {
   justify-content: space-between;
   align-items: start;
+}
+
+.cart-footer {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.clear-cart-button[disabled] {
+  opacity: 0.45;
+  cursor: default;
 }
 
 .cart-items {
@@ -1056,6 +1162,11 @@ p {
   margin-top: 1.4rem;
 }
 
+.footer-regret-inline {
+  min-width: 0;
+  width: auto;
+}
+
 .regret-button {
   display: inline-flex;
   align-items: center;
@@ -1113,7 +1224,7 @@ p {
 }
 
 .gift-card-shell {
-  width: min(calc(100% - 2rem), 1180px);
+  width: min(calc(100% - 2rem), 1560px);
   padding: 1rem 0 2.5rem;
 }
 
@@ -1244,9 +1355,112 @@ p {
 
 .gift-card-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.15rem;
   margin-top: 1.8rem;
+}
+
+.gift-card-shop-item {
+  overflow: hidden;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(43, 36, 32, 0.08);
+  box-shadow: 0 18px 42px rgba(43, 36, 32, 0.08);
+}
+
+.gift-card-visual {
+  width: 100%;
+  min-height: 250px;
+  display: grid;
+  align-content: space-between;
+  gap: 1rem;
+  padding: 1.45rem;
+  border: none;
+  background:
+    linear-gradient(135deg, rgba(250, 248, 244, 0.98), rgba(222, 214, 206, 0.98) 46%, rgba(182, 171, 162, 0.98)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0));
+  color: inherit;
+  text-align: left;
+}
+
+.gift-card-visual-brand {
+  color: rgba(115, 100, 89, 0.64);
+  font-family: "Syne", sans-serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.12em;
+}
+
+.gift-card-visual-mark {
+  justify-self: end;
+  width: 36px;
+  height: 36px;
+  border-radius: 50% 50% 12% 50%;
+  border: 3px solid rgba(255, 255, 255, 0.52);
+  opacity: 0.95;
+}
+
+.gift-card-visual-copy {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  align-self: center;
+}
+
+.gift-card-visual-title {
+  color: rgba(255, 255, 255, 0.76);
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1.65rem, 2.5vw, 2.45rem);
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.62);
+}
+
+.gift-card-visual-copy strong {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Syne", sans-serif;
+  font-size: clamp(1.55rem, 2.3vw, 2.25rem);
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.64);
+}
+
+.gift-card-shop-body {
+  padding: 1rem 1.05rem 1.1rem;
+}
+
+.gift-card-shop-body .product-category {
+  margin-bottom: 0.6rem;
+  color: rgba(43, 36, 32, 0.6);
+  font-size: 0.76rem;
+  letter-spacing: 0.18em;
+}
+
+.gift-card-shop-body h3 {
+  margin: 0;
+  font-size: clamp(1.18rem, 1.45vw, 1.55rem);
+  line-height: 1.06;
+  color: #2B2420;
+}
+
+.gift-card-shop-body .product-link {
+  font-weight: 600;
+}
+
+.gift-card-shop-body .product-footer {
+  margin-top: 0.95rem;
+  align-items: center;
+}
+
+.gift-card-shop-body .price {
+  color: #2B2420;
+  font-size: clamp(1.12rem, 1.4vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.gift-card-shop-body .primary-button {
+  min-width: 110px;
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.92rem;
 }
 
 .gift-card-option {
@@ -1671,8 +1885,13 @@ p {
 .payment-modal-close {
   border: none;
   background: transparent;
-  font-size: 2rem;
+  font-size: 0;
   color: rgba(43, 36, 32, 0.55);
+  line-height: 1;
+}
+
+.payment-modal-close::before {
+  font-size: 2rem;
 }
 
 .payment-modal-tabs {
@@ -1821,9 +2040,22 @@ p {
   .manifesto-grid,
   .subpage-hero,
   .product-page-card,
-  .contact-form {
+  .contact-form,
+  .gift-card-grid {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .catalog-carousel {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-arrow {
+    display: none;
+  }
+
+  .home-page .product-carousel {
+    grid-auto-columns: minmax(220px, 82vw);
   }
 
   .product-page-meta {

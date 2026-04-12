@@ -100,7 +100,7 @@
     slug: "anillos",
     price: 97000,
     priceLabel: "$97.000",
-    image: "./assets/products/anillo-dorado.jpg",
+    image: "./assets/products/anillo-dorado-plata.jpg",
     description: "Anillo dorado con textura erosionada y volumen irregular.",
   },
   {
@@ -111,7 +111,6 @@
     price: 102000,
     priceLabel: "$102.000",
     image: "./assets/products/anillo-vintage.png",
-    hoverImage: "./assets/products/anillo-vintage-hover.jpg",
     imageClass: "is-square-crop",
     description: "Anillo de plata con frente ornamental y presencia simetrica.",
   },
@@ -126,9 +125,53 @@
     imageClass: "is-square-crop",
     description: "Anillo de plata con gema verde tallada y marco irregular.",
   },
+  {
+    id: "anillo-espiral-plata",
+    name: "Anillo Espiral Plata",
+    category: "Anillos",
+    slug: "anillos",
+    price: 89000,
+    priceLabel: "$89.000",
+    image: "./assets/products/anillo-espiral-plata.png",
+    imageClass: "is-square-crop",
+    description: "Anillo de plata pulida con forma envolvente y gesto fluido.",
+  },
+  {
+    id: "anillo-fluido-plata",
+    name: "Anillo Fluido Plata",
+    category: "Anillos",
+    slug: "anillos",
+    price: 94000,
+    priceLabel: "$94.000",
+    image: "./assets/products/anillo-fluido-plata.png",
+    imageClass: "is-square-crop",
+    description: "Anillo ancho de plata con pliegues suaves y volumen escultorico.",
+  },
+  {
+    id: "earcuff-crudo",
+    name: "Earcuff Crudo",
+    category: "Earcuff",
+    slug: "earcuff",
+    price: 68000,
+    priceLabel: "$68.000",
+    image: "./assets/products/earcuff-crudo.png",
+    imageClass: "is-square-crop",
+    description: "Earcuff de plata con forma organica y textura irregular.",
+  },
+  {
+    id: "anillo-pina",
+    name: "Anillo Magma",
+    category: "Anillos",
+    slug: "anillos",
+    price: 106000,
+    priceLabel: "$106.000",
+    image: "./assets/products/anillo-pina.jpg",
+    imageClass: "is-square-crop",
+    description: "Anillo ancho de plata con relieve organico y ondas suaves.",
+  },
 ];
 
-export const filters = ["Todas", "Anillos", "Pulseras", "Aros", "Collares"];
+export const filters = ["Todas", "Anillos", "Pulseras", "Aros", "Earcuff", "Collares"];
 export const storageKey = "sangria-cart";
 export const currencyStorageKey = "sangria-currency";
 export const usdRateStorageKey = "sangria-usd-rate";
