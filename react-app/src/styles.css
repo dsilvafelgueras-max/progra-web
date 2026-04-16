@@ -1,0 +1,494 @@
+:root {
+  --bg: #ece7df;
+  --surface: rgba(255, 255, 255, 0.76);
+  --text: #2b2420;
+  --muted: rgba(43, 36, 32, 0.68);
+  --wine: #7a1731;
+  --line: rgba(43, 36, 32, 0.12);
+  --shadow: 0 22px 60px rgba(43, 36, 32, 0.12);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.react-shell {
+  min-height: 100vh;
+}
+
+.app-header,
+.react-content {
+  width: min(100% - 2rem, 1440px);
+  margin: 0 auto;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.2rem;
+  align-items: flex-start;
+  padding: 1.5rem 0 1rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.app-header h1,
+.hero-copy-react h2,
+.learning-head h2,
+.cart-drawer-head h2,
+.checkout-panel-head h2 {
+  margin: 0;
+  font-family: "Syne", sans-serif;
+}
+
+.app-header h1 {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  color: var(--wine);
+}
+
+.header-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: flex-end;
+}
+
+.search-box,
+.currency-switcher,
+.cart-chip,
+.filter-bar button,
+.product-card-react button,
+.primary-button-react,
+.ghost-button-react,
+.checkout-form-react button {
+  border-radius: 999px;
+}
+
+.search-box {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 250px;
+}
+
+.search-box span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.search-box input,
+.checkout-form-react input,
+.checkout-form-react select {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--text);
+  padding: 0.9rem 1rem;
+  outline: none;
+}
+
+.currency-switcher {
+  display: inline-flex;
+  padding: 0.2rem;
+  background: rgba(122, 23, 49, 0.08);
+  border: 1px solid rgba(122, 23, 49, 0.12);
+}
+
+.currency-switcher button,
+.filter-bar button,
+.cart-chip,
+.ghost-button-react {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+}
+
+.currency-switcher button {
+  min-width: 66px;
+  padding: 0.68rem 0.9rem;
+}
+
+.currency-switcher .is-active,
+.filter-bar .is-active {
+  background: var(--wine);
+  color: #fff;
+}
+
+.cart-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  background: rgba(122, 23, 49, 0.08);
+  border: 1px solid rgba(122, 23, 49, 0.12);
+}
+
+.cart-chip strong {
+  min-width: 1.8rem;
+  height: 1.8rem;
+  display: grid;
+  place-items: center;
+  background: rgba(122, 23, 49, 0.16);
+  border-radius: 999px;
+  color: var(--wine);
+}
+
+.react-content {
+  padding-bottom: 4rem;
+}
+
+.hero-react,
+.learning-panel,
+.cart-drawer-react,
+.checkout-panel-react {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.hero-react {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.8fr);
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.hero-copy-react p:last-child {
+  max-width: 64ch;
+}
+
+.hero-metrics-react {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero-metrics-react article {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid var(--line);
+}
+
+.hero-metrics-react strong {
+  font-size: 2rem;
+  color: var(--wine);
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1.25rem 0;
+}
+
+.filter-bar button {
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(122, 23, 49, 0.12);
+  background: rgba(122, 23, 49, 0.06);
+}
+
+.product-grid-react {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.product-card-react {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--line);
+}
+
+.product-image-react {
+  background: #fff;
+  min-height: 240px;
+  display: grid;
+  place-items: center;
+}
+
+.product-image-react img {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+}
+
+.product-copy-react {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.product-copy-react p,
+.product-copy-react h3,
+.product-copy-react span {
+  margin: 0;
+}
+
+.product-copy-react p {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.product-copy-react h3 {
+  font-size: 1.2rem;
+  font-family: "Syne", sans-serif;
+}
+
+.product-copy-react span {
+  font-weight: 700;
+}
+
+.product-card-react button,
+.primary-button-react {
+  border: none;
+  padding: 0.9rem 1rem;
+  background: var(--wine);
+  color: #fff;
+  font-weight: 700;
+}
+
+.empty-grid {
+  padding: 2rem 1.4rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+}
+
+.learning-panel {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+}
+
+.learning-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.rate-badge {
+  display: grid;
+  gap: 0.1rem;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--line);
+}
+
+.rate-badge span,
+.rate-badge small {
+  color: var(--muted);
+}
+
+.learning-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.learning-card {
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--line);
+}
+
+.learning-card h3 {
+  margin: 0 0 0.75rem;
+  font-family: "Syne", sans-serif;
+}
+
+.learning-card ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.learning-card li + li {
+  margin-top: 0.45rem;
+}
+
+.overlay-react {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 14, 14, 0.38);
+  display: grid;
+  justify-items: end;
+}
+
+.overlay-soft {
+  justify-items: center;
+  align-items: center;
+}
+
+.cart-drawer-react {
+  width: min(480px, 100vw);
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.cart-drawer-head,
+.checkout-panel-head,
+.checkout-summary-row,
+.cart-row-react {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cart-drawer-items {
+  display: grid;
+  gap: 1rem;
+  margin: 1.2rem 0;
+}
+
+.cart-row-react {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.cart-row-react h3,
+.cart-row-react p {
+  margin: 0;
+}
+
+.cart-row-react p {
+  color: var(--muted);
+}
+
+.cart-row-side {
+  display: grid;
+  justify-items: end;
+  gap: 0.35rem;
+}
+
+.cart-row-side button {
+  border: none;
+  background: transparent;
+  color: var(--wine);
+}
+
+.cart-total-react {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.ghost-button-react {
+  padding: 0.8rem 0.95rem;
+  border: 1px solid var(--line);
+}
+
+.cart-empty,
+.checkout-success-react {
+  color: var(--muted);
+}
+
+.checkout-panel-react {
+  width: min(1080px, calc(100vw - 2rem));
+  padding: 1.5rem;
+}
+
+.checkout-panel-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+.checkout-form-react {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.checkout-form-react label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.checkout-form-react span {
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.checkout-summary-react {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--line);
+  align-content: start;
+}
+
+.checkout-summary-react h3 {
+  margin: 0;
+  font-family: "Syne", sans-serif;
+}
+
+.checkout-summary-row.is-total {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+  font-weight: 700;
+}
+
+@media (max-width: 1100px) {
+  .product-grid-react {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .hero-react,
+  .checkout-panel-layout,
+  .learning-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 780px) {
+  .app-header,
+  .header-tools {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .product-grid-react {
+    grid-template-columns: 1fr;
+  }
+
+  .learning-head {
+    flex-direction: column;
+  }
+}
