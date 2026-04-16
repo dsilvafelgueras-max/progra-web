@@ -3,7 +3,7 @@
   --surface: rgba(255, 255, 255, 0.76);
   --text: #2b2420;
   --muted: rgba(43, 36, 32, 0.68);
-  --wine: #7a1731;
+  --wine: #1A0A10;
   --line: rgba(43, 36, 32, 0.12);
   --shadow: 0 22px 60px rgba(43, 36, 32, 0.12);
 }
@@ -119,8 +119,8 @@ img {
 .currency-switcher {
   display: inline-flex;
   padding: 0.2rem;
-  background: rgba(122, 23, 49, 0.08);
-  border: 1px solid rgba(122, 23, 49, 0.12);
+  background: rgba(26, 10, 16, 0.08);
+  border: 1px solid rgba(26, 10, 16, 0.12);
 }
 
 .currency-switcher button,
@@ -148,8 +148,8 @@ img {
   align-items: center;
   gap: 0.7rem;
   padding: 0.8rem 1rem;
-  background: rgba(122, 23, 49, 0.08);
-  border: 1px solid rgba(122, 23, 49, 0.12);
+  background: rgba(26, 10, 16, 0.08);
+  border: 1px solid rgba(26, 10, 16, 0.12);
 }
 
 .cart-chip strong {
@@ -157,7 +157,7 @@ img {
   height: 1.8rem;
   display: grid;
   place-items: center;
-  background: rgba(122, 23, 49, 0.16);
+  background: rgba(26, 10, 16, 0.16);
   border-radius: 999px;
   color: var(--wine);
 }
@@ -213,8 +213,8 @@ img {
 
 .filter-bar button {
   padding: 0.8rem 1rem;
-  border: 1px solid rgba(122, 23, 49, 0.12);
-  background: rgba(122, 23, 49, 0.06);
+  border: 1px solid rgba(26, 10, 16, 0.12);
+  background: rgba(26, 10, 16, 0.06);
 }
 
 .product-grid-react {
