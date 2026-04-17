@@ -17,11 +17,14 @@ const state = {
   currency: loadCurrency(),
   cartOpen: false,
   menuOpen: false,
+  sortOption: "popular",
+  sortOpen: false,
 };
 
 const els = {
   title: document.querySelector("#category-title"),
   productGrid: document.querySelector("#category-grid"),
+  sortMount: null,
   cartCount: document.querySelector("#cart-count"),
   cartDrawer: document.querySelector("#cart-drawer"),
   cartItems: document.querySelector("#cart-items"),
@@ -35,7 +38,19 @@ const els = {
   currencyButtons: Array.from(document.querySelectorAll("[data-currency]")),
   currencySwitch: document.querySelector(".currency-switch"),
   topbarRight: document.querySelector(".topbar-right"),
+  sortPanel: null,
+  sortTrigger: null,
 };
+
+const sortOptions = [
+  { value: "popular", label: "Mas vendidos" },
+  { value: "price-asc", label: "Precio: menor a mayor" },
+  { value: "price-desc", label: "Precio: mayor a menor" },
+  { value: "name-asc", label: "A - Z" },
+  { value: "name-desc", label: "Z - A" },
+  { value: "newest", label: "Mas nuevo al mas viejo" },
+  { value: "oldest", label: "Mas viejo al mas nuevo" },
+];
 
 function ensureClearCartButton() {
   if (!els.cartFooter || els.cartFooter.querySelector("[data-clear-cart]")) return;
@@ -79,6 +94,110 @@ function handleSearchSubmit(rawValue) {
   window.location.href = match?.href ?? "./anillos.html";
 }
 
+function getSortLabel(value = state.sortOption) {
+  return sortOptions.find((option) => option.value === value)?.label ?? "Mas vendidos";
+}
+
+function sortProducts(items) {
+  const sorted = [...items];
+
+  switch (state.sortOption) {
+    case "price-asc":
+      return sorted.sort((a, b) => a.price - b.price);
+    case "price-desc":
+      return sorted.sort((a, b) => b.price - a.price);
+    case "name-asc":
+      return sorted.sort((a, b) => a.name.localeCompare(b.name, "es"));
+    case "name-desc":
+      return sorted.sort((a, b) => b.name.localeCompare(a.name, "es"));
+    case "newest":
+      return sorted.reverse();
+    case "oldest":
+    case "popular":
+    default:
+      return sorted;
+  }
+}
+
+function ensureSortToolbar() {
+  if (els.sortMount || !els.productGrid?.parentElement) return;
+  const toolbar = document.createElement("div");
+  toolbar.className = "catalog-tools";
+  els.productGrid.parentElement.insertBefore(toolbar, els.productGrid);
+  els.sortMount = toolbar;
+}
+
+function ensureSortPanel() {
+  if (els.sortPanel) return;
+
+  const panel = document.createElement("div");
+  panel.className = "sort-panel";
+  panel.hidden = true;
+  panel.innerHTML = `
+    <div class="sort-panel-card" role="dialog" aria-modal="true" aria-labelledby="sort-panel-title">
+      <div class="sort-panel-head">
+        <h3 id="sort-panel-title">Ordenar</h3>
+        <button class="sort-panel-close" type="button" data-close-sort>Cerrar</button>
+      </div>
+      <div class="sort-panel-options">
+        ${sortOptions
+          .map(
+            (option) => `
+              <label class="sort-option">
+                <input type="radio" name="category-sort" value="${option.value}" ${
+                  option.value === state.sortOption ? "checked" : ""
+                } />
+                <span>${option.label}</span>
+              </label>
+            `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(panel);
+  els.sortPanel = panel;
+}
+
+function renderSortPanel() {
+  ensureSortPanel();
+  if (!els.sortPanel) return;
+
+  els.sortPanel
+    .querySelectorAll('input[name="category-sort"]')
+    .forEach((input) => {
+      input.checked = input.value === state.sortOption;
+    });
+
+  if (els.sortTrigger) {
+    els.sortTrigger.querySelector("[data-sort-label]").textContent = getSortLabel();
+  }
+}
+
+function renderSortToolbar() {
+  ensureSortToolbar();
+  if (!els.sortMount) return;
+
+  els.sortMount.innerHTML = `
+    <button class="sort-trigger" type="button" data-toggle-sort>
+      <span>Filtrar:</span>
+      <strong data-sort-label>${getSortLabel()}</strong>
+    </button>
+  `;
+
+  els.sortTrigger = els.sortMount.querySelector("[data-toggle-sort]");
+  renderSortPanel();
+}
+
+function setSortOpen(nextValue) {
+  state.sortOpen = nextValue;
+  ensureSortPanel();
+  if (!els.sortPanel) return;
+  els.sortPanel.hidden = !nextValue;
+  els.sortPanel.classList.toggle("open", nextValue);
+}
+
 function goToProduct(productId) {
   const product = getProductById(productId);
   if (!product) return;
@@ -105,7 +224,7 @@ function renderPageHeader(items) {
 }
 
 function renderProducts() {
-  const items = getProductsBySlug(page);
+  const items = sortProducts(getProductsBySlug(page));
   renderPageHeader(items);
 
   if (items.length === 0) {
@@ -246,11 +365,32 @@ function bindEvents() {
     if (toggleCartTrigger) return setCartOpen(!state.cartOpen);
     const toggleMenuTrigger = event.target.closest("[data-toggle-menu]");
     if (toggleMenuTrigger) return setMenuOpen(!state.menuOpen);
+    const toggleSortTrigger = event.target.closest("[data-toggle-sort]");
+    if (toggleSortTrigger) return setSortOpen(!state.sortOpen);
+    const closeSortTrigger = event.target.closest("[data-close-sort]");
+    if (closeSortTrigger) return setSortOpen(false);
     const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
     if (toggleSearchTrigger) {
       els.searchForm?.classList.toggle("is-open");
       els.searchInput?.focus();
     }
+
+    if (
+      state.sortOpen &&
+      els.sortPanel &&
+      !event.target.closest(".sort-panel-card")
+    ) {
+      setSortOpen(false);
+    }
+  });
+
+  document.addEventListener("change", (event) => {
+    const sortOption = event.target.closest('input[name="category-sort"]');
+    if (!sortOption) return;
+    state.sortOption = sortOption.value;
+    renderSortPanel();
+    renderProducts();
+    setSortOpen(false);
   });
 
   els.overlay.addEventListener("click", () => {
@@ -261,6 +401,7 @@ function bindEvents() {
 
 function init() {
   ensureClearCartButton();
+  renderSortToolbar();
   renderCurrencyButtons();
   renderProducts();
   renderCart();
