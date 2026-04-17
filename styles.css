@@ -1310,8 +1310,21 @@ p {
 }
 
 .footer-regret-inline {
+  display: inline;
   min-width: 0;
   width: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #1A0A10;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.footer-regret-inline:hover,
+.footer-regret-inline:focus-visible {
+  text-decoration: underline;
 }
 
 .regret-button {
@@ -1325,6 +1338,24 @@ p {
   background: rgba(255, 255, 255, 0.9);
   color: #1A0A10;
   font-weight: 600;
+}
+
+.regret-button.footer-regret-inline {
+  display: inline;
+  min-width: 0;
+  width: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #1A0A10;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.regret-button.footer-regret-inline:hover,
+.regret-button.footer-regret-inline:focus-visible {
+  text-decoration: underline;
 }
 
 .login-page {
