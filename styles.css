@@ -423,6 +423,21 @@ p {
   text-transform: uppercase;
 }
 
+.hero-origin {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0 0 1.2rem;
+}
+
+.hero-origin p {
+  margin: 0;
+  color: rgba(232, 213, 196, 0.9);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
 .hero-kicker,
 .section-tag {
   margin: 0 0 0.7rem;
@@ -1475,6 +1490,74 @@ p {
   max-width: 760px;
   margin: 0 auto;
   border-radius: 18px;
+}
+
+.size-guide-content {
+  display: grid;
+  gap: 1.2rem;
+  margin-top: 1.6rem;
+}
+
+.size-guide-section {
+  padding: 1.2rem 1.25rem;
+  border-radius: 24px;
+  background: #ffffff;
+  border: 1px solid rgba(43, 36, 32, 0.08);
+}
+
+.size-guide-section h2 {
+  margin: 0 0 0.9rem;
+  color: #2B2420;
+  font-size: 1.2rem;
+}
+
+.size-guide-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: rgba(43, 36, 32, 0.74);
+  display: grid;
+  gap: 0.7rem;
+}
+
+.size-guide-list li {
+  line-height: 1.65;
+}
+
+.care-note {
+  margin: 0;
+  color: rgba(43, 36, 32, 0.74);
+  line-height: 1.7;
+}
+
+.size-guide-chart {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 1rem;
+}
+
+.size-guide-chip {
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  text-align: center;
+}
+
+.size-guide-chip span {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(43, 36, 32, 0.7);
+  border-radius: 50%;
+  color: #2B2420;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.size-guide-chip strong {
+  color: rgba(43, 36, 32, 0.72);
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .size-guide-actions {

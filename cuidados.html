@@ -3,11 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="SANGRIA, marca de joyeria con menu lateral, catalogo visual y carrito de compra."
-    />
-    <title>SANGRIA | Joyeria</title>
+    <meta name="description" content="Cuidados de piezas de plata SANGRIA." />
+    <title>Cuidados | SANGRIA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,92 +13,73 @@
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body class="home-page">
-    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
-
-    <header class="hero-shell" id="top">
-      <div class="hero-media">
-        <img
-          src="./assets/products/anillo-sello.jpg"
-          alt="Anillo SANGRIA en primer plano"
-        />
-      </div>
-
+  <body class="contact-page">
+    <header class="category-page-shell">
       <nav class="topbar" aria-label="Principal">
         <div class="topbar-left">
           <button class="menu-button" type="button" data-toggle-menu aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
             <span class="sr-only">Abrir catalogo lateral</span>
           </button>
-          <a class="brand" href="#top">SANGRIA</a>
+          <a class="brand" href="./index.html">SANGRIA</a>
         </div>
-
         <div class="topbar-right">
           <form class="search-shell" data-search-form>
             <button class="icon-button" type="button" data-toggle-search aria-label="Abrir buscador">
               <span class="icon-search"></span>
             </button>
             <span class="search-label">Buscar</span>
-            <input
-              class="search-input"
-              type="search"
-              name="search"
-              placeholder=""
-              data-search-input
-            />
+            <input class="search-input" type="search" name="search" placeholder="" data-search-input />
           </form>
-          <a class="icon-button" href="./login.html" aria-label="Ir a iniciar sesion">
-            <span class="icon-user"></span>
-          </a>
+          <a class="icon-button" href="./login.html" aria-label="Ir a iniciar sesion"><span class="icon-user"></span></a>
           <button class="cart-button icon-button" type="button" data-toggle-cart aria-label="Abrir carrito">
-            <span class="icon-bag"></span>
-            <span id="cart-count">0</span>
+            <span class="icon-bag"></span><span id="cart-count">0</span>
           </button>
-          <div class="currency-switch topbar-currency">
-            <button type="button" data-currency="ARS">ARS</button>
-            <button type="button" data-currency="USD">USD</button>
-          </div>
         </div>
       </nav>
-
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="hero-slogan">handmade jewelery</p>
-          <div class="hero-origin">
-            <p>HANDCRAFTED JEWELRY</p>
-            <p>MADE A MANO IN BUENOS AIRES . ARGENTINA</p>
-          </div>
-          <div class="hero-actions">
-            <a class="primary-button button-link" href="./anillos.html">Ver anillos</a>
-          </div>
-        </div>
-      </section>
     </header>
 
-    <main id="main-content">
-      <section class="section catalog" id="catalogo" aria-labelledby="catalog-title">
-        <div class="section-heading catalog-heading">
-          <div>
-            <p class="section-tag">Tienda</p>
-            <h2 id="catalog-title">Piezas disponibles</h2>
-          </div>
-          <div class="filter-row" id="filters" role="toolbar" aria-label="Filtrar productos"></div>
+    <main class="size-guide-shell">
+      <section class="size-guide-card">
+        <div class="contact-copy">
+          <p class="section-tag">Cuidados</p>
+          <h1>Cuidado de tus piezas de plata</h1>
+          <p>
+            La plata es un material noble y duradero, pero requiere ciertos cuidados para conservar
+            su brillo y belleza original con el paso del tiempo.
+          </p>
         </div>
 
-        <div class="catalog-carousel">
-          <button class="catalog-arrow" type="button" data-carousel-prev aria-label="Ver productos anteriores">‹</button>
-          <div class="product-grid product-carousel" id="product-grid" aria-live="polite"></div>
-          <button class="catalog-arrow" type="button" data-carousel-next aria-label="Ver mas productos">›</button>
+        <div class="size-guide-content">
+          <article class="size-guide-section">
+            <h2>Recomendaciones</h2>
+            <ul class="size-guide-list">
+              <li>Evitá el contacto con agua, perfumes, cremas y productos químicos.</li>
+              <li>Quitate las piezas antes de bañarte, hacer ejercicio o nadar.</li>
+              <li>
+                Guardalas en un lugar seco, idealmente en su packaging o en bolsas individuales para
+                evitar rayones y oxidación.
+              </li>
+              <li>Limpiá la pieza suavemente con un paño especial para plata para devolverle su brillo.</li>
+              <li>Usalas con frecuencia: el contacto con la piel ayuda a mantener su apariencia.</li>
+            </ul>
+          </article>
+
+          <article class="size-guide-section">
+            <h2>Importante</h2>
+            <p class="care-note">
+              Con el tiempo, la plata puede oscurecerse naturalmente debido a la oxidación. Esto es
+              normal y no afecta la calidad de la pieza. Con una limpieza adecuada, recupera su brillo
+              original.
+            </p>
+          </article>
         </div>
       </section>
-
     </main>
 
-    <aside class="menu-drawer" id="menu-drawer" aria-labelledby="menu-title" aria-hidden="true">
+    <aside class="menu-drawer" id="menu-drawer" aria-hidden="true">
       <div class="menu-head">
-        <a class="brand brand-side" href="#top">SANGRIA</a>
+        <a class="brand brand-side" href="./index.html">SANGRIA</a>
         <button class="menu-close" type="button" data-toggle-menu aria-label="Cerrar menu">×</button>
       </div>
       <div class="menu-links">
@@ -129,28 +107,23 @@
         </div>
         <button class="ghost-button compact" type="button" data-toggle-cart>Cerrar</button>
       </div>
-
       <div class="cart-items" id="cart-items"></div>
-
       <div class="cart-footer">
-        <div class="cart-total">
-          <span>Total</span>
-          <strong id="cart-total">$0</strong>
-        </div>
+        <div class="cart-total"><span>Total</span><strong id="cart-total">ARS 0</strong></div>
         <a class="primary-button full-width button-link" href="./checkout.html">Finalizar compra</a>
       </div>
     </aside>
 
     <div class="overlay" id="overlay" hidden></div>
-
     <footer class="site-footer shop-footer">
       <div class="footer-columns">
         <div>
           <h2>ayuda</h2>
           <a href="./contacto.html">contactanos</a>
-          <a href="./contacto.html">envios</a>
-          <a href="./contacto.html">cambios y devoluciones</a>
-          <a href="./guia-talles.html">guia de talles</a><a href="./cuidados.html">cuidados</a>
+          <a href="./login.html">envios</a>
+          <a href="./login.html">cambios y devoluciones</a>
+          <a href="./guia-talles.html">guia de talles</a>
+          <a href="./cuidados.html">cuidados</a>
         </div>
         <div>
           <h2>legal</h2>
@@ -159,13 +132,20 @@
         <div>
           <h2>siguenos</h2>
           <div class="social-row">
-            <a href="https://www.instagram.com/sangriajewelry/" aria-label="Instagram" target="_blank" rel="noreferrer"><span class="social-icon social-instagram" aria-hidden="true"></span></a>
-            <a href="#top" aria-label="TikTok"><span class="social-icon social-tiktok" aria-hidden="true"></span></a>
+            <a href="https://www.instagram.com/sangriajewelry/" aria-label="Instagram" target="_blank" rel="noreferrer">
+              <span class="social-icon social-instagram" aria-hidden="true"></span>
+            </a>
+            <a href="./index.html" aria-label="TikTok">
+              <span class="social-icon social-tiktok" aria-hidden="true"></span>
+            </a>
           </div>
         </div>
       </div>
-
       <div class="footer-bottom">
+        <div class="currency-switch">
+          <button type="button" data-currency="ARS">ARS $</button>
+          <button type="button" data-currency="USD">USD $</button>
+        </div>
         <div class="payment-block" aria-label="Medios de pago">
           <strong>Medios de pago</strong>
           <div class="payment-row">
@@ -180,12 +160,6 @@
       </div>
       <p class="footer-signature">SANGRIA</p>
     </footer>
-
-    <script type="module" src="./js/app.js"></script>
+    <script type="module" src="./js/static-pages.js"></script>
   </body>
 </html>
-
-
-
-
-
