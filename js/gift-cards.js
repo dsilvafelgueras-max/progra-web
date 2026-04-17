@@ -74,7 +74,6 @@ function renderGiftCards() {
             </span>
           </button>
           <div class="gift-card-shop-body">
-            <p class="product-category">Tarjetas regalo</p>
             <h3>
               <button class="product-link" type="button" data-view-product="${product.id}">
                 ${product.name}

@@ -61,6 +61,7 @@
     price: 138000,
     priceLabel: "$138.000",
     image: "./assets/products/pulsera-onda-catalogo.png",
+    imageSizeClass: "image-scale-md",
     description: "Pulsera ancha con capas fluidas y gesto organico en plata.",
   },
   {
@@ -71,6 +72,7 @@
     price: 74000,
     priceLabel: "$74.000",
     image: "./assets/products/anillo-torsion.jpg",
+    imageSizeClass: "image-scale-lg",
     description: "Anillo fino con relieve irregular y perfil de torsion.",
   },
   {
@@ -81,6 +83,7 @@
     price: 82000,
     priceLabel: "$82.000",
     image: "./assets/products/anillo-escultura.jpg",
+    imageSizeClass: "image-scale-md",
     description: "Anillo escultorico de volumen suave con presencia minima.",
   },
   {
@@ -91,6 +94,7 @@
     price: 91000,
     priceLabel: "$91.000",
     image: "./assets/products/anillo-sello-catalogo.png",
+    imageSizeClass: "image-scale-md",
     description: "Sello texturado con superficie erosionada y caracter bruto.",
   },
   {
@@ -101,6 +105,7 @@
     price: 97000,
     priceLabel: "$97.000",
     image: "./assets/products/anillo-dorado-plata.jpg",
+    imageSizeClass: "image-scale-md",
     description: "Anillo dorado con textura erosionada y volumen irregular.",
   },
   {
@@ -112,6 +117,7 @@
     priceLabel: "$102.000",
     image: "./assets/products/anillo-vintage.png",
     imageClass: "is-square-crop",
+    imageSizeClass: "image-scale-md",
     description: "Anillo de plata con frente ornamental y presencia simetrica.",
   },
   {
@@ -123,6 +129,7 @@
     priceLabel: "$118.000",
     image: "./assets/products/anillo-gema-verde.png",
     imageClass: "is-square-crop",
+    imageSizeClass: "image-scale-lg",
     description: "Anillo de plata con gema verde tallada y marco irregular.",
   },
   {
@@ -134,6 +141,7 @@
     priceLabel: "$89.000",
     image: "./assets/products/anillo-espiral-plata.png",
     imageClass: "is-square-crop",
+    imageSizeClass: "image-scale-md",
     description: "Anillo de plata pulida con forma envolvente y gesto fluido.",
   },
   {
@@ -145,6 +153,7 @@
     priceLabel: "$94.000",
     image: "./assets/products/anillo-fluido-plata.png",
     imageClass: "is-square-crop",
+    imageSizeClass: "image-scale-sm",
     description: "Anillo ancho de plata con pliegues suaves y volumen escultorico.",
   },
   {
@@ -156,6 +165,7 @@
     priceLabel: "$68.000",
     image: "./assets/products/earcuff-crudo.png",
     imageClass: "is-square-crop",
+    imageSizeClass: "image-scale-lg",
     description: "Earcuff de plata con forma organica y textura irregular.",
   },
   {
@@ -167,6 +177,7 @@
     priceLabel: "$106.000",
     image: "./assets/products/anillo-pina.jpg",
     imageClass: "is-square-crop",
+    imageSizeClass: "image-scale-xl",
     description: "Anillo ancho de plata con relieve organico y ondas suaves.",
   },
 ];

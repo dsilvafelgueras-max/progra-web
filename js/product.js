@@ -58,6 +58,10 @@ const searchRoutes = [
   { keywords: ["earcuff", "ear cuff", "cuff"], href: "./earcuff.html" },
 ];
 
+function buildImageClasses(...classNames) {
+  return classNames.filter(Boolean).join(" ");
+}
+
 function normalize(value) {
   return value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
 }
@@ -192,22 +196,21 @@ function renderProduct() {
     <section class="product-page-card fade-in">
       <div class="product-page-media">
         <button class="product-thumb is-active" type="button" data-image-src="${product.image}" data-image-alt="${product.name}">
-          <img src="${product.image}" alt="${product.name}" class="${product.imageClass ?? ""}" />
+          <img src="${product.image}" alt="${product.name}" class="${buildImageClasses(product.imageClass, product.imageSizeClass)}" />
         </button>
         ${
           product.hoverImage
             ? `<button class="product-thumb" type="button" data-image-src="${product.hoverImage}" data-image-alt="${product.name} vista alternativa">
-                <img src="${product.hoverImage}" alt="${product.name} vista alternativa" class="${product.hoverImageClass ?? ""}" />
+                <img src="${product.hoverImage}" alt="${product.name} vista alternativa" class="${buildImageClasses(product.hoverImageClass, product.hoverImageSizeClass ?? product.imageSizeClass)}" />
               </button>`
             : ""
         }
         <div class="product-page-image-shell">
-          <img src="${product.image}" alt="${product.name}" class="${product.imageClass ?? ""}" id="detail-main-image" />
+          <img src="${product.image}" alt="${product.name}" class="${buildImageClasses(product.imageClass, product.imageSizeClass)}" id="detail-main-image" />
         </div>
       </div>
       <div class="product-page-copy">
         <p class="breadcrumb">Inicio / ${product.category} / ${product.name}</p>
-        <p class="product-category">${product.category}</p>
         <h1>${product.name}</h1>
         <p class="product-page-price">${formatPrice(product.price, state.currency)}</p>
         <button class="installment-pill" type="button" data-open-payment>

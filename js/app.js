@@ -56,6 +56,10 @@ const searchRoutes = [
   { keywords: ["earcuff", "ear cuff", "cuff"], href: "./earcuff.html" },
 ];
 
+function buildImageClasses(...classNames) {
+  return classNames.filter(Boolean).join(" ");
+}
+
 function normalize(value) {
   return value.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
 }
@@ -129,15 +133,14 @@ function renderProducts() {
               product.hoverImage
                 ? `
             <div class="product-image-stack">
-              <img src="${product.image}" alt="${product.name}" class="product-image-primary ${product.imageClass ?? ""}" />
-              <img src="${product.hoverImage}" alt="${product.name} vista alternativa" class="product-image-hover ${product.hoverImageClass ?? ""}" />
+              <img src="${product.image}" alt="${product.name}" class="${buildImageClasses("product-image-primary", product.imageClass, product.imageSizeClass)}" />
+              <img src="${product.hoverImage}" alt="${product.name} vista alternativa" class="${buildImageClasses("product-image-hover", product.hoverImageClass, product.hoverImageSizeClass ?? product.imageSizeClass)}" />
             </div>
             `
-                : `<img src="${product.image}" alt="${product.name}" class="${product.imageClass ?? ""}" />`
+                : `<img src="${product.image}" alt="${product.name}" class="${buildImageClasses(product.imageClass, product.imageSizeClass)}" />`
             }
           </button>
           <div class="product-body">
-            <p class="product-category">${product.category}</p>
             <h3><button class="product-link" type="button" data-view-product="${product.id}">${product.name}</button></h3>
             <div class="product-footer">
               <span class="price">${formatPrice(product.price, state.currency)}</span>
