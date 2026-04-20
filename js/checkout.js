@@ -18,6 +18,7 @@ const state = {
   couponOpen: false,
   couponCode: "",
   couponDiscountRate: 0,
+  step: 1,
 };
 
 const els = {
@@ -191,6 +192,35 @@ function renderCheckoutSummary() {
     els.summaryShipping.textContent = labels[state.deliveryMethod] ?? "A coordinar";
   }
   if (els.checkoutSubmit) els.checkoutSubmit.disabled = false;
+}
+
+function renderStep() {
+  document.querySelectorAll("[data-step]").forEach((block) => {
+    block.hidden = Number(block.dataset.step) !== state.step;
+  });
+
+  document.querySelectorAll("[data-step-indicator]").forEach((el) => {
+    const n = Number(el.dataset.stepIndicator);
+    el.classList.toggle("is-active", n === state.step);
+    el.classList.toggle("is-done", n < state.step);
+  });
+}
+
+function validateCurrentStep() {
+  const block = document.querySelector(`[data-step="${state.step}"]`);
+  if (!block) return true;
+  const inputs = Array.from(block.querySelectorAll("input:not([disabled]), select:not([disabled])"));
+  for (const input of inputs) {
+    if (!input.reportValidity()) return false;
+  }
+  return true;
+}
+
+function goToStep(next) {
+  if (next > state.step && !validateCurrentStep()) return;
+  state.step = Math.max(1, Math.min(3, next));
+  renderStep();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function renderCouponState() {
@@ -411,6 +441,12 @@ function bindEvents() {
       });
     }
 
+    const nextStepTrigger = event.target.closest("[data-next-step]");
+    if (nextStepTrigger) return goToStep(state.step + 1);
+
+    const prevStepTrigger = event.target.closest("[data-prev-step]");
+    if (prevStepTrigger) return goToStep(state.step - 1);
+
     const couponToggleTrigger = event.target.closest("#checkout-coupon-toggle");
     if (couponToggleTrigger) {
       state.couponOpen = !state.couponOpen;
@@ -431,6 +467,7 @@ function init() {
   ensureClearCartButton();
   renderCurrencyButtons();
   renderCart();
+  renderStep();
   renderDeliveryMethod();
   renderPaymentMethod();
   renderCouponState();

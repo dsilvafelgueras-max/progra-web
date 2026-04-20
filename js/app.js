@@ -26,6 +26,9 @@ const els = {
   productGrid: document.querySelector("#product-grid"),
   carouselPrev: document.querySelector("[data-carousel-prev]"),
   carouselNext: document.querySelector("[data-carousel-next]"),
+  productGrid2: document.querySelector("#product-grid-otros"),
+  carouselPrev2: document.querySelector("[data-carousel-prev2]"),
+  carouselNext2: document.querySelector("[data-carousel-next2]"),
   cartCount: document.querySelector("#cart-count"),
   cartDrawer: document.querySelector("#cart-drawer"),
   cartItems: document.querySelector("#cart-items"),
@@ -214,10 +217,34 @@ function renderFilters() {
   renderSortPanel();
 }
 
+function buildProductCard(product, index) {
+  return `
+    <article class="product-card fade-in" style="animation-delay: ${index * 40}ms">
+      <button class="product-image product-image-button" type="button" data-view-product="${product.id}" aria-label="Ver ${product.name}">
+        ${
+          product.hoverImage
+            ? `<div class="product-image-stack">
+                <img src="${product.image}" alt="${product.name}" class="${buildImageClasses("product-image-primary", product.imageClass, product.imageSizeClass)}" />
+                <img src="${product.hoverImage}" alt="${product.name} vista alternativa" class="${buildImageClasses("product-image-hover", product.hoverImageClass, product.hoverImageSizeClass ?? product.imageSizeClass)}" />
+               </div>`
+            : `<img src="${product.image}" alt="${product.name}" class="${buildImageClasses(product.imageClass, product.imageSizeClass)}" />`
+        }
+      </button>
+      <div class="product-body">
+        <h3><button class="product-link" type="button" data-view-product="${product.id}">${product.name}</button></h3>
+        <div class="product-footer">
+          <span class="price">${formatPrice(product.price, state.currency)}</span>
+          <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar</button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 function renderProducts() {
   if (!els.productGrid) return;
 
-  const visible = sortProducts(getProductsByCategory(state.activeFilter));
+  const visible = sortProducts(getProductsByCategory("Anillos"));
 
   if (visible.length === 0) {
     els.productGrid.innerHTML = `
@@ -232,35 +259,23 @@ function renderProducts() {
     return;
   }
 
-  els.productGrid.innerHTML = visible
-    .map(
-      (product, index) => `
-        <article class="product-card fade-in" style="animation-delay: ${index * 40}ms">
-          <button class="product-image product-image-button" type="button" data-view-product="${product.id}" aria-label="Ver ${product.name}">
-            ${
-              product.hoverImage
-                ? `
-            <div class="product-image-stack">
-              <img src="${product.image}" alt="${product.name}" class="${buildImageClasses("product-image-primary", product.imageClass, product.imageSizeClass)}" />
-              <img src="${product.hoverImage}" alt="${product.name} vista alternativa" class="${buildImageClasses("product-image-hover", product.hoverImageClass, product.hoverImageSizeClass ?? product.imageSizeClass)}" />
-            </div>
-            `
-                : `<img src="${product.image}" alt="${product.name}" class="${buildImageClasses(product.imageClass, product.imageSizeClass)}" />`
-            }
-          </button>
-          <div class="product-body">
-            <h3><button class="product-link" type="button" data-view-product="${product.id}">${product.name}</button></h3>
-            <div class="product-footer">
-              <span class="price">${formatPrice(product.price, state.currency)}</span>
-              <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar</button>
-            </div>
-          </div>
-        </article>
-      `
-    )
-    .join("");
-
+  els.productGrid.innerHTML = visible.map(buildProductCard).join("");
   requestAnimationFrame(updateCarouselControls);
+}
+
+function renderOtrosProducts() {
+  if (!els.productGrid2) return;
+
+  const otras = ["Pulseras", "Aros", "Earcuff", "Collares"];
+  const visible = products.filter((p) => otras.includes(p.category));
+
+  if (visible.length === 0) {
+    els.productGrid2.innerHTML = `<article class="product-card fade-in"><div class="product-body"><p class="product-category">Proximamente</p><h3>Mas piezas proximamente</h3></div></article>`;
+    return;
+  }
+
+  els.productGrid2.innerHTML = visible.map(buildProductCard).join("");
+  requestAnimationFrame(updateCarouselControls2);
 }
 
 function getCarouselStep() {
@@ -282,10 +297,28 @@ function updateCarouselControls() {
   els.carouselNext.disabled = current >= maxScroll - 4;
 }
 
+function updateCarouselControls2() {
+  if (!els.productGrid2 || !els.carouselPrev2 || !els.carouselNext2) return;
+
+  const maxScroll = Math.max(0, els.productGrid2.scrollWidth - els.productGrid2.clientWidth);
+  const current = els.productGrid2.scrollLeft;
+
+  els.carouselPrev2.disabled = current <= 4;
+  els.carouselNext2.disabled = current >= maxScroll - 4;
+}
+
 function scrollCarousel(direction) {
   if (!els.productGrid) return;
   els.productGrid.scrollBy({ left: getCarouselStep() * direction, behavior: "smooth" });
   window.setTimeout(updateCarouselControls, 220);
+}
+
+function scrollCarousel2(direction) {
+  if (!els.productGrid2) return;
+  const firstCard = els.productGrid2.querySelector(".product-card");
+  const step = firstCard ? firstCard.getBoundingClientRect().width + 16 : 320;
+  els.productGrid2.scrollBy({ left: step * direction, behavior: "smooth" });
+  window.setTimeout(updateCarouselControls2, 220);
 }
 
 function getCartDetailed() {
@@ -417,6 +450,8 @@ function bindEvents() {
 
   els.carouselPrev?.addEventListener("click", () => scrollCarousel(-1));
   els.carouselNext?.addEventListener("click", () => scrollCarousel(1));
+  els.carouselPrev2?.addEventListener("click", () => scrollCarousel2(-1));
+  els.carouselNext2?.addEventListener("click", () => scrollCarousel2(1));
   els.productGrid?.addEventListener("scroll", updateCarouselControls, { passive: true });
   window.addEventListener("resize", updateCarouselControls);
 
@@ -487,10 +522,12 @@ function init() {
   renderCurrencyButtons();
   renderFilters();
   renderProducts();
+  renderOtrosProducts();
   renderCart();
   bindEvents();
   fetchUsdToArsRate().then(() => {
     renderProducts();
+    renderOtrosProducts();
     renderCart();
   });
 }
