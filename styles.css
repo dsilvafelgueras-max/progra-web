@@ -93,6 +93,7 @@ p {
   inset: 0;
   border-radius: 0;
   overflow: hidden;
+  background: #111;
 }
 
 .hero-media::after {
@@ -107,6 +108,7 @@ p {
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: rotate(90deg) scale(1.8);
 }
 
 .topbar,
