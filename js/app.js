@@ -6,15 +6,18 @@
   getProductById,
   loadCart,
   loadCurrency,
+  loadFavorites,
   products,
   saveCart,
   saveCurrency,
+  saveFavorites,
 } from "./data.js";
 
 const state = {
   activeFilter: "Todas",
   sortOption: "popular",
   cart: loadCart(),
+  favorites: loadFavorites(),
   currency: loadCurrency(),
   cartOpen: false,
   menuOpen: false,
@@ -218,8 +221,14 @@ function renderFilters() {
 }
 
 function buildProductCard(product, index) {
+  const isFav = state.favorites.includes(product.id);
   return `
     <article class="product-card fade-in" style="animation-delay: ${index * 40}ms">
+      <button class="favorite-button${isFav ? " is-active" : ""}" type="button" data-toggle-favorite="${product.id}" aria-label="${isFav ? "Quitar de favoritos" : "Agregar a favoritos"}">
+        <svg viewBox="0 0 24 24" fill="${isFav ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </button>
       <button class="product-image product-image-button" type="button" data-view-product="${product.id}" aria-label="Ver ${product.name}">
         ${
           product.hoverImage
@@ -234,7 +243,7 @@ function buildProductCard(product, index) {
         <h3><button class="product-link" type="button" data-view-product="${product.id}">${product.name}</button></h3>
         <div class="product-footer">
           <span class="price">${formatPrice(product.price, state.currency)}</span>
-          <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar</button>
+          <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar al carrito</button>
         </div>
       </div>
     </article>
@@ -382,6 +391,15 @@ function removeFromCart(productId) {
   renderCart();
 }
 
+function toggleFavorite(productId) {
+  const index = state.favorites.indexOf(productId);
+  if (index === -1) state.favorites.push(productId);
+  else state.favorites.splice(index, 1);
+  saveFavorites(state.favorites);
+  renderProducts();
+  renderOtrosProducts();
+}
+
 function clearCart() {
   state.cart = [];
   saveCart(state.cart);
@@ -471,6 +489,8 @@ function bindEvents() {
     if (removeTrigger) return removeFromCart(removeTrigger.dataset.removeCart);
     const clearTrigger = event.target.closest("[data-clear-cart]");
     if (clearTrigger) return clearCart();
+    const favTrigger = event.target.closest("[data-toggle-favorite]");
+    if (favTrigger) return toggleFavorite(favTrigger.dataset.toggleFavorite);
     const toggleCartTrigger = event.target.closest("[data-toggle-cart]");
     if (toggleCartTrigger) return setCartOpen(!state.cartOpen);
     const toggleMenuTrigger = event.target.closest("[data-toggle-menu]");

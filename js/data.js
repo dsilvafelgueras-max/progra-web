@@ -228,6 +228,7 @@
 
 export const filters = ["Todas", "Anillos", "Pulseras", "Aros", "Earcuff", "Collares"];
 export const storageKey = "sangria-cart";
+export const favoritesStorageKey = "sangria-favorites";
 export const currencyStorageKey = "sangria-currency";
 export const usdRateStorageKey = "sangria-usd-rate";
 const defaultUsdRate = 1400;
@@ -244,6 +245,19 @@ export function loadCart() {
 
 export function saveCart(cart) {
   localStorage.setItem(storageKey, JSON.stringify(cart));
+}
+
+export function loadFavorites() {
+  try {
+    const saved = localStorage.getItem(favoritesStorageKey);
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveFavorites(favorites) {
+  localStorage.setItem(favoritesStorageKey, JSON.stringify(favorites));
 }
 
 export function loadCurrency() {
