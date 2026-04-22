@@ -74,14 +74,8 @@ function renderGiftCards() {
             </span>
           </button>
           <div class="gift-card-shop-body">
-            <h3>
-              <button class="product-link" type="button" data-view-product="${product.id}">
-                ${product.name}
-              </button>
-            </h3>
             <div class="product-footer">
-              <span class="price">${formatPrice(product.price, state.currency)}</span>
-              <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar</button>
+              <button class="primary-button full-width" type="button" data-add-cart="${product.id}">Agregar al carrito</button>
             </div>
           </div>
         </article>

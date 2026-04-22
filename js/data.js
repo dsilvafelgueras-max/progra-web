@@ -44,16 +44,6 @@
     isGiftCard: true,
   },
   {
-    id: "gift-card-200000",
-    name: "Gift Card 200.000",
-    category: "Tarjetas Regalo",
-    slug: "tarjeta-regalo",
-    price: 200000,
-    priceLabel: "$200.000",
-    image: "./assets/products/gift-card-sangria.svg",
-    description: "Tarjeta regalo digital para usar online en SANGRIA.",
-    isGiftCard: true,
-  },  {
     id: "pulsera-onda",
     name: "Pulsera Onda",
     category: "Pulseras",
