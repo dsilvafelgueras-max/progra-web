@@ -334,7 +334,7 @@ function renderCart() {
         <article class="cart-row">
           <div>
             <h3>${item.name}</h3>
-            <p>${item.category} Â· ${item.quantity} unidad${item.quantity > 1 ? "es" : ""}</p>
+            <p>${item.quantity} unidad${item.quantity > 1 ? "es" : ""}</p>
           </div>
           <div>
             <strong>${formatPrice(item.price * item.quantity, state.currency)}</strong>
@@ -489,12 +489,13 @@ function bindEvents() {
 }
 
 function init() {
+  bindEvents();
   setPaymentOpen(false);
   ensureClearCartButton();
+  mountCurrencySwitch();
   renderCurrencyButtons();
   renderProduct();
   renderCart();
-  bindEvents();
   fetchUsdToArsRate().then(() => {
     renderProduct();
     renderCart();

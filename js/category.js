@@ -18,7 +18,6 @@ const state = {
   cartOpen: false,
   menuOpen: false,
   sortOption: "popular",
-  sortOpen: false,
 };
 
 const els = {
@@ -43,13 +42,10 @@ const els = {
 };
 
 const sortOptions = [
-  { value: "popular", label: "Mas vendidos" },
-  { value: "price-asc", label: "Precio: menor a mayor" },
-  { value: "price-desc", label: "Precio: mayor a menor" },
-  { value: "name-asc", label: "A - Z" },
-  { value: "name-desc", label: "Z - A" },
-  { value: "newest", label: "Mas nuevo al mas viejo" },
-  { value: "oldest", label: "Mas viejo al mas nuevo" },
+  { value: "popular", label: "más vendidos" },
+  { value: "newest", label: "nuevo" },
+  { value: "price-asc", label: "precio: menor a mayor" },
+  { value: "price-desc", label: "precio: mayor a menor" },
 ];
 
 function ensureClearCartButton() {
@@ -122,80 +118,24 @@ function sortProducts(items) {
 function ensureSortToolbar() {
   if (els.sortMount || !els.productGrid?.parentElement) return;
   const toolbar = document.createElement("div");
-  toolbar.className = "catalog-tools";
+  toolbar.className = "sort-inline-bar";
   els.productGrid.parentElement.insertBefore(toolbar, els.productGrid);
   els.sortMount = toolbar;
-}
-
-function ensureSortPanel() {
-  if (els.sortPanel) return;
-
-  const panel = document.createElement("div");
-  panel.className = "sort-panel";
-  panel.hidden = true;
-  panel.innerHTML = `
-    <div class="sort-panel-card" role="dialog" aria-modal="true" aria-labelledby="sort-panel-title">
-      <div class="sort-panel-head">
-        <h3 id="sort-panel-title">Ordenar</h3>
-        <button class="sort-panel-close" type="button" data-close-sort>Cerrar</button>
-      </div>
-      <div class="sort-panel-options">
-        ${sortOptions
-          .map(
-            (option) => `
-              <label class="sort-option">
-                <input type="radio" name="category-sort" value="${option.value}" ${
-                  option.value === state.sortOption ? "checked" : ""
-                } />
-                <span>${option.label}</span>
-              </label>
-            `
-          )
-          .join("")}
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(panel);
-  els.sortPanel = panel;
-}
-
-function renderSortPanel() {
-  ensureSortPanel();
-  if (!els.sortPanel) return;
-
-  els.sortPanel
-    .querySelectorAll('input[name="category-sort"]')
-    .forEach((input) => {
-      input.checked = input.value === state.sortOption;
-    });
-
-  if (els.sortTrigger) {
-    els.sortTrigger.querySelector("[data-sort-label]").textContent = getSortLabel();
-  }
 }
 
 function renderSortToolbar() {
   ensureSortToolbar();
   if (!els.sortMount) return;
 
-  els.sortMount.innerHTML = `
-    <button class="sort-trigger" type="button" data-toggle-sort>
-      <span>Filtrar:</span>
-      <strong data-sort-label>${getSortLabel()}</strong>
-    </button>
-  `;
-
-  els.sortTrigger = els.sortMount.querySelector("[data-toggle-sort]");
-  renderSortPanel();
-}
-
-function setSortOpen(nextValue) {
-  state.sortOpen = nextValue;
-  ensureSortPanel();
-  if (!els.sortPanel) return;
-  els.sortPanel.hidden = !nextValue;
-  els.sortPanel.classList.toggle("open", nextValue);
+  els.sortMount.innerHTML = sortOptions
+    .map((option) => `
+      <button
+        class="sort-inline-option${option.value === state.sortOption ? " is-active" : ""}"
+        type="button"
+        data-sort-value="${option.value}"
+      >${option.label}</button>
+    `)
+    .join('<span class="sort-inline-sep">·</span>');
 }
 
 function goToProduct(productId) {
@@ -284,7 +224,7 @@ function renderCart() {
 
   els.cartItems.innerHTML = items.map((item) => `
     <article class="cart-row">
-      <div><h3>${item.name}</h3><p>${item.category} · ${item.quantity} unidad${item.quantity > 1 ? "es" : ""}</p></div>
+      <div><h3>${item.name}</h3><p>${item.quantity} unidad${item.quantity > 1 ? "es" : ""}</p></div>
       <div><strong>${formatPrice(item.price * item.quantity, state.currency)}</strong><button class="remove-button" type="button" data-remove-cart="${item.id}">Quitar</button></div>
     </article>
   `).join("");
@@ -365,32 +305,19 @@ function bindEvents() {
     if (toggleCartTrigger) return setCartOpen(!state.cartOpen);
     const toggleMenuTrigger = event.target.closest("[data-toggle-menu]");
     if (toggleMenuTrigger) return setMenuOpen(!state.menuOpen);
-    const toggleSortTrigger = event.target.closest("[data-toggle-sort]");
-    if (toggleSortTrigger) return setSortOpen(!state.sortOpen);
-    const closeSortTrigger = event.target.closest("[data-close-sort]");
-    if (closeSortTrigger) return setSortOpen(false);
+    const sortOptionTrigger = event.target.closest("[data-sort-value]");
+    if (sortOptionTrigger) {
+      state.sortOption = sortOptionTrigger.dataset.sortValue;
+      renderSortToolbar();
+      renderProducts();
+      return;
+    }
     const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
     if (toggleSearchTrigger) {
       els.searchForm?.classList.toggle("is-open");
       els.searchInput?.focus();
     }
 
-    if (
-      state.sortOpen &&
-      els.sortPanel &&
-      !event.target.closest(".sort-panel-card")
-    ) {
-      setSortOpen(false);
-    }
-  });
-
-  document.addEventListener("change", (event) => {
-    const sortOption = event.target.closest('input[name="category-sort"]');
-    if (!sortOption) return;
-    state.sortOption = sortOption.value;
-    renderSortPanel();
-    renderProducts();
-    setSortOpen(false);
   });
 
   els.overlay.addEventListener("click", () => {
@@ -400,12 +327,13 @@ function bindEvents() {
 }
 
 function init() {
+  bindEvents();
   ensureClearCartButton();
+  mountCurrencySwitch();
   renderSortToolbar();
   renderCurrencyButtons();
   renderProducts();
   renderCart();
-  bindEvents();
   fetchUsdToArsRate().then(() => {
     renderProducts();
     renderCart();

@@ -6,8 +6,8 @@
   --surface-strong: rgba(255, 255, 255, 0.92);
   --panel-text: #2B2420;
   --shadow: 0 28px 80px rgba(0, 0, 0, 0.22);
-  --radius: 28px;
-  --radius-sm: 18px;
+  --radius: 2px;
+  --radius-sm: 2px;
   --max-width: 1680px;
   --accent-blue: #1A0A10;
 }
@@ -25,7 +25,9 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Inter", sans-serif;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.08em;
   color: var(--text);
   background: #ece7df;
 }
@@ -46,11 +48,20 @@ button {
 }
 
 h1,
-h2,
+h2 {
+  font-family: "Cormorant Garamond", "Bodoni Moda", serif;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
 h3,
 .brand,
 .hero-kicker {
-  font-family: "Syne", sans-serif;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  letter-spacing: 0.1em;
 }
 
 p {
@@ -145,10 +156,11 @@ p {
   align-items: center;
   gap: 0.45rem;
   min-width: 250px;
-  padding: 0.48rem 0.9rem;
-  border-radius: 999px;
-  background: rgba(26, 10, 16, 0.08);
-  border: 1px solid rgba(26, 10, 16, 0.16);
+  padding: 0.48rem 0.2rem;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(26, 10, 16, 0.25);
 }
 
 .search-label {
@@ -156,7 +168,7 @@ p {
   align-items: center;
   color: var(--accent-blue);
   font-size: 0.96rem;
-  font-weight: 600;
+  font-weight: 300;
   transition: opacity 160ms ease, width 160ms ease, margin 160ms ease;
 }
 
@@ -230,7 +242,7 @@ p {
   color: var(--accent-blue);
   text-decoration: none;
   font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
+  font-weight: 300;
   letter-spacing: 0.12em;
   font-family: "Alte Haas Grotesk", "Syne", sans-serif;
 }
@@ -466,7 +478,7 @@ p {
 .secondary-button,
 .filter-button,
 .ghost-button {
-  border-radius: 999px;
+  border-radius: 0;
   padding: 0.95rem 1.15rem;
   transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
 }
@@ -483,7 +495,9 @@ p {
 .ghost-button,
 .menu-links button,
 .menu-links a {
-  font-weight: 600;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.1em;
 }
 
 .primary-button:hover,
@@ -499,6 +513,22 @@ p {
   border: none;
   background: #1A0A10;
   color: #E8D5C4;
+}
+
+.hero .primary-button {
+  background: transparent;
+  color: rgba(232, 213, 196, 0.9);
+  border: 1px solid rgba(232, 213, 196, 0.5);
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.hero .primary-button:hover {
+  background: rgba(232, 213, 196, 0.1);
+  border-color: rgba(232, 213, 196, 0.9);
+  transform: none;
 }
 
 .secondary-button,
@@ -520,7 +550,7 @@ p {
 .section {
   width: min(calc(100% - 2rem), var(--max-width));
   margin: 0 auto;
-  padding: 1.2rem 0 4rem;
+  padding: 0.4rem 0 3rem;
   color: #2B2420;
 }
 
@@ -555,7 +585,6 @@ p {
 .product-card,
 .manifesto-copy,
 .manifesto-stats,
-.contact-form,
 .menu-drawer,
 .cart-drawer {
   border-radius: var(--radius);
@@ -564,10 +593,14 @@ p {
 
 .category-card,
 .manifesto-copy,
-.manifesto-stats,
-.contact-form {
+.manifesto-stats {
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(43, 36, 32, 0.08);
+}
+
+.contact-form {
+  background: transparent;
+  border: none;
 }
 
 .product-card {
@@ -577,9 +610,13 @@ p {
 }
 
 .category-card,
-.manifesto-copy,
-.contact-form {
+.manifesto-copy {
   padding: 1.6rem;
+}
+
+.contact-form {
+  padding: 0;
+  box-shadow: none;
 }
 
 .category-card {
@@ -622,6 +659,45 @@ p {
   align-items: center;
 }
 
+.sort-inline-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0 0 1.8rem;
+  flex-wrap: wrap;
+}
+
+.sort-inline-option {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: rgba(43, 36, 32, 0.45);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.sort-inline-option.is-active {
+  color: #2B2420;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.sort-inline-option:hover {
+  color: #2B2420;
+}
+
+.sort-inline-sep {
+  color: rgba(43, 36, 32, 0.2);
+  font-size: 0.65rem;
+  user-select: none;
+}
+
 .sort-trigger {
   display: inline-flex;
   align-items: center;
@@ -631,11 +707,11 @@ p {
   color: #2B2420;
   padding: 0.95rem 1.15rem;
   border-radius: 999px;
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .sort-trigger strong {
-  font-weight: 700;
+  font-weight: 300;
 }
 
 .catalog-tools {
@@ -770,13 +846,13 @@ p {
 }
 
 .catalog-arrow {
-  width: 52px;
-  height: 52px;
+  width: 36px;
+  height: 36px;
   border: 1px solid rgba(26, 10, 16, 0.16);
   border-radius: 999px;
   background: #ffffff;
   color: var(--accent-blue);
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   line-height: 1;
 }
 
@@ -788,7 +864,7 @@ p {
 .home-page .product-carousel {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(320px, 380px);
+  grid-auto-columns: calc(20% - 0.65rem);
   grid-template-columns: none;
   gap: 0.8rem;
   overflow-x: auto;
@@ -808,25 +884,71 @@ p {
   position: relative;
   display: flex;
   flex-direction: column;
+  border-radius: 4px;
+  box-shadow: none;
+  border: none;
+  background: #C8C2BC;
+}
+
+.product-card .primary-button {
+  background: transparent;
+  color: #2B2420;
+  border: 1px solid rgba(43, 36, 32, 0.3);
+  border-radius: 4px;
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: opacity 0.2s, transform 0.2s, border-color 0.15s, background 0.15s;
+}
+
+.product-card .primary-button {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.product-card:hover .primary-button {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.product-card .primary-button:hover {
+  background: #1a1a1a;
+  color: #f5ede6;
+  border-color: #1a1a1a;
 }
 
 .favorite-button {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 0.6rem;
+  right: 0.6rem;
   z-index: 2;
-  width: 2rem;
-  height: 2rem;
-  padding: 0.3rem;
-  background: rgba(255, 255, 255, 0.85);
+  width: 1.4rem;
+  height: 1.4rem;
+  padding: 0;
+  background: transparent;
   border: none;
-  border-radius: 50%;
+  border-radius: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1a1a1a;
-  transition: background 0.15s, color 0.15s;
+  color: rgba(43, 36, 32, 0.35);
+  opacity: 0;
+  transition: opacity 0.2s, color 0.15s;
+}
+
+.product-card:hover .favorite-button {
+  opacity: 1;
+}
+
+.favorite-button.is-active {
+  opacity: 1;
+  color: #2B2420;
+}
+
+.favorite-button:hover {
+  color: #2B2420;
 }
 
 .user-icon-img {
@@ -861,10 +983,20 @@ p {
 
 .product-image {
   aspect-ratio: 1 / 1;
-  background: #ffffff;
+  background: #C8C2BC;
   display: grid;
   place-items: center;
-  padding: 0.85rem;
+  padding: 28px;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-image img {
+  mix-blend-mode: multiply;
 }
 
 .product-image-button {
@@ -936,9 +1068,9 @@ p {
 
 .product-body {
   display: grid;
-  gap: 0.35rem;
-  padding: 0.9rem 1rem 1rem;
-  background: #fff;
+  gap: 0;
+  padding: 0.55rem 0.6rem 0.65rem;
+  background: #C8C2BC;
   flex: 1;
 }
 
@@ -952,7 +1084,8 @@ p {
 
 .product-body h3 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.88rem;
+  font-weight: 300;
   line-height: 1.18;
 }
 
@@ -970,13 +1103,15 @@ p {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.6rem;
-  margin-top: 0.55rem;
+  gap: 0.5rem;
+  margin-top: 0;
 }
 
 .price {
-  font-weight: 700;
-  font-size: 0.98rem;
+  font-weight: 400;
+  font-size: 0.82rem;
+  color: rgba(43, 36, 32, 0.55);
+  letter-spacing: 0.04em;
 }
 
 .manifesto-grid {
@@ -1019,10 +1154,43 @@ p {
 .contact-form input,
 .contact-form textarea {
   width: 100%;
-  padding: 1rem;
-  border-radius: 18px;
-  border: 1px solid rgba(43, 36, 32, 0.1);
-  background: #ffffff;
+  padding: 0.6rem 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid rgba(43, 36, 32, 0.25);
+  background: transparent;
+  color: #2B2420;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-bottom-color: #2B2420;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(43, 36, 32, 0.35);
+}
+
+.contact-form .primary-button {
+  display: block;
+  margin: 2rem auto 0;
+  width: auto;
+  background: transparent;
+  color: #2B2420;
+  border: 1px solid rgba(43, 36, 32, 0.4);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.85rem 2.5rem;
+}
+
+.contact-form .primary-button:hover {
+  background: #2B2420;
+  color: #f5ede6;
+  border-color: #2B2420;
 }
 
 .full-row,
@@ -1094,7 +1262,7 @@ p {
   cursor: pointer;
   color: var(--accent-blue);
   font-size: clamp(1.2rem, 2vw, 1.8rem);
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .menu-group summary::-webkit-details-marker {
@@ -1328,33 +1496,42 @@ p {
 }
 
 .currency-switch button {
-  border: 1px solid rgba(43, 36, 32, 0.12);
-  background: #ffffff;
-  color: #1A0A10;
-  padding: 0.8rem 1rem;
-  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: rgba(43, 36, 32, 0.35);
+  padding: 0.2rem 0;
+  border-radius: 0;
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.15s;
 }
 
 .currency-switch button.active {
-  background: #1A0A10;
-  color: #E8D5C4;
-  border-color: #1A0A10;
+  color: #2B2420;
+  background: transparent;
+  border: none;
+}
+
+.currency-switch button:hover {
+  color: #2B2420;
 }
 
 .topbar-currency {
-  gap: 0.28rem;
-  margin-left: 1rem;
+  gap: 0;
+  margin-left: 0.6rem;
+  align-items: center;
 }
 
-.topbar-currency button {
-  padding: 0.3rem 0.58rem;
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-}
-
-.home-page .currency-switch {
-  display: none;
+.topbar-currency button:first-child::after {
+  content: " /";
+  color: rgba(43, 36, 32, 0.2);
+  font-weight: 300;
+  margin-right: 0.3rem;
+  pointer-events: none;
 }
 
 .payment-row span {
@@ -1382,14 +1559,20 @@ p {
 }
 
 .payment-logo-img {
-  width: 76px;
-  height: 40px;
-  padding: 0.35rem;
-  border: 1px solid rgba(43, 36, 32, 0.12);
-  background: #ffffff;
+  width: 52px;
+  height: 28px;
+  padding: 0.25rem;
+  border: 1px solid rgba(43, 36, 32, 0.08);
+  background: transparent;
   border-radius: 4px;
   display: block;
   object-fit: contain;
+  filter: grayscale(1) opacity(0.5);
+  transition: filter 0.2s;
+}
+
+.payment-logo-img:hover {
+  filter: grayscale(0) opacity(1);
 }
 
 .footer-signature {
@@ -1435,7 +1618,7 @@ p {
   border: 1px solid rgba(26, 10, 16, 0.22);
   background: rgba(255, 255, 255, 0.9);
   color: #1A0A10;
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .regret-button.footer-regret-inline {
@@ -1696,14 +1879,14 @@ p {
   border: 2px solid rgba(43, 36, 32, 0.7);
   border-radius: 50%;
   color: #2B2420;
-  font-weight: 700;
+  font-weight: 300;
   font-size: 1.2rem;
 }
 
 .size-guide-chip strong {
   color: rgba(43, 36, 32, 0.72);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .size-guide-actions {
@@ -1779,7 +1962,7 @@ p {
   color: rgba(255, 255, 255, 0.9);
   font-family: "Syne", sans-serif;
   font-size: clamp(1.55rem, 2.3vw, 2.25rem);
-  font-weight: 700;
+  font-weight: 300;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.64);
 }
 
@@ -1802,7 +1985,7 @@ p {
 }
 
 .gift-card-shop-body .product-link {
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .gift-card-shop-body .product-footer {
@@ -1813,7 +1996,7 @@ p {
 .gift-card-shop-body .price {
   color: #2B2420;
   font-size: clamp(1.12rem, 1.4vw, 1.45rem);
-  font-weight: 700;
+  font-weight: 300;
   letter-spacing: 0.01em;
 }
 
@@ -1857,7 +2040,7 @@ p {
   font-family: "Bodoni Moda", serif;
   font-size: clamp(1.7rem, 3vw, 2.5rem);
   text-align: center;
-  font-weight: 600;
+  font-weight: 300;
   text-shadow: 0 1px 0 rgba(255,255,255,0.65);
 }
 
@@ -1960,7 +2143,7 @@ p {
 
 .field-group label {
   font-size: 0.82rem;
-  font-weight: 600;
+  font-weight: 300;
   letter-spacing: 0.06em;
   color: #2B2420;
 }
@@ -1986,7 +2169,7 @@ p {
   padding: 0;
   cursor: pointer;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 300;
   color: #2B2420;
   text-decoration: underline;
 }
@@ -2096,8 +2279,12 @@ p {
 }
 
 .subpage-copy h1 {
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
-  line-height: 0.92;
+  font-size: 48px;
+  line-height: 1.05;
+  font-family: "Cormorant Garamond", "Bodoni Moda", serif;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: -0.01em;
 }
 
 .breadcrumb {
@@ -2445,7 +2632,7 @@ p {
 
 .payment-modal-section-title {
   color: rgba(43, 36, 32, 0.58);
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .payment-option-card {
@@ -2472,7 +2659,7 @@ p {
 }
 
 .payment-option-kicker {
-  font-weight: 700;
+  font-weight: 300;
 }
 
 .payment-option-copy p {
@@ -2545,12 +2732,12 @@ p {
   border: 1px solid currentColor;
   border-radius: 999px;
   font-size: 0.88rem;
-  font-weight: 700;
+  font-weight: 300;
 }
 
 .checkout-step strong {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .checkout-step.is-active {
@@ -2824,7 +3011,7 @@ p {
 .checkout-coupon-message {
   margin: 0;
   font-size: 0.92rem;
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .checkout-coupon-message[data-state="success"] {
@@ -2873,7 +3060,7 @@ p {
 .checkout-error {
   margin: 0;
   color: #1A0A10;
-  font-weight: 600;
+  font-weight: 300;
 }
 
 .checkout-required-note {
