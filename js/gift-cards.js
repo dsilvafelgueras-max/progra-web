@@ -60,24 +60,17 @@ function renderGiftCards() {
     .map(
       (product, index) => `
         <article class="gift-card-shop-item fade-in" style="animation-delay: ${index * 40}ms">
-          <button
-            class="gift-card-visual"
-            type="button"
-            data-view-product="${product.id}"
-            aria-label="Ver ${product.name}"
-          >
+          <div class="gift-card-visual">
             <span class="gift-card-visual-brand">SANGRIA</span>
-            <span class="gift-card-visual-mark" aria-hidden="true"></span>
-            <span class="gift-card-visual-copy">
-              <span class="gift-card-visual-title">GIFT CARD</span>
-              <strong>${formatPrice(product.price, state.currency)}</strong>
-            </span>
-          </button>
-          <div class="gift-card-shop-body">
-            <div class="product-footer">
-              <button class="primary-button full-width" type="button" data-add-cart="${product.id}">Agregar al carrito</button>
+            <div class="gift-card-visual-bottom">
+              <div class="gift-card-visual-copy">
+                <span class="gift-card-visual-title">GIFT CARD</span>
+                <strong>${formatPrice(product.price, state.currency)}</strong>
+              </div>
+              <span class="gift-card-visual-circle" aria-hidden="true"></span>
             </div>
           </div>
+          <button class="gift-card-add-btn primary-button full-width" type="button" data-add-cart="${product.id}">Agregar al carrito</button>
         </article>
       `
     )

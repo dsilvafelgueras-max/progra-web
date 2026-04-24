@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "c:\\c\\Users\\Lola\\OneDrive\\Desktop\\progra web"
+    ],
+    "allow": [
+      "Bash(node -e ' *)"
+    ]
+  }
+}

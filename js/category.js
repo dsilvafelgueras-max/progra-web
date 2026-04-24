@@ -17,6 +17,7 @@ const state = {
   currency: loadCurrency(),
   cartOpen: false,
   menuOpen: false,
+  filterOpen: false,
   sortOption: "popular",
 };
 
@@ -39,6 +40,7 @@ const els = {
   topbarRight: document.querySelector(".topbar-right"),
   sortPanel: null,
   sortTrigger: null,
+  filterDrawer: null,
 };
 
 const sortOptions = [
@@ -115,27 +117,72 @@ function sortProducts(items) {
   }
 }
 
-function ensureSortToolbar() {
+function ensureFilterTrigger() {
   if (els.sortMount || !els.productGrid?.parentElement) return;
   const toolbar = document.createElement("div");
-  toolbar.className = "sort-inline-bar";
+  toolbar.className = "filter-trigger-bar";
+  toolbar.innerHTML = `
+    <button class="filter-trigger-btn" type="button" data-open-filter>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+        <line x1="0" y1="1" x2="16" y2="1"/>
+        <line x1="3" y1="6" x2="13" y2="6"/>
+        <line x1="6" y1="11" x2="10" y2="11"/>
+      </svg>
+      filtrar
+    </button>
+  `;
   els.productGrid.parentElement.insertBefore(toolbar, els.productGrid);
   els.sortMount = toolbar;
 }
 
-function renderSortToolbar() {
-  ensureSortToolbar();
-  if (!els.sortMount) return;
+function ensureFilterDrawer() {
+  if (els.filterDrawer) return;
+  const drawer = document.createElement("aside");
+  drawer.className = "filter-drawer";
+  drawer.setAttribute("aria-hidden", "true");
+  drawer.innerHTML = `
+    <div class="filter-drawer-head">
+      <span class="filter-drawer-title">filtrar</span>
+      <button class="filter-drawer-close" type="button" data-close-filter aria-label="Cerrar filtros">×</button>
+    </div>
+    <div class="filter-drawer-body">
+      <div class="filter-drawer-group">
+        <p class="filter-drawer-label">ordenar</p>
+        ${sortOptions.map((option) => `
+          <button
+            class="filter-drawer-option${option.value === state.sortOption ? " is-active" : ""}"
+            type="button"
+            data-sort-value="${option.value}"
+          >${option.label}</button>
+        `).join("")}
+      </div>
+    </div>
+  `;
+  document.body.appendChild(drawer);
+  els.filterDrawer = drawer;
+}
 
-  els.sortMount.innerHTML = sortOptions
-    .map((option) => `
-      <button
-        class="sort-inline-option${option.value === state.sortOption ? " is-active" : ""}"
-        type="button"
-        data-sort-value="${option.value}"
-      >${option.label}</button>
-    `)
-    .join('<span class="sort-inline-sep">·</span>');
+function renderSortToolbar() {
+  ensureFilterTrigger();
+  ensureFilterDrawer();
+  if (!els.filterDrawer) return;
+  els.filterDrawer.querySelectorAll("[data-sort-value]").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.sortValue === state.sortOption);
+  });
+}
+
+function setFilterOpen(nextValue) {
+  state.filterOpen = nextValue;
+  ensureFilterDrawer();
+  els.filterDrawer?.classList.toggle("open", nextValue);
+  els.filterDrawer?.setAttribute("aria-hidden", String(!nextValue));
+  if (nextValue) {
+    state.cartOpen = false;
+    state.menuOpen = false;
+    els.cartDrawer?.classList.remove("open");
+    els.menuDrawer?.classList.remove("open");
+  }
+  syncOverlay();
 }
 
 function goToProduct(productId) {
@@ -252,7 +299,7 @@ function clearCart() {
 }
 
 function syncOverlay() {
-  els.overlay.hidden = !(state.cartOpen || state.menuOpen);
+  els.overlay.hidden = !(state.cartOpen || state.menuOpen || state.filterOpen);
 }
 
 function setCartOpen(nextValue) {
@@ -310,19 +357,24 @@ function bindEvents() {
       state.sortOption = sortOptionTrigger.dataset.sortValue;
       renderSortToolbar();
       renderProducts();
+      setFilterOpen(false);
       return;
     }
+    const openFilterTrigger = event.target.closest("[data-open-filter]");
+    if (openFilterTrigger) return setFilterOpen(true);
+    const closeFilterTrigger = event.target.closest("[data-close-filter]");
+    if (closeFilterTrigger) return setFilterOpen(false);
     const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
     if (toggleSearchTrigger) {
       els.searchForm?.classList.toggle("is-open");
       els.searchInput?.focus();
     }
-
   });
 
   els.overlay.addEventListener("click", () => {
     setCartOpen(false);
     setMenuOpen(false);
+    setFilterOpen(false);
   });
 }
 
