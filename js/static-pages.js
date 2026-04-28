@@ -26,6 +26,7 @@ const els = {
   searchForm: document.querySelector("[data-search-form]"),
   searchInput: document.querySelector("[data-search-input]"),
   currencyButtons: Array.from(document.querySelectorAll("[data-currency]")),
+  contactForm: document.querySelector("#contact-form"),
 };
 
 const searchRoutes = [
@@ -213,6 +214,22 @@ function bindEvents() {
   els.overlay?.addEventListener("click", () => {
     setCartOpen(false);
     setMenuOpen(false);
+  });
+
+  els.contactForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const confirmation = document.createElement("div");
+    confirmation.className = "contact-confirmation";
+    confirmation.innerHTML = `
+      <p class="contact-confirmation-main">Tu consulta fue enviada.</p>
+      <p class="contact-confirmation-sub">Te respondemos a la brevedad.</p>
+    `;
+    els.contactForm.replaceWith(confirmation);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        confirmation.classList.add("is-visible");
+      });
+    });
   });
 }
 
