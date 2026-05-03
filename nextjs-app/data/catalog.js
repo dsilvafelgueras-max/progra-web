@@ -87,6 +87,46 @@ export const products = [
     image: "/products/earcuff-crudo.png",
     description: "Earcuff de plata con forma organica y textura irregular.",
   },
+  {
+    id: "aro-argolla-lisa",
+    name: "Argolla Lisa",
+    category: "Aros",
+    priceArs: 78000,
+    image: "/products/aros-1.png",
+    description: "Aro argolla de plata con superficie texturada y perfil irregular.",
+  },
+  {
+    id: "aro-argolla-organica",
+    name: "Argolla Organica",
+    category: "Aros",
+    priceArs: 85000,
+    image: "/products/aros-2.png",
+    description: "Aro argolla de plata con relieve organico y volumen escultorico.",
+  },
+  {
+    id: "earcuff-gema-azul",
+    name: "Gema Azul",
+    category: "Earcuff",
+    priceArs: 92000,
+    image: "/products/earcuff-gema-azul.png",
+    description: "Earcuff de plata con gema azul engastada en montura irregular.",
+  },
+  {
+    id: "earcuff-gema-dorada",
+    name: "Gema Dorada",
+    category: "Earcuff",
+    priceArs: 92000,
+    image: "/products/earcuff-2.png",
+    description: "Earcuff de plata con gema dorada engastada en montura organica.",
+  },
+  {
+    id: "earcuff-cuff-plata",
+    name: "Cuff Plata",
+    category: "Earcuff",
+    priceArs: 72000,
+    image: "/products/earcuff-3.png",
+    description: "Earcuff ancho de plata pulida con gesto fluido y apertura lateral.",
+  },
 ];
 
 export const categories = ["Todas", "Anillos", "Pulseras", "Aros", "Earcuff", "Collares"];

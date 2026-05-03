@@ -1,8 +1,24 @@
 import type { Metadata } from "next";
+import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
+import { AuthProvider } from "../context/AuthContext";
 import SiteHeader from "../components/SiteHeader";
 import CartOverlays from "../components/CartOverlays";
+
+const cormorant = Cormorant_Garamond({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  weight: "300",
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -18,13 +34,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
+    <html lang="es" className={`${cormorant.variable} ${montserrat.variable}`}>
       <body>
-        <CartProvider>
-          <SiteHeader />
-          {children}
-          <CartOverlays />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <SiteHeader />
+            {children}
+            <CartOverlays />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

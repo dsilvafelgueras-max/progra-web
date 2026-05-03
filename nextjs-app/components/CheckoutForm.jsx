@@ -1,5 +1,6 @@
 'use client';
 import { useMemo, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const initialValues = {
   fullName: '',
@@ -29,6 +30,7 @@ function isStepValid(step, values) {
 }
 
 export default function CheckoutForm({ items, currency, rate, formatMoney }) {
+  const { user, addOrder } = useAuth();
   const [formValues, setFormValues] = useState(initialValues);
   const [step, setStep] = useState(1);
   const [touched, setTouched] = useState(false);
@@ -63,6 +65,19 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     if (!isStepValid(3, formValues)) {
       setTouched(true);
       return;
+    }
+    if (user) {
+      addOrder({
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        items: items.map((item) => ({
+          id: item.id,
+          name: item.name,
+          priceArs: item.priceArs,
+          quantity: item.quantity,
+        })),
+        total: subtotal,
+      });
     }
     setSubmitted(true);
   }
