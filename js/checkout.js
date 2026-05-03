@@ -412,7 +412,15 @@ function bindEvents() {
     renderPaymentMethod();
     renderCouponState();
     setCouponMessage("", "info");
-    if (els.checkoutSuccess) els.checkoutSuccess.hidden = false;
+    const main = document.querySelector("main");
+    if (main) {
+      main.className = "checkout-confirm";
+      main.innerHTML = `
+        <h1 class="checkout-confirm-title">Tu pedido fue recibido.</h1>
+        <p class="checkout-confirm-sub">Te contactamos a la brevedad para coordinar el pago y el envío.</p>
+        <a class="primary-button button-link checkout-confirm-btn" href="./anillos.html">Seguir viendo piezas</a>
+      `;
+    }
   });
 
   els.couponForm?.addEventListener("submit", (event) => {
@@ -461,6 +469,40 @@ function bindEvents() {
     setCartOpen(false);
     setMenuOpen(false);
   });
+
+  // Expiry auto-format MM/AA
+  ["cardExpiry", "cardExpiryDirect"].forEach((name) => {
+    const input = els.checkoutForm?.elements[name];
+    if (!input) return;
+    input.addEventListener("input", () => {
+      let v = input.value.replace(/\D/g, "").slice(0, 4);
+      if (v.length > 2) v = v.slice(0, 2) + "/" + v.slice(2);
+      input.value = v;
+    });
+  });
+
+  // FullName: letters and spaces only
+  const fullNameInput = els.checkoutForm?.elements["fullName"];
+  if (fullNameInput) {
+    fullNameInput.addEventListener("input", () => {
+      const err = document.getElementById("error-fullName");
+      const valid = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]*$/.test(fullNameInput.value);
+      if (err) err.hidden = valid || fullNameInput.value === "";
+      fullNameInput.setCustomValidity(valid ? "" : "Solo letras y espacios.");
+    });
+  }
+
+  // DNI: 7-8 digits
+  const dniInput = els.checkoutForm?.elements["dni"];
+  if (dniInput) {
+    dniInput.addEventListener("input", () => {
+      const err = document.getElementById("error-dni");
+      const val = dniInput.value;
+      const valid = /^[0-9]{7,8}$/.test(val);
+      if (err) err.hidden = val === "" || valid;
+      dniInput.setCustomValidity(valid || val === "" ? "" : "DNI inválido.");
+    });
+  }
 }
 
 function init() {
