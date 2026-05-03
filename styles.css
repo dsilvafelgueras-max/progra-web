@@ -29,7 +29,8 @@ body {
   font-weight: 300;
   letter-spacing: 0.08em;
   color: var(--text);
-  background: #ebe8e2;
+  background: #e8e3dc;
+
 }
 
 button,
@@ -131,7 +132,7 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: 52% 80%;
   display: block;
 }
 
@@ -2298,7 +2299,7 @@ p {
 .gift-card-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(220, 215, 208, 0.6);
+  background: #e3ddd5;
 }
 
 .gift-card-inner {
