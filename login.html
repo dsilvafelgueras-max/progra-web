@@ -129,6 +129,15 @@
         localStorage.setItem(USERS_KEY, JSON.stringify(users));
       }
 
+      function getReturnUrl() {
+        const stored = sessionStorage.getItem("login-return");
+        if (stored) { sessionStorage.removeItem("login-return"); return stored; }
+        const ref = document.referrer;
+        const sameOrigin = ref && ref.startsWith(window.location.origin);
+        const notLogin = !ref.includes("login.html");
+        return (sameOrigin && notLogin) ? ref : "./index.html";
+      }
+
       function setMode(register) {
         isRegister = register;
         loginTitle.textContent = register ? "Crear cuenta" : "Iniciar sesion";
@@ -148,7 +157,14 @@
         passwordError.textContent = "";
         confirmError.textContent = "";
         loginError.textContent = "";
+        passwordInput.classList.remove("input-invalid");
       }
+
+      // Indicador visual de contraseña (solo borde, sin texto)
+      passwordInput.addEventListener("input", () => {
+        const len = passwordInput.value.length;
+        passwordInput.classList.toggle("input-invalid", len > 0 && len < 6);
+      });
 
       toggleBtn.addEventListener("click", () => setMode(!isRegister));
 
@@ -161,18 +177,30 @@
         const confirm = confirmInput.value;
         let valid = true;
 
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (!email) {
+          emailError.textContent = "campo requerido";
+          valid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           emailError.textContent = "Ingresa un correo valido.";
           valid = false;
         }
-        if (password.length < 6) {
-          passwordError.textContent = "La contrasena debe tener al menos 6 caracteres.";
+
+        if (!password) {
+          passwordError.textContent = "campo requerido";
+          valid = false;
+        } else if (password.length < 6) {
+          passwordInput.classList.add("input-invalid");
           valid = false;
         }
-        if (isRegister && password !== confirm) {
+
+        if (isRegister && !confirm) {
+          confirmError.textContent = "campo requerido";
+          valid = false;
+        } else if (isRegister && password !== confirm) {
           confirmError.textContent = "Las contrasenas no coinciden.";
           valid = false;
         }
+
         if (!valid) return;
 
         const users = loadUsers();
@@ -185,14 +213,16 @@
           users[email] = { password, createdAt: new Date().toISOString(), orders: [], favorites: [] };
           saveUsers(users);
           localStorage.setItem(SESSION_KEY, JSON.stringify({ email }));
-          window.location.href = "./cuenta.html";
+          // Mostrar "Cuenta creada" y redirigir después de 2s
+          form.innerHTML = '<p class="login-success-msg">Cuenta creada.</p>';
+          setTimeout(() => { window.location.href = "./index.html"; }, 2000);
         } else {
           if (!users[email] || users[email].password !== password) {
             loginError.textContent = "Correo o contrasena incorrectos.";
             return;
           }
           localStorage.setItem(SESSION_KEY, JSON.stringify({ email }));
-          window.location.href = "./cuenta.html";
+          window.location.href = getReturnUrl();
         }
       });
     </script>

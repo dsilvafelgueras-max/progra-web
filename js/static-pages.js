@@ -233,11 +233,25 @@ function bindEvents() {
   });
 }
 
+function renderSessionUser() {
+  try {
+    const session = JSON.parse(localStorage.getItem("sangria-session"));
+    if (!session?.email) return;
+    const userLink = document.querySelector('a[href="./login.html"]');
+    if (!userLink) return;
+    const short = session.email.split("@")[0];
+    userLink.innerHTML = `<span class="session-user-label">${short}</span>`;
+    userLink.href = "./cuenta.html";
+    userLink.setAttribute("aria-label", `Cuenta de ${short}`);
+  } catch {}
+}
+
 function init() {
   ensureClearCartButton();
   renderCurrencyButtons();
   renderCart();
   bindEvents();
+  renderSessionUser();
 }
 
 init();
