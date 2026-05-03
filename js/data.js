@@ -92,6 +92,17 @@
     description: "Pulsera con placa de plata de forma irregular y eslabones articulados.",
   },
   {
+    id: "pulsera-5",
+    name: "Pulsera 5",
+    category: "Pulseras",
+    slug: "pulseras",
+    price: 149000,
+    priceLabel: "$149.000",
+    image: "./assets/products/pulsera 5.png",
+    imageSizeClass: "image-scale-md",
+    description: "Pulsera de plata con gesto organico y presencia escultorica.",
+  },
+  {
     id: "collar-gargantilla-toggle",
     name: "Gargantilla Toggle",
     category: "Collares",
@@ -153,7 +164,7 @@
     slug: "anillos",
     price: 92000,
     priceLabel: "$92.000",
-    image: "./assets/products/anillo-vintage.png",
+    image: "./assets/products/vintage hornamental.png",
     imageClass: "is-square-crop",
     imageSizeClass: "image-scale-md",
     description: "Anillo de plata con frente ornamental y presencia simetrica.",
@@ -385,7 +396,6 @@ export function getProductsBySlug(slug) {
 export function getProductById(id) {
   return products.find((product) => product.id === id) ?? null;
 }
-
 
 
 

@@ -123,6 +123,10 @@ p {
   background: linear-gradient(to bottom, rgba(232, 227, 220, 0.6) 0%, rgba(232, 227, 220, 0) 15%);
 }
 
+.home-page .hero-media::after {
+  display: none;
+}
+
 .hero-media img {
   width: 100%;
   height: 100%;
@@ -170,7 +174,7 @@ p {
   border-radius: 0;
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(26, 10, 16, 0.25);
+  border-bottom: 1px solid transparent;
 }
 
 .search-label {
@@ -255,6 +259,20 @@ p {
   font-weight: 800;
   letter-spacing: 0.12em;
   font-family: "Alte Haas Grotesk", "Syne", sans-serif;
+}
+
+.topbar .brand,
+.topbar .menu-button,
+.topbar .icon-button,
+.topbar .search-shell,
+.topbar .topbar-currency {
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  border-bottom: 1px solid transparent;
 }
 
 .brand-side {
@@ -413,6 +431,76 @@ p {
 .home-page .cart-button #cart-count {
   background: rgba(26, 10, 16, 0.12);
   color: var(--accent-blue);
+}
+
+.home-page .topbar {
+  background: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.home-page .topbar .brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 0.7rem;
+  color: #1A0A10;
+}
+
+.home-page .menu-button span:not(.sr-only) {
+  background: #1A0A10;
+}
+
+.home-page .search-label,
+.home-page .search-input,
+.home-page .topbar-currency button {
+  color: #1A0A10;
+  opacity: 1;
+}
+
+.home-page .search-input::placeholder {
+  color: rgba(26, 10, 16, 0.62);
+}
+
+.home-page .topbar-currency button:first-child::after {
+  color: rgba(26, 10, 16, 0.4);
+}
+
+.home-page .icon-search,
+.home-page .icon-user::before,
+.home-page .icon-user::after,
+.home-page .icon-bag,
+.home-page .icon-bag::before {
+  border-color: #1A0A10;
+}
+
+.home-page .icon-search::after {
+  background: #1A0A10;
+}
+
+.home-page .user-icon-img {
+  opacity: 1;
+  filter: brightness(0) saturate(100%);
+}
+
+.home-page .cart-button #cart-count {
+  background: rgba(26, 10, 16, 0.08);
+  color: #1A0A10;
+}
+
+.home-page .topbar:hover,
+.home-page .topbar:focus-within {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.home-page .search-shell.is-open {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+}
+
+.home-page .search-shell.is-open .search-input {
+  color: #1A0A10;
+  opacity: 1;
 }
 
 .search-shell:focus-within .search-label {
@@ -2644,7 +2732,25 @@ p {
 .category-page-shell {
   width: min(calc(100% - 1rem), var(--max-width));
   margin: 0 auto;
-  padding: 1rem 0 0;
+  padding: 0;
+}
+
+.category-page-shell .topbar {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid rgba(43, 36, 32, 0.12);
+}
+
+body:not(.home-page) .topbar .brand:hover,
+body:not(.home-page) .topbar .brand:focus-visible,
+body:not(.home-page) .topbar .menu-button:hover,
+body:not(.home-page) .topbar .menu-button:focus-visible,
+body:not(.home-page) .topbar .icon-button:hover,
+body:not(.home-page) .topbar .icon-button:focus-visible,
+body:not(.home-page) .topbar .search-shell:hover,
+body:not(.home-page) .topbar .search-shell:focus-within,
+body:not(.home-page) .topbar .topbar-currency:hover,
+body:not(.home-page) .topbar .topbar-currency:focus-within {
+  border-bottom-color: #2B2420;
 }
 
 .subpage-hero {
