@@ -48,7 +48,13 @@ button {
   cursor: pointer;
 }
 
-h1,
+h1 {
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  letter-spacing: 0.01em;
+}
+
 h2 {
   font-family: "Cormorant Garamond", "Bodoni Moda", serif;
   font-weight: 300;
@@ -273,7 +279,6 @@ p {
     border-color 0.2s ease,
     background-color 0.2s ease,
     box-shadow 0.2s ease;
-  border-bottom: 1px solid transparent;
 }
 
 .brand-side {
@@ -567,7 +572,7 @@ p {
 
 .hero-copy h1 {
   margin: 0;
-  font-size: clamp(3.2rem, 8vw, 6.2rem);
+  font-size: clamp(1.9rem, 4.8vw, 3.7rem);
   line-height: 0.9;
   letter-spacing: 0.12em;
   font-family: "Alte Haas Grotesk", "Syne", sans-serif;
@@ -665,7 +670,7 @@ p {
 }
 
 .section-tag {
-  color: rgba(43, 36, 32, 0.62);
+  color: rgba(43, 36, 32, 0.80);
 }
 
 .section-heading h2 {
@@ -777,7 +782,7 @@ p {
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: lowercase;
-  color: rgba(43, 36, 32, 0.55);
+  color: rgba(43, 36, 32, 0.72);
   cursor: pointer;
   transition: color 0.15s;
 }
@@ -831,7 +836,7 @@ p {
   border: none;
   padding: 0;
   font-size: 1.4rem;
-  color: rgba(43, 36, 32, 0.5);
+  color: rgba(43, 36, 32, 0.68);
   cursor: pointer;
   line-height: 1;
   transition: color 0.15s;
@@ -872,7 +877,7 @@ p {
   font-size: 0.82rem;
   letter-spacing: 0.1em;
   text-align: left;
-  color: rgba(43, 36, 32, 0.5);
+  color: rgba(43, 36, 32, 0.68);
   cursor: pointer;
   transition: color 0.15s;
 }
@@ -1266,7 +1271,7 @@ p {
 
 .product-category {
   margin: 0 0 0.15rem;
-  color: rgba(43, 36, 32, 0.58);
+  color: rgba(43, 36, 32, 0.75);
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.68rem;
@@ -1286,7 +1291,7 @@ p {
 .empty-state,
 .contact-form span,
 .site-footer {
-  color: rgba(43, 36, 32, 0.64);
+  color: rgba(43, 36, 32, 0.82);
 }
 
 .product-footer {
@@ -1300,7 +1305,7 @@ p {
 .price {
   font-weight: 400;
   font-size: 0.82rem;
-  color: rgba(43, 36, 32, 0.55);
+  color: rgba(43, 36, 32, 0.72);
   letter-spacing: 0.04em;
 }
 
@@ -1462,7 +1467,7 @@ p {
   font-weight: 300;
   font-size: 15px;
   letter-spacing: 0.15em;
-  text-transform: lowercase;
+  text-transform: capitalize;
   color: #2B2420;
   background: none;
   border: none;
@@ -1543,13 +1548,18 @@ p {
 }
 
 .cart-drawer {
+  --bg: rgba(255, 255, 255, 0.96);
+  --border: rgba(43, 36, 32, 0.12);
+  --text-secondary: rgba(43, 36, 32, 0.42);
+  --text-primary: #2B2420;
+  --img-bg: rgba(43, 36, 32, 0.04);
   right: 1rem;
   top: 1rem;
   width: min(380px, calc(100vw - 2rem));
   height: calc(100vh - 2rem);
   padding: 1.2rem;
-  background: rgba(255, 255, 255, 0.96);
-  color: #2B2420;
+  background: var(--bg);
+  color: var(--text-primary);
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 1rem;
@@ -1578,30 +1588,97 @@ p {
 }
 
 .clear-cart-button {
-  border-color: rgba(26, 10, 16, 0.28);
-  background: rgba(26, 10, 16, 0.08);
-  color: #1A0A10;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  padding: 0;
+  text-align: left;
+  justify-self: start;
+}
+
+.clear-cart-button:hover {
+  color: var(--text-primary);
 }
 
 .cart-items {
   overflow: auto;
   display: grid;
-  gap: 0.8rem;
+  gap: 0;
+  align-content: start;
 }
 
 .cart-row {
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+
+.cart-thumbnail {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  background: var(--img-bg);
+  flex-shrink: 0;
+}
+
+.cart-row-body {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.cart-row-info {
+  display: flex;
   justify-content: space-between;
-  padding: 0.9rem;
-  border-radius: var(--radius-sm);
-  background: rgba(43, 36, 32, 0.04);
-  border: 1px solid rgba(43, 36, 32, 0.08);
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.cart-item-name {
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item-price {
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cart-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 11px;
+  color: var(--text-secondary);
 }
 
 .remove-button {
   border: none;
   background: transparent;
-  color: #8a3f3f;
+  color: var(--text-secondary);
   padding: 0;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+}
+
+.remove-button:hover {
+  color: var(--text-primary);
 }
 
 .overlay {
@@ -1629,17 +1706,32 @@ p {
   transform: none;
 }
 
+.cart-total {
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.cart-total strong {
+  font-weight: 300;
+  font-family: "Montserrat", "Inter", sans-serif;
+}
+
 .cart-footer .primary-button {
   background: transparent;
-  color: #2B2420;
-  border: 1px solid rgba(43, 36, 32, 0.35);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
   border-radius: 0;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
 }
 
 .cart-footer .primary-button:hover {
-  background: #2B2420;
-  color: #f5ede6;
-  border-color: #2B2420;
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--text-primary);
   transform: none;
 }
 
@@ -1804,6 +1896,20 @@ p {
 }
 
 .topbar-currency button:first-child::after {
+  content: " /";
+  color: rgba(43, 36, 32, 0.2);
+  font-weight: 300;
+  margin-right: 0.3rem;
+  pointer-events: none;
+}
+
+.footer-currency {
+  gap: 0;
+  align-items: center;
+  align-self: center;
+}
+
+.footer-currency button:first-child::after {
   content: " /";
   color: rgba(43, 36, 32, 0.2);
   font-weight: 300;
@@ -2004,10 +2110,9 @@ p {
 
 .historia-copy h1 {
   margin: 0.2rem 0 0.8rem;
-  font-family: "Cormorant Garamond", serif;
   font-weight: 300;
   font-style: normal;
-  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  font-size: clamp(1.7rem, 3.6vw, 2.9rem);
   line-height: 0.95;
   letter-spacing: -0.01em;
 }
@@ -2055,19 +2160,19 @@ p {
 }
 
 .contact-page-card {
-  padding: 0;
+  padding: 2rem;
   border-radius: 0;
-  background: transparent;
-  border: none;
+  background: #EDEAE4;
+  border: 1px solid rgba(43, 36, 32, 0.12);
   box-shadow: none;
   color: #2B2420;
 }
 
 .size-guide-card {
-  padding: 0;
+  padding: 2rem;
   border-radius: 0;
-  background: transparent;
-  border: none;
+  background: #EDEAE4;
+  border: 1px solid rgba(43, 36, 32, 0.12);
   box-shadow: none;
   color: #2B2420;
 }
@@ -2106,12 +2211,12 @@ p {
 }
 
 .login-copy h1 {
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-size: clamp(1.3rem, 3vw, 2rem);
   line-height: 0.95;
 }
 
 .contact-copy h1 {
-  font-size: clamp(1.9rem, 4.4vw, 3rem);
+  font-size: clamp(1.15rem, 2.65vw, 1.8rem);
   line-height: 0.94;
   color: #2B2420;
 }
@@ -2123,12 +2228,12 @@ p {
 .login-copy p,
 .login-note,
 .login-form span {
-  color: rgba(43, 36, 32, 0.64);
+  color: rgba(43, 36, 32, 0.82);
 }
 
 .contact-copy p,
 .contact-form-page span {
-  color: rgba(43, 36, 32, 0.64);
+  color: rgba(43, 36, 32, 0.82);
 }
 
 .regret-copy p strong {
@@ -2299,7 +2404,7 @@ p {
 .gift-card-overlay {
   position: absolute;
   inset: 0;
-  background: #e3ddd5;
+  background: rgba(227, 221, 213, 0.42);
 }
 
 .gift-card-inner {
@@ -2335,7 +2440,7 @@ p {
   font-size: 9px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(43, 36, 32, 0.5);
+  color: rgba(43, 36, 32, 0.68);
 }
 
 .gift-card-visual-bottom strong {
@@ -2423,7 +2528,7 @@ p {
 }
 
 .gift-card-brand {
-  color: rgba(43, 36, 32, 0.5);
+  color: rgba(43, 36, 32, 0.68);
   font-size: 0.78rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -2580,7 +2685,7 @@ p {
   font-weight: 300;
   font-size: 0.75rem;
   letter-spacing: 0.1em;
-  color: rgba(43, 36, 32, 0.55);
+  color: rgba(43, 36, 32, 0.72);
 }
 
 .login-divider {
@@ -2666,7 +2771,7 @@ p {
 }
 
 .cuenta-header h1 {
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(0.85rem, 1.8vw, 1.2rem);
   font-family: "Inter", sans-serif;
   font-weight: 500;
   word-break: break-all;
@@ -2751,7 +2856,7 @@ body:not(.home-page) .topbar .search-shell:hover,
 body:not(.home-page) .topbar .search-shell:focus-within,
 body:not(.home-page) .topbar .topbar-currency:hover,
 body:not(.home-page) .topbar .topbar-currency:focus-within {
-  border-bottom-color: #2B2420;
+  border-bottom-color: transparent;
 }
 
 .subpage-hero {
@@ -2778,18 +2883,17 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 }
 
 .subpage-copy h1 {
-  font-size: 48px;
+  font-size: 29px;
   line-height: 1.05;
-  font-family: "Cormorant Garamond", "Bodoni Moda", serif;
-  font-weight: 400;
+  font-weight: 300;
   font-style: normal;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
 }
 
 .breadcrumb {
   display: inline-flex;
   margin-bottom: 1rem;
-  color: rgba(43, 36, 32, 0.55);
+  color: rgba(43, 36, 32, 0.72);
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.76rem;
@@ -2797,7 +2901,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 
 .subpage-copy p,
 .subpage-side p {
-  color: rgba(43, 36, 32, 0.64);
+  color: rgba(43, 36, 32, 0.82);
 }
 
 .subpage-side {
@@ -2891,7 +2995,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 }
 
 .product-page-copy h1 {
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-size: clamp(1.45rem, 3vw, 2.5rem);
   line-height: 0.92;
 }
 
@@ -2920,7 +3024,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 }
 
 .installment-pill span {
-  color: rgba(43, 36, 32, 0.62);
+  color: rgba(43, 36, 32, 0.80);
   font-size: 0.92rem;
 }
 
@@ -2943,7 +3047,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 }
 
 .product-quantity-label {
-  color: rgba(43, 36, 32, 0.55);
+  color: rgba(43, 36, 32, 0.72);
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.7rem;
@@ -2999,7 +3103,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 }
 
 .product-page-meta span {
-  color: rgba(43, 36, 32, 0.5);
+  color: rgba(43, 36, 32, 0.68);
   text-transform: uppercase;
   letter-spacing: 0.16em;
   font-size: 0.68rem;
@@ -3112,7 +3216,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   border: none;
   background: transparent;
   font-size: 0;
-  color: rgba(43, 36, 32, 0.55);
+  color: rgba(43, 36, 32, 0.72);
   line-height: 1;
 }
 
@@ -3131,7 +3235,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   border: none;
   background: transparent;
   padding: 0.5rem 0.2rem;
-  color: rgba(43, 36, 32, 0.62);
+  color: rgba(43, 36, 32, 0.80);
   border-bottom: 2px solid transparent;
 }
 
@@ -3151,7 +3255,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 }
 
 .payment-modal-section-title {
-  color: rgba(43, 36, 32, 0.58);
+  color: rgba(43, 36, 32, 0.75);
   font-weight: 300;
 }
 
@@ -3300,14 +3404,15 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 }
 
 .checkout-card {
-  background: transparent;
-  border: none;
+  background: #EDEAE4;
+  border: 1px solid rgba(43, 36, 32, 0.12);
+  border-radius: 0;
   color: #2B2420;
 }
 
 .checkout-form-card,
 .checkout-summary-card {
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
 .checkout-form {
@@ -3332,7 +3437,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 }
 
 .checkout-block h1 {
-  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  font-size: clamp(1.1rem, 2.4vw, 1.6rem);
 }
 
 .checkout-block h2,
@@ -3361,6 +3466,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 .checkout-form label span {
   font-size: 0.95rem;
   color: rgba(43, 36, 32, 0.78);
+  font-weight: 400;
 }
 
 .checkout-form input {
@@ -3396,6 +3502,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   height: 1rem;
   margin: 0;
   accent-color: #2B2420;
+  color-scheme: light;
 }
 
 .checkout-payment-methods {
@@ -3491,7 +3598,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 }
 
 .checkout-summary-copy p {
-  color: rgba(43, 36, 32, 0.58);
+  color: rgba(43, 36, 32, 0.75);
 }
 
 .checkout-coupon {
@@ -3577,7 +3684,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 
 .checkout-summary-total span {
   font-family: "Montserrat", "Inter", sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 0.82rem;
   letter-spacing: 0.06em;
   color: rgba(43, 36, 32, 0.65);
@@ -3628,6 +3735,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   font-family: "Cormorant Garamond", serif;
   font-weight: 400;
   font-style: normal;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
 }
 
 .checkout-summary-head h2 {
@@ -3644,7 +3752,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   font-size: 0.72rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(43, 36, 32, 0.55);
+  color: rgba(43, 36, 32, 0.72);
 }
 
 .checkout-summary-copy h3 {
@@ -3678,7 +3786,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   font-family: "Montserrat", "Inter", sans-serif;
   font-weight: 300;
   font-size: 13px;
-  color: rgba(43, 36, 32, 0.55);
+  color: rgba(43, 36, 32, 0.72);
   margin: 0;
   letter-spacing: 0.06em;
   max-width: 40ch;
@@ -3718,10 +3826,22 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   font-family: "Montserrat", "Inter", sans-serif;
   font-weight: 300;
   font-size: 12px;
-  color: rgba(43, 36, 32, 0.55);
+  color: rgba(43, 36, 32, 0.72);
   letter-spacing: 0.04em;
-  margin-top: 0.25rem;
   display: block;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  margin-top: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, max-height 0.22s ease, margin-top 0.22s ease;
+}
+
+.field-error.is-visible {
+  opacity: 1;
+  max-height: 3em;
+  margin-top: 0.25rem;
+  pointer-events: auto;
 }
 
 .checkout-required-note {
@@ -3861,7 +3981,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   }
 
   .hero-copy h1 {
-    font-size: clamp(2.8rem, 14vw, 4.6rem);
+    font-size: clamp(1.7rem, 8.4vw, 2.8rem);
   }
 
   .topbar-right {

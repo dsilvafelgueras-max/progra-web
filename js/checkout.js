@@ -484,23 +484,43 @@ function bindEvents() {
   // FullName: letters and spaces only
   const fullNameInput = els.checkoutForm?.elements["fullName"];
   if (fullNameInput) {
-    fullNameInput.addEventListener("input", () => {
-      const err = document.getElementById("error-fullName");
-      const valid = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]*$/.test(fullNameInput.value);
-      if (err) err.hidden = valid || fullNameInput.value === "";
+    const errFullName = document.getElementById("error-fullName");
+    const checkFullName = () => {
+      const valid = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(fullNameInput.value);
       fullNameInput.setCustomValidity(valid ? "" : "Solo letras y espacios.");
+      return valid;
+    };
+    fullNameInput.addEventListener("blur", () => {
+      const valid = checkFullName();
+      if (errFullName) errFullName.classList.toggle("is-visible", !valid && fullNameInput.value !== "");
+    });
+    fullNameInput.addEventListener("input", () => {
+      const valid = checkFullName();
+      if (errFullName?.classList.contains("is-visible")) {
+        errFullName.classList.toggle("is-visible", !valid && fullNameInput.value !== "");
+      }
     });
   }
 
   // DNI: 7-8 digits
   const dniInput = els.checkoutForm?.elements["dni"];
   if (dniInput) {
-    dniInput.addEventListener("input", () => {
-      const err = document.getElementById("error-dni");
+    const errDni = document.getElementById("error-dni");
+    const checkDni = () => {
       const val = dniInput.value;
       const valid = /^[0-9]{7,8}$/.test(val);
-      if (err) err.hidden = val === "" || valid;
       dniInput.setCustomValidity(valid || val === "" ? "" : "DNI inválido.");
+      return { valid, val };
+    };
+    dniInput.addEventListener("blur", () => {
+      const { valid, val } = checkDni();
+      if (errDni) errDni.classList.toggle("is-visible", !valid && val !== "");
+    });
+    dniInput.addEventListener("input", () => {
+      const { valid, val } = checkDni();
+      if (errDni?.classList.contains("is-visible")) {
+        errDni.classList.toggle("is-visible", !valid && val !== "");
+      }
     });
   }
 }

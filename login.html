@@ -96,6 +96,10 @@
         <img class="payment-logo-img" src="./assets/payments/naranja.png" alt="Naranja" />
       </div>
     </div>
+    <div class="currency-switch footer-currency">
+      <button type="button" data-currency="ARS">ARS</button>
+      <button type="button" data-currency="USD">USD</button>
+    </div>
   </div>
   <p class="footer-signature">SANGRIA</p>
 </footer>
@@ -197,7 +201,7 @@
           confirmError.textContent = "campo requerido";
           valid = false;
         } else if (isRegister && password !== confirm) {
-          confirmError.textContent = "Las contrasenas no coinciden.";
+confirmError.textContent = "Las contraseñas no coinciden.";
           valid = false;
         }
 
@@ -218,7 +222,7 @@
           setTimeout(() => { window.location.href = "./index.html"; }, 2000);
         } else {
           if (!users[email] || users[email].password !== password) {
-            loginError.textContent = "Correo o contrasena incorrectos.";
+loginError.textContent = "Correo o contraseña incorrectos.";
             return;
           }
           localStorage.setItem(SESSION_KEY, JSON.stringify({ email }));

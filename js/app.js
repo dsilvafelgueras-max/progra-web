@@ -360,13 +360,16 @@ function renderCart() {
     .map(
       (item) => `
         <article class="cart-row">
-          <div>
-            <h3>${item.name}</h3>
-            <p>${item.quantity} unidad${item.quantity > 1 ? "es" : ""}</p>
-          </div>
-          <div>
-            <strong>${formatPrice(item.price * item.quantity, state.currency)}</strong>
-            <button class="remove-button" type="button" data-remove-cart="${item.id}">Quitar</button>
+          ${item.image ? `<img class="cart-thumbnail" src="${item.image}" alt="">` : ""}
+          <div class="cart-row-body">
+            <div class="cart-row-info">
+              <span class="cart-item-name">${item.name}</span>
+              <span class="cart-item-price">${formatPrice(item.price * item.quantity, state.currency)}</span>
+            </div>
+            <div class="cart-row-meta">
+              <span>${item.quantity} unidad${item.quantity > 1 ? "es" : ""}</span>
+              <button class="remove-button" type="button" data-remove-cart="${item.id}">quitar</button>
+            </div>
           </div>
         </article>
       `

@@ -93,7 +93,7 @@
   },
   {
     id: "pulsera-5",
-    name: "Pulsera 5",
+    name: "Amalta",
     category: "Pulseras",
     slug: "pulseras",
     price: 149000,
@@ -396,6 +396,5 @@ export function getProductsBySlug(slug) {
 export function getProductById(id) {
   return products.find((product) => product.id === id) ?? null;
 }
-
 
 
