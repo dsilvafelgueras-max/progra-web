@@ -58,6 +58,7 @@ h1 {
 h2 {
   font-family: "Cormorant Garamond", "Bodoni Moda", serif;
   font-weight: 300;
+  font-weight: bold;
   font-style: italic;
   letter-spacing: 0.02em;
 }
@@ -68,6 +69,7 @@ h3,
   font-family: "Montserrat", "Inter", sans-serif;
   font-weight: 300;
   font-style: normal;
+  font-weight: bold;
   letter-spacing: 0.1em;
 }
 
@@ -138,7 +140,7 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 52% 80%;
+  object-position: 50% 70%;
   display: block;
 }
 
@@ -190,6 +192,7 @@ p {
   color: var(--accent-blue);
   font-size: 0.96rem;
   font-weight: 300;
+  font-weight: bold;
   transition: opacity 160ms ease, width 160ms ease, margin 160ms ease;
 }
 
@@ -262,10 +265,18 @@ p {
 .brand {
   color: var(--accent-blue);
   text-decoration: none;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1rem, 2vw, 1.5rem);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.18em;
   font-family: "Alte Haas Grotesk", "Syne", sans-serif;
+}
+
+.topbar .brand {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
 .topbar .brand,
@@ -341,6 +352,7 @@ p {
   border-radius: 999px;
   background: rgba(26, 10, 16, 0.12);
   font-size: 0.8rem;
+  font-weight: bold;
   color: var(--accent-blue);
 }
 
@@ -440,7 +452,9 @@ p {
 }
 
 .home-page .topbar {
-  background: transparent;
+  background: rgba(232, 227, 220, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: background-color 0.2s ease;
 }
 
@@ -555,6 +569,7 @@ p {
   font-family: "Montserrat", "Inter", sans-serif;
   font-weight: 300;
   font-size: 10px;
+  font-weight: bold;
   letter-spacing: 0.25em;
   line-height: 1.6;
   text-transform: uppercase;
@@ -569,6 +584,7 @@ p {
   letter-spacing: 0.22em;
   color: rgba(255, 255, 255, 0.8);
 }
+
 
 .hero-copy h1 {
   margin: 0;
@@ -1091,6 +1107,7 @@ p {
   border: 1px solid rgba(43, 36, 32, 0.3);
   border-radius: 4px;
   font-weight: 400;
+  font-weight: bold;
   font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1197,6 +1214,16 @@ p {
 .product-image-button {
   width: 100%;
   border: none;
+  padding: 0;
+  background: transparent;
+  outline: none;
+}
+
+.product-image-button:hover,
+.product-image-button:active,
+.product-image-button:focus {
+  background: #DDD8D0;
+  outline: none;
 }
 
 .product-image-stack {
@@ -1291,7 +1318,7 @@ p {
 .empty-state,
 .contact-form span,
 .site-footer {
-  color: rgba(43, 36, 32, 0.82);
+  color: rgba(23, 19, 17, 0.738);
 }
 
 .product-footer {
@@ -1304,8 +1331,9 @@ p {
 
 .price {
   font-weight: 400;
+  font-weight: bold;
   font-size: 0.82rem;
-  color: rgba(43, 36, 32, 0.72);
+  color: rgba(0, 0, 0, 0.674);
   letter-spacing: 0.04em;
 }
 
@@ -1503,7 +1531,7 @@ p {
   font-weight: 300;
   font-size: 12px;
   letter-spacing: 0.14em;
-  text-transform: lowercase;
+  text-transform: capitalize;
   color: rgba(43, 36, 32, 0.75);
   transition: color 0.15s;
 }
@@ -2048,26 +2076,26 @@ p {
 
 .login-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f3f0eb 0%, #ece7df 100%);
+  background: #e8e3dc;
 }
 
 .contact-page {
   display: grid;
   place-items: center;
   min-height: 100vh;
-  background: linear-gradient(180deg, #f2ede6 0%, #e7e1d7 100%);
+  background: #e8e3dc;
 }
 
 .size-guide-page {
   display: grid;
   place-items: center;
   min-height: 100vh;
-  background: linear-gradient(180deg, #f3ede6 0%, #e8ddd1 100%);
+  background: #e8e3dc;
 }
 
 .gift-card-page {
   min-height: 100vh;
-  background: #ece7df;
+  background: #e8e3dc;
 }
 
 .login-shell {
@@ -2094,6 +2122,72 @@ p {
 .contact-shell {
   width: min(calc(100% - 2rem), 980px);
   padding: 1rem 0 2.5rem;
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
+}
+
+.contact-faq {
+  display: grid;
+  gap: 0;
+  margin-top: 1.2rem;
+}
+
+.faq-item {
+  border-top: 1px solid rgba(43, 36, 32, 0.12);
+}
+
+.faq-item:last-child {
+  border-bottom: 1px solid rgba(43, 36, 32, 0.12);
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+  color: #2B2420;
+  gap: 1rem;
+}
+
+.faq-question::-webkit-details-marker {
+  display: none;
+}
+
+.faq-question::after {
+  content: "+";
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(43, 36, 32, 0.45);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] .faq-question::after {
+  content: "−";
+}
+
+.faq-answer {
+  padding: 0 0 1rem;
+  color: rgba(43, 36, 32, 0.82);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.faq-answer p {
+  margin: 0;
+}
+
+.faq-answer a {
+  color: #2B2420;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .historia-shell {
@@ -2836,9 +2930,16 @@ p {
 }
 
 .category-page-shell {
-  width: min(calc(100% - 1rem), var(--max-width));
+  width: 100%;
   margin: 0 auto;
   padding: 0;
+}
+
+body:not(.home-page) .category-page-shell {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #e8e3dc;
 }
 
 .category-page-shell .topbar {
@@ -2944,6 +3045,24 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   padding: 1.4rem;
   background: #ffffff;
   border-radius: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-material-line {
+  margin: 0;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 0.88rem;
+  color: rgba(43, 36, 32, 0.72);
+  letter-spacing: 0.04em;
+}
+
+.product-add-btn {
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
 }
 
 .product-page-media > .product-thumb {
@@ -2986,6 +3105,10 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   align-content: start;
   gap: 0.9rem;
   color: #2B2420;
+  background: #EDEAE4;
+  border: 1px solid rgba(43, 36, 32, 0.12);
+  padding: 2rem;
+  border-radius: 0;
 }
 
 .product-page-copy h1,
@@ -3006,26 +3129,32 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   letter-spacing: 0.04em;
 }
 
-.installment-pill {
-  width: fit-content;
+.payment-summary {
   display: grid;
-  gap: 0.2rem;
-  padding: 0.9rem 1rem;
-  border-radius: 0;
-  border: 1px solid rgba(43, 36, 32, 0.12);
-  background: transparent;
-  color: #2B2420;
-  text-align: left;
+  gap: 0.25rem;
 }
 
-.installment-pill strong,
-.installment-pill span {
-  display: block;
-}
-
-.installment-pill span {
+.payment-summary-line {
+  margin: 0;
+  font-size: 0.85rem;
   color: rgba(43, 36, 32, 0.80);
-  font-size: 0.92rem;
+  font-weight: 300;
+}
+
+.payment-summary-link {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 0.15rem;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 0.82rem;
+  color: #2B2420;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  text-align: left;
+  width: fit-content;
 }
 
 .product-page-description {
@@ -3041,16 +3170,23 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 
 .product-purchase-row {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 0.8rem;
-  flex-wrap: wrap;
+}
+
+.product-purchase-row .primary-button {
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
 }
 
 .product-quantity-label {
   color: rgba(43, 36, 32, 0.72);
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  font-size: 0.7rem;
+
 }
 
 .product-quantity-control {
@@ -3058,9 +3194,10 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   display: inline-flex;
   align-items: center;
   gap: 0.9rem;
-  padding: 0.45rem 0;
-  border: none;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(14, 12, 11, 0.481);
   background: transparent;
+  border-radius: 0;
 }
 
 .quantity-button {
@@ -3117,6 +3254,61 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   display: flex;
   gap: 0.8rem;
   margin-top: 0.6rem;
+}
+
+.product-accordion {
+  margin-top: 0.5rem;
+  display: grid;
+  gap: 0;
+}
+
+.product-accordion-item {
+  border-top: 1px solid rgba(43, 36, 32, 0.14);
+}
+
+.product-accordion-item:last-child {
+  border-bottom: 1px solid rgba(43, 36, 32, 0.14);
+}
+
+.product-accordion-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: "Montserrat", "Inter", sans-serif;
+  font-weight: 300;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(43, 36, 32, 0.72);
+}
+
+.product-accordion-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.product-accordion-trigger::after {
+  content: "+";
+  font-size: 0.9rem;
+  color: rgba(43, 36, 32, 0.45);
+  flex-shrink: 0;
+}
+
+.product-accordion-item[open] .product-accordion-trigger::after {
+  content: "−";
+}
+
+.product-accordion-body {
+  padding: 0 0 0.9rem;
+  font-size: 0.82rem;
+  color: rgba(43, 36, 32, 0.75);
+  line-height: 1.7;
+}
+
+.product-accordion-body p {
+  margin: 0;
 }
 
 .product-page-actions .primary-button {
@@ -3193,7 +3385,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   width: min(1120px, calc(100vw - 2rem));
   max-height: calc(100vh - 2rem);
   overflow: auto;
-  border-radius: 24px;
+  border-radius: 0;
   background: #ffffff;
   color: #2B2420;
   box-shadow: var(--shadow);
@@ -3264,9 +3456,9 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   justify-content: space-between;
   gap: 1rem;
   padding: 1.25rem;
-  border-radius: 22px;
+  border-radius: 0;
   background: #faf8f5;
-  border: 1px solid rgba(43, 36, 32, 0.06);
+  border: 1px solid rgba(43, 36, 32, 0.12);
 }
 
 .payment-option-copy {

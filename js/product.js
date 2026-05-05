@@ -210,39 +210,86 @@ function renderProduct() {
         </div>
       </div>
       <div class="product-page-copy">
-        <p class="breadcrumb">Inicio / ${product.category} / ${product.name}</p>
         <h1>${product.name}</h1>
         <p class="product-page-price">${formatPrice(product.price, state.currency)}</p>
-        <button class="installment-pill" type="button" data-open-payment>
-          <strong>3 cuotas sin interes</strong>
-          <span>de ${formatPrice(payment.installmentBase, state.currency)} Â· ver medios de pago</span>
-        </button>
+        <div class="payment-summary">
+          <p class="payment-summary-line">3 cuotas sin interes de ${formatPrice(payment.installmentBase, state.currency)}</p>
+          <p class="payment-summary-line">10% de descuento pagando con Transferencia o deposito bancario</p>
+          <button class="payment-summary-link" type="button" data-open-payment>ver mas detalles</button>
+        </div>
         <p class="product-page-description">${product.description}</p>
-        <div class="product-page-meta">
-          <div><span>Material</span><strong>${meta.material}</strong></div>
-          <div><span>Estado</span><strong>${meta.availability}</strong></div>
-          <div><span>Envio</span><strong>${meta.delivery}</strong></div>
-        </div>
-        <div class="product-quantity-block">
-          <span class="product-quantity-label">Cantidad</span>
-          <div class="product-purchase-row">
-            <div class="product-quantity-control" aria-label="Selector de cantidad">
-              <button class="quantity-button" type="button" data-decrease-qty aria-label="Restar una unidad">-</button>
-              <strong class="quantity-value">${state.selectedQuantity}</strong>
-              <button class="quantity-button" type="button" data-increase-qty aria-label="Sumar una unidad">+</button>
-            </div>
-            <button class="primary-button" type="button" data-add-cart="${product.id}">Agregar al carrito</button>
-          </div>
-        </div>
+        <p class="product-material-line">Material: ${meta.material}</p>
+        <button class="primary-button product-add-btn" type="button" data-add-cart="${product.id}">Agregar al carrito</button>
         ${getGiftCardInfoMarkup(product)}
-        <div class="product-page-actions">
-          <a class="secondary-button button-link" href="./${product.slug}.html">Ver mas ${product.category.toLowerCase()}</a>
+        <div class="product-accordion">
+          <details class="product-accordion-item">
+            <summary class="product-accordion-trigger">Cambios y devoluciones</summary>
+            <div class="product-accordion-body">
+              <p>Aceptamos cambios dentro de los 30 dias de recibido el pedido, siempre que la pieza este en condiciones originales y sin uso. Para iniciar un cambio, escribinos a traves del formulario de contacto o por Instagram con tu numero de pedido.</p>
+            </div>
+          </details>
+          <details class="product-accordion-item">
+            <summary class="product-accordion-trigger">Envios y retiros</summary>
+            <div class="product-accordion-body">
+              <p>Realizamos envios a todo el pais a traves de correo privado. El tiempo de preparacion es de 2 a 5 dias habiles. Tambien podes coordinar retiro en nuestro taller en Buenos Aires escribiendonos antes.</p>
+            </div>
+          </details>
         </div>
       </div>
     </section>
   `;
 
   renderPaymentModal(product);
+  initImageZoom();
+}
+
+function initImageZoom() {
+  const shell = document.querySelector(".product-page-image-shell");
+  const img = document.getElementById("detail-main-image");
+  if (!shell || !img) return;
+
+  let isZoomed = false;
+
+  shell.style.cursor = "zoom-in";
+  img.style.transition = "transform 0.35s ease";
+  img.style.transformOrigin = "center center";
+
+  function pan(clientX, clientY) {
+    const rect = shell.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const y = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+    img.style.transformOrigin = `${x * 100}% ${y * 100}%`;
+  }
+
+  shell.addEventListener("click", (e) => {
+    isZoomed = !isZoomed;
+    if (isZoomed) {
+      pan(e.clientX, e.clientY);
+      img.style.transform = "scale(2.8)";
+      shell.style.cursor = "zoom-out";
+    } else {
+      img.style.transform = "scale(1)";
+      img.style.transformOrigin = "center center";
+      shell.style.cursor = "zoom-in";
+    }
+  });
+
+  shell.addEventListener("mousemove", (e) => {
+    if (!isZoomed) return;
+    pan(e.clientX, e.clientY);
+  });
+
+  shell.addEventListener("touchmove", (e) => {
+    if (!isZoomed) return;
+    e.preventDefault();
+    pan(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: false });
+
+  shell.addEventListener("mouseleave", () => {
+    if (isZoomed) {
+      img.style.transformOrigin = "center center";
+    }
+  });
 }
 
 function renderPaymentModal(product) {

@@ -375,10 +375,10 @@ export async function fetchUsdToArsRate() {
 
 export function formatPrice(value, currency = "ARS", rate = usdRate) {
   if (currency === "USD") {
-    return `USD ${Math.round(value / rate).toLocaleString("en-US")}`;
+    return `U$D ${Math.round(value / rate).toLocaleString("en-US")}`;
   }
 
-  return `ARS ${value.toLocaleString("es-AR")}`;
+  return `$${value.toLocaleString("es-AR")}`;
 }
 
 export function getProductsByCategory(category) {
