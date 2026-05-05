@@ -452,6 +452,7 @@ function bindEvents() {
       saveCurrency(state.currency);
       renderCurrencyButtons();
       renderProducts();
+      renderOtrosProducts();
       renderCart();
     });
   });
