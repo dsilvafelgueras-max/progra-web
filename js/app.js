@@ -12,6 +12,7 @@
   saveCurrency,
   saveFavorites,
 } from "./data.js";
+import { enhanceSessionLink } from "./session.js";
 
 const state = {
   activeFilter: "Todas",
@@ -543,6 +544,7 @@ function bindEvents() {
 
 function init() {
   ensureClearCartButton();
+  enhanceSessionLink();
   renderCurrencyButtons();
   renderFilters();
   renderProducts();
@@ -557,5 +559,4 @@ function init() {
 }
 
 init();
-
 

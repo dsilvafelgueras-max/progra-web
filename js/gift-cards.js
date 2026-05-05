@@ -7,6 +7,7 @@ import {
   saveCart,
   saveCurrency,
 } from "./data.js";
+import { enhanceSessionLink } from "./session.js";
 
 const giftCards = products.filter((product) => product.isGiftCard);
 
@@ -223,6 +224,7 @@ function bindEvents() {
 
 function init() {
   ensureClearCartButton();
+  enhanceSessionLink();
   renderCurrencyButtons();
   renderGiftCards();
   renderCart();

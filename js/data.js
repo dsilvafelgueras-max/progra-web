@@ -114,6 +114,18 @@
     description: "Gargantilla de plata con aro rigido, cadena y cierre toggle.",
   },
   {
+    id: "collar-2",
+    name: "Collar 2",
+    category: "Collares",
+    slug: "collares",
+    price: 112000,
+    priceLabel: "$112.000",
+    image: "./assets/products/collar 2.png",
+    imageClass: "is-square-crop",
+    imageSizeClass: "image-scale-md",
+    description: "Collar de plata con gesto organico y presencia escultorica.",
+  },
+  {
     id: "anillo-torsion",
     name: "Torsion",
     category: "Anillos",
@@ -131,8 +143,9 @@
     slug: "anillos",
     price: 74000,
     priceLabel: "$74.000",
-    image: "./assets/products/anillo-escultura.jpg",
-    imageSizeClass: "image-scale-md",
+    image: "./assets/products/anillo-escultura-removebg-preview (1).png",
+    imageClass: "is-square-crop",
+    imageSizeClass: "image-scale-lg",
     description: "Anillo escultorico de volumen suave con presencia minima.",
   },
   {
@@ -396,5 +409,4 @@ export function getProductsBySlug(slug) {
 export function getProductById(id) {
   return products.find((product) => product.id === id) ?? null;
 }
-
 

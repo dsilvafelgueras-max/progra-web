@@ -8,137 +8,295 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&family=Montserrat:wght@300&family=Bodoni+Moda:opsz,wght@6..96,600;6..96,700&family=Inter:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300&family=Montserrat:wght@300&family=Bodoni+Moda:opsz,wght@6..96,600;6..96,700&family=Inter:wght@400;500;600;700&family=Syne:wght@500;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body class="cuenta-page">
-    <nav class="topbar" style="position:relative;z-index:2;padding:1.2rem 2rem;">
+    <nav class="topbar cuenta-topbar">
       <div class="topbar-left">
         <a class="brand" href="./index.html">SANGRIA</a>
       </div>
       <div class="topbar-right">
-        <button class="ghost-button compact" type="button" id="logout-btn">Cerrar sesion</button>
+        <button class="ghost-button compact cuenta-logout-button" type="button" id="logout-btn">Cerrar sesion</button>
       </div>
     </nav>
 
-    <main class="section" style="padding-top:3rem;padding-bottom:4rem;">
+    <main class="section cuenta-shell">
       <div class="cuenta-header">
-        <p class="section-tag">Mi cuenta</p>
-        <h1 id="cuenta-email"></h1>
+        <h1>Mi cuenta</h1>
+        <p class="cuenta-subtitle" id="cuenta-email"></p>
       </div>
 
-      <div class="cuenta-grid">
-        <section class="cuenta-block">
-          <h2>Favoritos</h2>
-          <div id="favorites-list" class="cuenta-items"></div>
+      <nav class="cuenta-tabs" aria-label="Secciones de cuenta">
+        <button class="cuenta-tab is-active" type="button" data-account-tab="perfil">perfil</button>
+        <span class="cuenta-tab-separator">&middot;</span>
+        <button class="cuenta-tab" type="button" data-account-tab="favoritos">favoritos</button>
+        <span class="cuenta-tab-separator">&middot;</span>
+        <button class="cuenta-tab" type="button" data-account-tab="pedidos">pedidos</button>
+      </nav>
+
+      <div class="cuenta-panels">
+        <section class="cuenta-panel is-active" data-account-panel="perfil">
+          <form class="cuenta-profile-form" id="profile-form">
+            <div class="field-group">
+              <label for="profile-name">Nombre</label>
+              <input id="profile-name" type="text" placeholder="Tu nombre" />
+            </div>
+
+            <div class="field-group">
+              <label for="profile-email">Correo electronico</label>
+              <input id="profile-email" type="email" readonly />
+            </div>
+
+            <div class="field-group">
+              <label for="profile-phone">Telefono</label>
+              <input id="profile-phone" type="tel" placeholder="Tu telefono" />
+            </div>
+
+            <div class="field-group">
+              <label for="profile-city">Ciudad</label>
+              <input id="profile-city" type="text" placeholder="Buenos Aires" />
+            </div>
+
+            <div class="cuenta-profile-actions">
+              <button class="ghost-button compact cuenta-outline-btn" type="submit">Guardar cambios</button>
+              <p class="cuenta-form-message" id="profile-message" hidden></p>
+            </div>
+          </form>
         </section>
 
-        <section class="cuenta-block">
-          <h2>Historial de compras</h2>
-          <div id="orders-list" class="cuenta-items"></div>
+        <section class="cuenta-panel" data-account-panel="favoritos" hidden>
+          <div id="favorites-list" class="cuenta-favorites-grid"></div>
+        </section>
+
+        <section class="cuenta-panel" data-account-panel="pedidos" hidden>
+          <div id="orders-list" class="cuenta-orders-list"></div>
         </section>
       </div>
     </main>
 
     <footer class="site-footer shop-footer">
-  <div class="footer-columns">
-    <div>
-      <h2>ayuda</h2>
-      <a href="./contacto.html">contactanos</a>
-      <a href="./contacto.html">cambios y devoluciones</a>
-      <a href="./guia-talles.html">guia de talles</a>
-      <a href="./cuidados.html">cuidados</a>
-    </div>
-    <div>
-      <h2>legal</h2>
-      <a href="./arrepentimiento.html">boton de arrepentimiento</a>
-    </div>
-    <div>
-      <h2>sobre sangria</h2>
-      <a href="./nuestra-historia.html">nuestra historia</a>
-    </div>
-    <div>
-      <h2>seguinos</h2>
-      <a href="https://www.instagram.com/sangriajewelry/" target="_blank" rel="noreferrer">instagram</a>
-      <a href="https://www.tiktok.com/@lolisilvafelgue" target="_blank" rel="noreferrer">tiktok</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="payment-block" aria-label="Medios de pago">
-      <strong>Medios de pago</strong>
-      <div class="payment-row">
-        <img class="payment-logo-img" src="./assets/payments/mercado-pago.webp" alt="Mercado Pago" />
-        <img class="payment-logo-img" src="./assets/payments/apple-pay.png" alt="Apple Pay" />
-        <img class="payment-logo-img" src="./assets/payments/visa.png" alt="Visa" />
-        <img class="payment-logo-img" src="./assets/payments/mastercard.svg" alt="Mastercard" />
-        <img class="payment-logo-img" src="./assets/payments/amex.svg" alt="American Express" />
-        <img class="payment-logo-img" src="./assets/payments/naranja.png" alt="Naranja" />
+      <div class="footer-columns">
+        <div>
+          <h2>ayuda</h2>
+          <a href="./contacto.html">contactanos</a>
+          <a href="./contacto.html">cambios y devoluciones</a>
+          <a href="./guia-talles.html">guia de talles</a>
+          <a href="./cuidados.html">cuidados</a>
+        </div>
+        <div>
+          <h2>legal</h2>
+          <a href="./arrepentimiento.html">boton de arrepentimiento</a>
+        </div>
+        <div>
+          <h2>sobre sangria</h2>
+          <a href="./nuestra-historia.html">nuestra historia</a>
+        </div>
+        <div>
+          <h2>seguinos</h2>
+          <a href="https://www.instagram.com/sangriajewelry/" target="_blank" rel="noreferrer">instagram</a>
+          <a href="https://www.tiktok.com/@lolisilvafelgue" target="_blank" rel="noreferrer">tiktok</a>
+        </div>
       </div>
-    </div>
-    <div class="currency-switch footer-currency">
-      <button type="button" data-currency="ARS">ARS</button>
-      <button type="button" data-currency="USD">USD</button>
-    </div>
-  </div>
-  <p class="footer-signature">SANGRIA</p>
-</footer>
+      <div class="footer-bottom">
+        <div class="payment-block" aria-label="Medios de pago">
+          <strong>Medios de pago</strong>
+          <div class="payment-row">
+            <img class="payment-logo-img" src="./assets/payments/mercado-pago.webp" alt="Mercado Pago" />
+            <img class="payment-logo-img" src="./assets/payments/apple-pay.png" alt="Apple Pay" />
+            <img class="payment-logo-img" src="./assets/payments/visa.png" alt="Visa" />
+            <img class="payment-logo-img" src="./assets/payments/mastercard.svg" alt="Mastercard" />
+            <img class="payment-logo-img" src="./assets/payments/amex.svg" alt="American Express" />
+            <img class="payment-logo-img" src="./assets/payments/naranja.png" alt="Naranja" />
+          </div>
+        </div>
+        <div class="currency-switch footer-currency">
+          <button type="button" data-currency="ARS">ARS</button>
+          <button type="button" data-currency="USD">USD</button>
+        </div>
+      </div>
+      <p class="footer-signature">SANGRIA</p>
+    </footer>
 
     <script type="module">
       import { products } from "./js/data.js";
+      import { clearSession, getCurrentUser, loadUsers, updateCurrentUser } from "./js/session.js";
 
-      const SESSION_KEY = "sangria-session";
-      const USERS_KEY = "sangria-users";
       const FAVORITES_KEY = "sangria-favorites";
+      const ORDER_STEPS = ["pedido recibido", "paquete armado", "en camino", "entregado"];
+      const currentUser = getCurrentUser();
 
-      const session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
-      if (!session) window.location.href = "./login.html";
+      if (!currentUser?.email) {
+        window.location.href = "./login.html";
+      }
 
-      document.getElementById("cuenta-email").textContent = session.email;
+      const profileName = document.getElementById("profile-name");
+      const profileEmail = document.getElementById("profile-email");
+      const profilePhone = document.getElementById("profile-phone");
+      const profileCity = document.getElementById("profile-city");
+      const profileForm = document.getElementById("profile-form");
+      const profileMessage = document.getElementById("profile-message");
+      const emailLabel = document.getElementById("cuenta-email");
+      const tabs = Array.from(document.querySelectorAll("[data-account-tab]"));
+      const panels = Array.from(document.querySelectorAll("[data-account-panel]"));
+      const users = loadUsers();
+      const user = users[currentUser.email] ?? {};
+      const favoritesList = document.getElementById("favorites-list");
+      const ordersList = document.getElementById("orders-list");
+
+      function setActiveTab(tabName) {
+        const nextTab = panels.some((panel) => panel.dataset.accountPanel === tabName)
+          ? tabName
+          : "perfil";
+
+        tabs.forEach((tab) => {
+          const isActive = tab.dataset.accountTab === nextTab;
+          tab.classList.toggle("is-active", isActive);
+          tab.setAttribute("aria-selected", String(isActive));
+        });
+
+        panels.forEach((panel) => {
+          const isActive = panel.dataset.accountPanel === nextTab;
+          panel.hidden = !isActive;
+          panel.classList.toggle("is-active", isActive);
+        });
+
+        window.location.hash = nextTab;
+      }
+
+      function renderFavorites() {
+        const favoriteIds = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
+        const favoriteProducts = products.filter((product) => favoriteIds.includes(product.id));
+
+        if (favoriteProducts.length === 0) {
+          favoritesList.innerHTML = `
+            <div class="cuenta-empty-state">
+              <p>todavia no guardaste ninguna pieza.</p>
+              <a class="ghost-button compact cuenta-outline-btn" href="./index.html">ver catalogo</a>
+            </div>
+          `;
+          return;
+        }
+
+        favoritesList.innerHTML = favoriteProducts
+          .map((product) => {
+            const imageClasses = [product.imageClass, product.imageSizeClass].filter(Boolean).join(" ");
+            return `
+              <article class="product-card cuenta-favorite-card">
+                <a class="product-image product-image-button" href="./producto.html?id=${product.id}" aria-label="Ver ${product.name}">
+                  <img src="${product.image}" alt="${product.name}" class="${imageClasses}" />
+                </a>
+                <div class="product-body">
+                  <h3><a class="product-link" href="./producto.html?id=${product.id}">${product.name}</a></h3>
+                  <div class="product-footer">
+                    <span class="price">${product.priceLabel}</span>
+                  </div>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+      }
+
+      function renderOrders() {
+        const orders = user.orders ?? [];
+
+        if (orders.length === 0) {
+          ordersList.innerHTML = `<p class="cuenta-empty-inline">todavia no realizaste ningun pedido.</p>`;
+          return;
+        }
+
+        ordersList.innerHTML = orders
+          .map((order, index) => {
+            const statusIndex = Number.isInteger(order.statusStep)
+              ? Math.max(0, Math.min(ORDER_STEPS.length - 1, order.statusStep))
+              : 0;
+            const orderNumber = order.number ?? `#${String(index + 1).padStart(4, "0")}`;
+            const orderDate = order.date ?? "sin fecha";
+            const orderTotal = order.total ?? "ARS 0";
+            const items = Array.isArray(order.items) ? order.items : [];
+
+            return `
+              <article class="cuenta-order ${index === 0 ? "is-open" : ""}">
+                <button class="cuenta-order-summary" type="button" data-order-toggle>
+                  <span>${orderNumber}</span>
+                  <span>${orderDate}</span>
+                  <strong>${orderTotal}</strong>
+                </button>
+                <div class="cuenta-order-body">
+                  <div class="cuenta-order-products">
+                    ${items
+                      .map(
+                        (item) => `
+                          <div class="cuenta-order-product">
+                            <span>${item.name}</span>
+                            <span>${item.quantity ?? 1} unidad${(item.quantity ?? 1) > 1 ? "es" : ""}</span>
+                          </div>
+                        `
+                      )
+                      .join("")}
+                  </div>
+                  <div class="cuenta-order-progress">
+                    ${ORDER_STEPS.map((label, stepIndex) => {
+                      const stepClass =
+                        stepIndex === statusIndex
+                          ? "is-current"
+                          : stepIndex < statusIndex
+                          ? "is-complete"
+                          : "is-upcoming";
+                      return `<span class="cuenta-order-step ${stepClass}">${label}</span>`;
+                    }).join("")}
+                  </div>
+                </div>
+              </article>
+            `;
+          })
+          .join("");
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => setActiveTab(tab.dataset.accountTab));
+      });
+
+      emailLabel.textContent = currentUser.email;
+
+      const profile = currentUser.data?.profile ?? {};
+      profileName.value = profile.name ?? "";
+      profileEmail.value = currentUser.email;
+      profilePhone.value = profile.phone ?? "";
+      profileCity.value = profile.city ?? "";
 
       document.getElementById("logout-btn").addEventListener("click", () => {
-        localStorage.removeItem(SESSION_KEY);
+        clearSession();
         window.location.href = "./login.html";
       });
 
-      const favoriteIds = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
-      const favoriteProducts = products.filter(p => favoriteIds.includes(p.id));
-      const favList = document.getElementById("favorites-list");
+      profileForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        updateCurrentUser({
+          profile: {
+            name: profileName.value.trim(),
+            phone: profilePhone.value.trim(),
+            city: profileCity.value.trim(),
+          },
+        });
+        profileMessage.hidden = false;
+        profileMessage.textContent = "Tus datos fueron actualizados.";
+      });
 
-      if (favoriteProducts.length === 0) {
-        favList.innerHTML = `<p class="empty-state-inline">Todavia no guardaste favoritos. Toca el corazon en un producto para guardarlo.</p>`;
-      } else {
-        favList.innerHTML = favoriteProducts.map(p => `
-          <div class="cuenta-item">
-            <img src="${p.image}" alt="${p.name}" />
-            <div>
-              <strong>${p.name}</strong>
-              <span>${p.priceLabel}</span>
-            </div>
-            <a class="ghost-button compact" href="./producto.html?id=${p.id}">Ver</a>
-          </div>
-        `).join("");
-      }
+      ordersList.addEventListener("click", (event) => {
+        const toggle = event.target.closest("[data-order-toggle]");
+        if (!toggle) return;
+        const order = toggle.closest(".cuenta-order");
+        if (!order) return;
+        order.classList.toggle("is-open");
+      });
 
-      const users = JSON.parse(localStorage.getItem(USERS_KEY) || "{}");
-      const user = users[session.email];
-      const orders = user?.orders ?? [];
-      const ordersList = document.getElementById("orders-list");
-
-      if (orders.length === 0) {
-        ordersList.innerHTML = `<p class="empty-state-inline">Todavia no realizaste compras.</p>`;
-      } else {
-        ordersList.innerHTML = orders.map(order => `
-          <div class="cuenta-item">
-            <div>
-              <strong>${order.date}</strong>
-              <span>${order.items.map(i => i.name).join(", ")}</span>
-            </div>
-            <strong>${order.total}</strong>
-          </div>
-        `).join("");
-      }
+      renderFavorites();
+      renderOrders();
+      setActiveTab(window.location.hash.replace("#", "") || "perfil");
     </script>
   </body>
 </html>

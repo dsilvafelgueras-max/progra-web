@@ -9,6 +9,7 @@
   saveCart,
   saveCurrency,
 } from "./data.js";
+import { enhanceSessionLink } from "./session.js";
 
 const page = document.body.dataset.categoryPage;
 
@@ -381,6 +382,7 @@ function bindEvents() {
 function init() {
   bindEvents();
   ensureClearCartButton();
+  enhanceSessionLink();
   mountCurrencySwitch();
   renderSortToolbar();
   renderCurrencyButtons();
@@ -393,7 +395,6 @@ function init() {
 }
 
 init();
-
 
 
 

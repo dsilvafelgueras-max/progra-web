@@ -7,6 +7,7 @@ import {
   saveCart,
   saveCurrency,
 } from "./data.js";
+import { enhanceSessionLink } from "./session.js";
 
 const state = {
   cart: loadCart(),
@@ -527,6 +528,7 @@ function bindEvents() {
 
 function init() {
   ensureClearCartButton();
+  enhanceSessionLink();
   renderCurrencyButtons();
   renderCart();
   renderStep();
