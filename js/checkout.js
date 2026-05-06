@@ -14,12 +14,6 @@ const state = {
   currency: loadCurrency(),
   cartOpen: false,
   menuOpen: false,
-  deliveryMethod: "domicilio",
-  paymentMethod: "mercado-pago",
-  couponOpen: false,
-  couponCode: "",
-  couponDiscountRate: 0,
-  step: 1,
 };
 
 const els = {
@@ -35,31 +29,9 @@ const els = {
   searchInput: document.querySelector("[data-search-input]"),
   currencyButtons: Array.from(document.querySelectorAll("[data-currency]")),
   summaryItems: document.querySelector("#checkout-summary-items"),
-  summarySubtotal: document.querySelector("#checkout-subtotal"),
   summaryTotal: document.querySelector("#checkout-total"),
-  summaryShipping: document.querySelector("#checkout-shipping"),
-  summaryDiscountRow: document.querySelector("#checkout-discount-row"),
-  summaryDiscount: document.querySelector("#checkout-discount"),
   checkoutForm: document.querySelector("#checkout-form"),
-  checkoutSuccess: document.querySelector("#checkout-success"),
-  checkoutSubmit: document.querySelector("#checkout-submit"),
   checkoutError: document.querySelector("#checkout-error"),
-  couponToggle: document.querySelector("#checkout-coupon-toggle"),
-  couponForm: document.querySelector("#checkout-coupon-form"),
-  couponInput: document.querySelector("#checkout-coupon-input"),
-  couponMessage: document.querySelector("#checkout-coupon-message"),
-  deliveryRadios: Array.from(document.querySelectorAll('input[name="deliveryMethod"]')),
-  deliveryPanels: Array.from(document.querySelectorAll("[data-delivery-panel]")),
-  deliveryRequiredInputs: Array.from(document.querySelectorAll("[data-delivery-required]")),
-  paymentRadios: Array.from(document.querySelectorAll('input[name="paymentMethod"]')),
-  paymentPanels: Array.from(document.querySelectorAll("[data-payment-panel]")),
-  paymentRequiredInputs: Array.from(document.querySelectorAll("[data-payment-required]")),
-};
-
-const couponCodes = {
-  SANGRIA10: 0.1,
-  BIENVENIDA15: 0.15,
-  JOYAS20: 0.2,
 };
 
 const searchRoutes = [
@@ -86,7 +58,6 @@ function handleSearchSubmit(rawValue) {
 
 function ensureClearCartButton() {
   if (!els.cartFooter || els.cartFooter.querySelector("[data-clear-cart]")) return;
-
   const button = document.createElement("button");
   button.type = "button";
   button.className = "ghost-button full-width clear-cart-button";
@@ -123,186 +94,49 @@ function renderCart() {
   if (!els.cartItems) return;
 
   if (items.length === 0) {
-    els.cartItems.innerHTML =
-      '<div class="empty-state">Todavia no agregaste productos. Selecciona una pieza del catalogo para guardarla aca.</div>';
+    els.cartItems.innerHTML = `<div class="empty-state">Tu carrito esta vacio.</div>`;
     return;
   }
 
   els.cartItems.innerHTML = items
-    .map(
-      (item) => `
-        <article class="cart-row">
-          <div>
-            <h3>${item.name}</h3>
-            <p>${item.quantity} unidad${item.quantity > 1 ? "es" : ""}</p>
+    .map((item) => `
+      <article class="cart-row">
+        ${item.image ? `<img class="cart-thumbnail" src="${item.image}" alt="">` : ""}
+        <div class="cart-row-body">
+          <div class="cart-row-info">
+            <span class="cart-item-name">${item.name}</span>
+            <span class="cart-item-price">${formatPrice(item.price * item.quantity, state.currency)}</span>
           </div>
-          <div>
-            <strong>${formatPrice(item.price * item.quantity, state.currency)}</strong>
-            <button class="remove-button" type="button" data-remove-cart="${item.id}">Quitar</button>
+          <div class="cart-row-meta">
+            <span>${item.quantity} unidad${item.quantity > 1 ? "es" : ""}</span>
+            <button class="remove-button" type="button" data-remove-cart="${item.id}">quitar</button>
           </div>
-        </article>
-      `
-    )
+        </div>
+      </article>
+    `)
     .join("");
 }
 
 function renderCheckoutSummary() {
   const items = getCartDetailed();
-  const subtotalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const discountAmount = Math.round(subtotalPrice * state.couponDiscountRate);
-  const totalPrice = Math.max(0, subtotalPrice - discountAmount);
+  const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+  if (els.summaryTotal) els.summaryTotal.textContent = formatPrice(total, state.currency);
   if (!els.summaryItems) return;
 
   if (items.length === 0) {
-    els.summaryItems.innerHTML =
-      '<div class="empty-state">Tu carrito esta vacio. Agrega productos antes de continuar con la compra.</div>';
-    if (els.summarySubtotal) els.summarySubtotal.textContent = formatPrice(0, state.currency);
-    if (els.summaryDiscount) els.summaryDiscount.textContent = formatPrice(0, state.currency);
-    if (els.summaryDiscountRow) els.summaryDiscountRow.hidden = true;
-    if (els.summaryTotal) els.summaryTotal.textContent = formatPrice(0, state.currency);
-    if (els.checkoutSubmit) els.checkoutSubmit.disabled = true;
+    els.summaryItems.innerHTML = `<p class="empty-state">Tu carrito esta vacio.</p>`;
     return;
   }
 
   els.summaryItems.innerHTML = items
-    .map(
-      (item) => `
-        <article class="checkout-summary-item">
-          <img src="${item.image}" alt="${item.name}" />
-          <div class="checkout-summary-copy">
-            <h3>${item.name}</h3>
-            <p>${item.quantity} unidad${item.quantity > 1 ? "es" : ""}</p>
-          </div>
-          <strong>${formatPrice(item.price * item.quantity, state.currency)}</strong>
-        </article>
-      `
-    )
+    .map((item) => `
+      <div class="css-item">
+        <span>${item.name} <small>x${item.quantity}</small></span>
+        <span>${formatPrice(item.price * item.quantity, state.currency)}</span>
+      </div>
+    `)
     .join("");
-
-  if (els.summarySubtotal) els.summarySubtotal.textContent = formatPrice(subtotalPrice, state.currency);
-  if (els.summaryDiscount) els.summaryDiscount.textContent = `- ${formatPrice(discountAmount, state.currency)}`;
-  if (els.summaryDiscountRow) els.summaryDiscountRow.hidden = discountAmount === 0;
-  if (els.summaryTotal) els.summaryTotal.textContent = formatPrice(totalPrice, state.currency);
-  if (els.summaryShipping) {
-    const labels = {
-      domicilio: "Entrega a domicilio",
-      encuentro: "Punto de encuentro por correo",
-      retiro: "Retiro en el local",
-    };
-    els.summaryShipping.textContent = labels[state.deliveryMethod] ?? "A coordinar";
-  }
-  if (els.checkoutSubmit) els.checkoutSubmit.disabled = false;
-}
-
-function renderStep() {
-  document.querySelectorAll("[data-step]").forEach((block) => {
-    block.hidden = Number(block.dataset.step) !== state.step;
-  });
-
-  document.querySelectorAll("[data-step-indicator]").forEach((el) => {
-    const n = Number(el.dataset.stepIndicator);
-    el.classList.toggle("is-active", n === state.step);
-    el.classList.toggle("is-done", n < state.step);
-  });
-}
-
-function validateCurrentStep() {
-  const block = document.querySelector(`[data-step="${state.step}"]`);
-  if (!block) return true;
-  const inputs = Array.from(block.querySelectorAll("input:not([disabled]), select:not([disabled])"));
-  for (const input of inputs) {
-    if (!input.reportValidity()) return false;
-  }
-  return true;
-}
-
-function goToStep(next) {
-  if (next > state.step && !validateCurrentStep()) return;
-  state.step = Math.max(1, Math.min(3, next));
-  renderStep();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function renderCouponState() {
-  if (els.couponForm) els.couponForm.hidden = !state.couponOpen;
-  if (els.couponToggle) {
-    els.couponToggle.textContent = state.couponOpen
-      ? "Ocultar cupon de descuento"
-      : "Agregar cupon de descuento";
-  }
-}
-
-function setCouponMessage(message, type = "info") {
-  if (!els.couponMessage) return;
-  els.couponMessage.hidden = !message;
-  els.couponMessage.textContent = message;
-  els.couponMessage.dataset.state = type;
-}
-
-function applyCoupon(rawCode) {
-  const normalizedCode = rawCode.trim().toUpperCase();
-
-  if (!normalizedCode) {
-    state.couponCode = "";
-    state.couponDiscountRate = 0;
-    setCouponMessage("Ingresa un codigo para aplicar el descuento.", "error");
-    renderCheckoutSummary();
-    return;
-  }
-
-  const discountRate = couponCodes[normalizedCode];
-
-  if (!discountRate) {
-    state.couponCode = "";
-    state.couponDiscountRate = 0;
-    setCouponMessage("Ese codigo no es valido.", "error");
-    renderCheckoutSummary();
-    return;
-  }
-
-  state.couponCode = normalizedCode;
-  state.couponDiscountRate = discountRate;
-  setCouponMessage(`Codigo aplicado: ${normalizedCode} (${Math.round(discountRate * 100)}% OFF)`, "success");
-  renderCheckoutSummary();
-}
-
-function renderDeliveryMethod() {
-  els.deliveryPanels.forEach((panel) => {
-    const isActive = panel.dataset.deliveryPanel === state.deliveryMethod;
-    panel.hidden = !isActive;
-
-    panel
-      .querySelectorAll("input, select, textarea")
-      .forEach((field) => {
-        field.disabled = !isActive;
-      });
-  });
-
-  els.deliveryRequiredInputs.forEach((input) => {
-    input.required = input.dataset.deliveryRequired === state.deliveryMethod;
-  });
-
-  els.deliveryRadios.forEach((radio) => {
-    radio.checked = radio.value === state.deliveryMethod;
-  });
-
-  renderCheckoutSummary();
-}
-
-function renderPaymentMethod() {
-  els.paymentPanels.forEach((panel) => {
-    panel.hidden = panel.dataset.paymentPanel !== state.paymentMethod;
-  });
-
-  els.paymentRequiredInputs.forEach((input) => {
-    const allowedMethods = (input.dataset.paymentRequired || "").split(" ");
-    input.required = allowedMethods.includes(state.paymentMethod);
-  });
-
-  els.paymentRadios.forEach((radio) => {
-    radio.checked = radio.value === state.paymentMethod;
-  });
 }
 
 function removeFromCart(productId) {
@@ -330,14 +164,12 @@ function setCartOpen(nextValue) {
   state.cartOpen = nextValue;
   els.cartDrawer?.classList.toggle("open", nextValue);
   els.cartDrawer?.setAttribute("aria-hidden", String(!nextValue));
-
   if (nextValue) {
     state.menuOpen = false;
     els.menuDrawer?.classList.remove("open");
     els.menuDrawer?.setAttribute("aria-hidden", "true");
-    els.menuButtons.forEach((button) => button.setAttribute("aria-expanded", "false"));
+    els.menuButtons.forEach((b) => b.setAttribute("aria-expanded", "false"));
   }
-
   syncOverlay();
 }
 
@@ -345,15 +177,26 @@ function setMenuOpen(nextValue) {
   state.menuOpen = nextValue;
   els.menuDrawer?.classList.toggle("open", nextValue);
   els.menuDrawer?.setAttribute("aria-hidden", String(!nextValue));
-  els.menuButtons.forEach((button) => button.setAttribute("aria-expanded", String(nextValue)));
-
+  els.menuButtons.forEach((b) => b.setAttribute("aria-expanded", String(nextValue)));
   if (nextValue) {
     state.cartOpen = false;
     els.cartDrawer?.classList.remove("open");
     els.cartDrawer?.setAttribute("aria-hidden", "true");
   }
-
   syncOverlay();
+}
+
+function showConfirmation() {
+  const main = document.querySelector("main");
+  if (main) {
+    main.className = "section checkout-confirm";
+    main.innerHTML = `
+      <p class="section-tag">Compra finalizada</p>
+      <h1 class="checkout-confirm-title">Tu pedido fue recibido.</h1>
+      <p class="checkout-confirm-sub">Te contactamos a la brevedad para coordinar el pago y el envio. Revisa tu correo electronico.</p>
+      <a class="primary-button button-link checkout-confirm-btn" href="./anillos.html">Seguir viendo piezas</a>
+    `;
+  }
 }
 
 function bindEvents() {
@@ -367,34 +210,6 @@ function bindEvents() {
     });
   });
 
-  els.deliveryRadios.forEach((radio) => {
-    radio.addEventListener("change", () => {
-      state.deliveryMethod = radio.value;
-      renderDeliveryMethod();
-    });
-  });
-
-  els.paymentRadios.forEach((radio) => {
-    radio.addEventListener("change", () => {
-      state.paymentMethod = radio.value;
-      renderPaymentMethod();
-    });
-  });
-
-  els.searchForm?.addEventListener("pointerdown", (event) => {
-    if (event.target === els.searchInput) return;
-    event.preventDefault();
-    requestAnimationFrame(() => {
-      els.searchInput?.focus();
-      els.searchInput?.select();
-    });
-  });
-
-  els.searchForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    handleSearchSubmit(els.searchInput?.value ?? "");
-  });
-
   els.checkoutForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     if (state.cart.length === 0) return;
@@ -402,128 +217,30 @@ function bindEvents() {
       if (els.checkoutError) els.checkoutError.hidden = false;
       return;
     }
-    if (els.checkoutError) els.checkoutError.hidden = true;
     clearCart();
-    els.checkoutForm.reset();
-    state.deliveryMethod = "domicilio";
-    state.paymentMethod = "mercado-pago";
-    state.couponCode = "";
-    state.couponDiscountRate = 0;
-    renderDeliveryMethod();
-    renderPaymentMethod();
-    renderCouponState();
-    setCouponMessage("", "info");
-    const main = document.querySelector("main");
-    if (main) {
-      main.className = "checkout-confirm";
-      main.innerHTML = `
-        <h1 class="checkout-confirm-title">Tu pedido fue recibido.</h1>
-        <p class="checkout-confirm-sub">Te contactamos a la brevedad para coordinar el pago y el envío.</p>
-        <a class="primary-button button-link checkout-confirm-btn" href="./anillos.html">Seguir viendo piezas</a>
-      `;
-    }
-  });
-
-  els.couponForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    applyCoupon(els.couponInput?.value ?? "");
+    showConfirmation();
   });
 
   document.addEventListener("click", (event) => {
     const removeTrigger = event.target.closest("[data-remove-cart]");
     if (removeTrigger) return removeFromCart(removeTrigger.dataset.removeCart);
-
     const clearTrigger = event.target.closest("[data-clear-cart]");
     if (clearTrigger) return clearCart();
-
     const toggleCartTrigger = event.target.closest("[data-toggle-cart]");
     if (toggleCartTrigger) return setCartOpen(!state.cartOpen);
-
     const toggleMenuTrigger = event.target.closest("[data-toggle-menu]");
     if (toggleMenuTrigger) return setMenuOpen(!state.menuOpen);
+  });
 
-    const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
-    if (toggleSearchTrigger) {
-      requestAnimationFrame(() => {
-        els.searchInput?.focus();
-        els.searchInput?.select();
-      });
-    }
-
-    const nextStepTrigger = event.target.closest("[data-next-step]");
-    if (nextStepTrigger) return goToStep(state.step + 1);
-
-    const prevStepTrigger = event.target.closest("[data-prev-step]");
-    if (prevStepTrigger) return goToStep(state.step - 1);
-
-    const couponToggleTrigger = event.target.closest("#checkout-coupon-toggle");
-    if (couponToggleTrigger) {
-      state.couponOpen = !state.couponOpen;
-      renderCouponState();
-      if (state.couponOpen) {
-        requestAnimationFrame(() => els.couponInput?.focus());
-      }
-    }
+  els.searchForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    handleSearchSubmit(els.searchInput?.value ?? "");
   });
 
   els.overlay?.addEventListener("click", () => {
     setCartOpen(false);
     setMenuOpen(false);
   });
-
-  // Expiry auto-format MM/AA
-  ["cardExpiry", "cardExpiryDirect"].forEach((name) => {
-    const input = els.checkoutForm?.elements[name];
-    if (!input) return;
-    input.addEventListener("input", () => {
-      let v = input.value.replace(/\D/g, "").slice(0, 4);
-      if (v.length > 2) v = v.slice(0, 2) + "/" + v.slice(2);
-      input.value = v;
-    });
-  });
-
-  // FullName: letters and spaces only
-  const fullNameInput = els.checkoutForm?.elements["fullName"];
-  if (fullNameInput) {
-    const errFullName = document.getElementById("error-fullName");
-    const checkFullName = () => {
-      const valid = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(fullNameInput.value);
-      fullNameInput.setCustomValidity(valid ? "" : "Solo letras y espacios.");
-      return valid;
-    };
-    fullNameInput.addEventListener("blur", () => {
-      const valid = checkFullName();
-      if (errFullName) errFullName.classList.toggle("is-visible", !valid && fullNameInput.value !== "");
-    });
-    fullNameInput.addEventListener("input", () => {
-      const valid = checkFullName();
-      if (errFullName?.classList.contains("is-visible")) {
-        errFullName.classList.toggle("is-visible", !valid && fullNameInput.value !== "");
-      }
-    });
-  }
-
-  // DNI: 7-8 digits
-  const dniInput = els.checkoutForm?.elements["dni"];
-  if (dniInput) {
-    const errDni = document.getElementById("error-dni");
-    const checkDni = () => {
-      const val = dniInput.value;
-      const valid = /^[0-9]{7,8}$/.test(val);
-      dniInput.setCustomValidity(valid || val === "" ? "" : "DNI inválido.");
-      return { valid, val };
-    };
-    dniInput.addEventListener("blur", () => {
-      const { valid, val } = checkDni();
-      if (errDni) errDni.classList.toggle("is-visible", !valid && val !== "");
-    });
-    dniInput.addEventListener("input", () => {
-      const { valid, val } = checkDni();
-      if (errDni?.classList.contains("is-visible")) {
-        errDni.classList.toggle("is-visible", !valid && val !== "");
-      }
-    });
-  }
 }
 
 function init() {
@@ -531,10 +248,6 @@ function init() {
   enhanceSessionLink();
   renderCurrencyButtons();
   renderCart();
-  renderStep();
-  renderDeliveryMethod();
-  renderPaymentMethod();
-  renderCouponState();
   renderCheckoutSummary();
   bindEvents();
   fetchUsdToArsRate().then(() => {

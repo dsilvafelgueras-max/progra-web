@@ -40,226 +40,94 @@
     </header>
 
     <main class="section checkout-section">
-      <section class="checkout-progress" aria-label="Etapas de compra">
-        <div class="checkout-step is-active" data-step-indicator="1"><span>1</span><strong>Contacto</strong></div>
-        <div class="checkout-step" data-step-indicator="2"><span>2</span><strong>Entrega</strong></div>
-        <div class="checkout-step" data-step-indicator="3"><span>3</span><strong>Pago</strong></div>
-      </section>
 
       <div class="checkout-layout">
-        <section class="checkout-card checkout-form-card">
-          <form class="checkout-form" id="checkout-form">
-            <div class="checkout-block">
-              <p class="section-tag">Compra</p>
-              <h1>Finalizar compra</h1>
-            </div>
+        <section class="checkout-simple-card">
+          <form id="checkout-form" class="checkout-simple-form">
 
-            <div class="checkout-required-note">
-              <span class="required-mark">*</span>
-              <span>Campos obligatorios para completar la compra</span>
-            </div>
-
-            <div class="checkout-block" data-step="1">
-              <h2>Datos de contacto</h2>
-              <div class="checkout-grid checkout-grid-two">
-                <label>
-                  <span>Nombre y apellido <strong class="required-mark">*</strong></span>
-                  <input type="text" name="fullName" placeholder="Tu nombre completo" minlength="4" pattern="[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+" required />
-                </label>
-                <span class="field-error" id="error-fullName">Solo letras y espacios.</span>
-                <label>
-                  <span>E-mail <strong class="required-mark">*</strong></span>
-                  <input type="email" name="email" placeholder="tu@email.com" required />
-                </label>
-                <label>
-                  <span>Telefono <strong class="required-mark">*</strong></span>
-                  <input type="tel" name="phone" placeholder="+54 11 0000 0000" minlength="8" required />
-                </label>
-                <label>
-                  <span>DNI <strong class="required-mark">*</strong></span>
-                  <input type="text" name="dni" placeholder="Documento" pattern="[0-9]{7,8}" minlength="7" maxlength="8" inputmode="numeric" required />
-                </label>
-                <span class="field-error" id="error-dni">Ingresá un DNI válido (7 u 8 dígitos numéricos).</span>
+            <div class="csf-section">
+              <h2 class="checkout-simple-title">Datos de contacto</h2>
+              <div class="csf-field csf-full">
+                <label for="co-name">Nombre completo <span class="required-mark">*</span></label>
+                <input id="co-name" type="text" name="fullName" required />
               </div>
-              <label class="checkout-check">
-                <input type="checkbox" name="offers" checked />
-                <span>Quiero recibir ofertas y novedades por e-mail</span>
-              </label>
-              <div class="step-nav">
-                <button type="button" class="primary-button" data-next-step>Siguiente</button>
+              <div class="csf-row">
+                <div class="csf-field">
+                  <label for="co-email">Email <span class="required-mark">*</span></label>
+                  <input id="co-email" type="email" name="email" required />
+                </div>
+                <div class="csf-field">
+                  <label for="co-phone">Telefono <span class="required-mark">*</span></label>
+                  <input id="co-phone" type="tel" name="phone" required />
+                </div>
               </div>
             </div>
 
-            <div class="checkout-block" data-step="2" hidden>
-              <h2>Entrega</h2>
-              <div class="checkout-delivery-methods">
-                <label class="checkout-radio">
-                  <input type="radio" name="deliveryMethod" value="domicilio" checked />
-                  <span>Entrega a domicilio</span>
-                </label>
-                <label class="checkout-radio">
-                  <input type="radio" name="deliveryMethod" value="encuentro" />
-                  <span>Punto de encuentro</span>
-                </label>
-                <label class="checkout-radio">
-                  <input type="radio" name="deliveryMethod" value="retiro" />
-                  <span>Retiro en el local</span>
-                </label>
-              </div>
+            <div class="csf-divider"></div>
 
-              <div class="checkout-delivery-panel" data-delivery-panel="domicilio">
-                <div class="checkout-grid checkout-grid-two">
-                  <label>
-                    <span>Codigo Postal <strong class="required-mark">*</strong></span>
-                    <input type="text" name="zip" placeholder="CP" minlength="4" data-delivery-required="domicilio" required />
-                  </label>
-                  <label>
-                    <span>Provincia <strong class="required-mark">*</strong></span>
-                    <input type="text" name="province" placeholder="Provincia" minlength="3" data-delivery-required="domicilio" required />
-                  </label>
-                  <label>
-                    <span>Ciudad <strong class="required-mark">*</strong></span>
-                    <input type="text" name="city" placeholder="Ciudad" minlength="3" data-delivery-required="domicilio" required />
-                  </label>
-                  <label>
-                    <span>Direccion <strong class="required-mark">*</strong></span>
-                    <input type="text" name="address" placeholder="Calle y altura" minlength="5" data-delivery-required="domicilio" required />
-                  </label>
-                  <label class="checkout-full">
-                    <span>Departamento / piso / referencia</span>
-                    <input type="text" name="details" placeholder="Opcional" />
-                  </label>
-                </div>
-              </div>
-
-              <div class="checkout-delivery-panel" data-delivery-panel="encuentro" hidden>
-                <div class="checkout-delivery-copy">
-                  <p>Coordinamos el punto de encuentro por correo una vez confirmada la compra.</p>
-                </div>
-                <div class="checkout-grid">
-                  <label>
-                    <span>Correo para coordinar <strong class="required-mark">*</strong></span>
-                    <input type="email" name="meetingEmail" placeholder="tu@email.com" data-delivery-required="encuentro" />
-                  </label>
-                </div>
-              </div>
-
-              <div class="checkout-delivery-panel" data-delivery-panel="retiro" hidden>
-                <div class="checkout-delivery-copy">
-                  <p>Retiro en el local con coordinacion previa. Te vamos a escribir para confirmar dia y horario.</p>
-                </div>
-              </div>
-              <div class="step-nav">
-                <button type="button" class="ghost-button" data-prev-step>Volver</button>
-                <button type="button" class="primary-button" data-next-step>Siguiente</button>
+            <div class="csf-section">
+              <h2 class="checkout-simple-title">Forma de pago</h2>
+              <div class="csf-payment-options">
+                <label class="csf-option">
+                  <input type="radio" name="payment" value="transferencia" required />
+                  <span class="csf-option-label">
+                    <strong>Transferencia bancaria</strong>
+                    <small>Te enviamos los datos al confirmar</small>
+                  </span>
+                </label>
+                <label class="csf-option">
+                  <input type="radio" name="payment" value="mercado-pago" />
+                  <span class="csf-option-label">
+                    <strong>Mercado Pago</strong>
+                    <small>Link de pago por correo</small>
+                  </span>
+                </label>
+                <label class="csf-option">
+                  <input type="radio" name="payment" value="efectivo" />
+                  <span class="csf-option-label">
+                    <strong>Efectivo</strong>
+                    <small>Al momento del retiro o encuentro</small>
+                  </span>
+                </label>
               </div>
             </div>
 
-            <div class="checkout-block" data-step="3" hidden>
-              <h2>Pago</h2>
-              <div class="checkout-payment-methods">
-                <label class="checkout-radio">
-                  <input type="radio" name="paymentMethod" value="mercado-pago" checked />
-                  <span>Mercado Pago</span>
-                </label>
-                <label class="checkout-radio">
-                  <input type="radio" name="paymentMethod" value="tarjeta" />
-                  <span>Tarjeta</span>
-                </label>
-                <label class="checkout-radio">
-                  <input type="radio" name="paymentMethod" value="transferencia" />
-                  <span>Transferencia</span>
-                </label>
-              </div>
-              <div class="checkout-payment-panel" data-payment-panel="mercado-pago">
-                <div class="checkout-grid checkout-grid-two">
-                  <label>
-                    <span>Titular de la tarjeta <strong class="required-mark">*</strong></span>
-                    <input type="text" name="cardName" placeholder="Como figura en la tarjeta" minlength="4" data-payment-required="mercado-pago tarjeta" required />
-                  </label>
-                  <label>
-                    <span>Numero de tarjeta <strong class="required-mark">*</strong></span>
-                    <input type="text" name="cardNumber" inputmode="numeric" placeholder="1234 5678 9012 3456" minlength="13" data-payment-required="mercado-pago tarjeta" required />
-                  </label>
-                  <label>
-                    <span>Vencimiento <strong class="required-mark">*</strong></span>
-                    <input type="text" name="cardExpiry" placeholder="MM/AA" minlength="4" data-payment-required="mercado-pago tarjeta" required />
-                  </label>
-                  <label>
-                    <span>Codigo de seguridad <strong class="required-mark">*</strong></span>
-                    <input type="text" name="cardCvv" inputmode="numeric" placeholder="CVV" minlength="3" data-payment-required="mercado-pago tarjeta" required />
-                  </label>
-                </div>
-              </div>
+            <div class="csf-divider"></div>
 
-              <div class="checkout-payment-panel" data-payment-panel="tarjeta" hidden>
-                <div class="checkout-grid checkout-grid-two">
-                  <label>
-                    <span>Titular de la tarjeta <strong class="required-mark">*</strong></span>
-                    <input type="text" name="cardNameDirect" placeholder="Como figura en la tarjeta" minlength="4" data-payment-required="tarjeta" />
-                  </label>
-                  <label>
-                    <span>Numero de tarjeta <strong class="required-mark">*</strong></span>
-                    <input type="text" name="cardNumberDirect" inputmode="numeric" placeholder="1234 5678 9012 3456" minlength="13" data-payment-required="tarjeta" />
-                  </label>
-                  <label>
-                    <span>Vencimiento <strong class="required-mark">*</strong></span>
-                    <input type="text" name="cardExpiryDirect" placeholder="MM/AA" minlength="4" data-payment-required="tarjeta" />
-                  </label>
-                  <label>
-                    <span>Codigo de seguridad <strong class="required-mark">*</strong></span>
-                    <input type="text" name="cardCvvDirect" inputmode="numeric" placeholder="CVV" minlength="3" data-payment-required="tarjeta" />
-                  </label>
+            <div class="csf-section">
+              <h2 class="checkout-simple-title">Envio</h2>
+              <div class="csf-field csf-full">
+                <label for="co-address">Direccion <span class="required-mark">*</span></label>
+                <input id="co-address" type="text" name="address" placeholder="Calle y numero" required />
+              </div>
+              <div class="csf-row">
+                <div class="csf-field">
+                  <label for="co-city">Ciudad <span class="required-mark">*</span></label>
+                  <input id="co-city" type="text" name="city" required />
+                </div>
+                <div class="csf-field">
+                  <label for="co-zip">Codigo postal <span class="required-mark">*</span></label>
+                  <input id="co-zip" type="text" name="zip" required />
                 </div>
               </div>
-
-              <div class="checkout-payment-panel" data-payment-panel="transferencia" hidden>
-                <div class="checkout-delivery-copy">
-                  <p>Te vamos a enviar los datos bancarios para completar la transferencia una vez confirmada la compra.</p>
-                </div>
-                <div class="checkout-grid">
-                  <label>
-                    <span>Correo para enviar comprobante <strong class="required-mark">*</strong></span>
-                    <input type="email" name="transferEmail" placeholder="tu@email.com" data-payment-required="transferencia" />
-                  </label>
-                </div>
-              </div>
-
-              <div class="checkout-actions">
-                <button type="button" class="ghost-button" data-prev-step>Volver</button>
-                <button class="primary-button" type="submit" id="checkout-submit">Confirmar compra</button>
+              <div class="csf-field csf-full">
+                <label for="co-comments">Comentarios (opcional)</label>
+                <textarea id="co-comments" name="comments" placeholder="Indicaciones para la entrega, referencias, etc." rows="3"></textarea>
               </div>
             </div>
 
-            <p class="checkout-error" id="checkout-error" hidden>
-              Completa todos los datos obligatorios antes de confirmar la compra.
-            </p>
+            <p class="checkout-error" id="checkout-error" hidden>Completa todos los campos obligatorios.</p>
 
+            <button type="submit" class="csf-submit" id="checkout-submit">Finalizar compra</button>
           </form>
         </section>
 
-        <aside class="checkout-card checkout-summary-card">
-          <div class="checkout-summary-head">
-            <p class="section-tag">Resumen</p>
-            <h2>Tu pedido</h2>
-          </div>
+        <aside class="checkout-simple-summary">
+          <h2 class="checkout-simple-title">Resumen de compra</h2>
           <div class="checkout-summary-items" id="checkout-summary-items"></div>
-          <button class="checkout-coupon" type="button" id="checkout-coupon-toggle">Agregar cupon de descuento</button>
-          <form class="checkout-coupon-form" id="checkout-coupon-form" hidden>
-            <label>
-              <span>Codigo de descuento</span>
-              <div class="checkout-coupon-row">
-                <input type="text" id="checkout-coupon-input" placeholder="Ej: SANGRIA10" autocomplete="off" />
-                <button class="ghost-button" type="submit">Aplicar</button>
-              </div>
-            </label>
-            <p class="checkout-coupon-message" id="checkout-coupon-message" hidden></p>
-          </form>
-          <div class="checkout-summary-total">
-            <div><span>Subtotal</span><strong id="checkout-subtotal">ARS 0</strong></div>
-            <div id="checkout-discount-row" hidden><span>Descuento</span><strong id="checkout-discount">ARS 0</strong></div>
-            <div><span>Envio</span><strong id="checkout-shipping">A coordinar</strong></div>
-            <div class="is-total"><span>Total</span><strong id="checkout-total">ARS 0</strong></div>
+          <div class="css-total">
+            <span>Total</span>
+            <strong id="checkout-total">$0</strong>
           </div>
         </aside>
       </div>

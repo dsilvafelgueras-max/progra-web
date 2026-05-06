@@ -276,11 +276,10 @@ function renderProducts() {
 function renderOtrosProducts() {
   if (!els.productGrid2) return;
 
-  const otras = ["Pulseras", "Aros", "Earcuff", "Collares"];
-  const visible = products.filter((p) => otras.includes(p.category));
+  const visible = products.filter((p) => !p.isGiftCard);
 
   if (visible.length === 0) {
-    els.productGrid2.innerHTML = `<article class="product-card fade-in"><div class="product-body"><p class="product-category">Proximamente</p><h3>Mas piezas proximamente</h3></div></article>`;
+    els.productGrid2.innerHTML = `<article class="product-card fade-in"><div class="product-body"><p class="product-category">Proximamente</p><h3>Proximamente</h3></div></article>`;
     return;
   }
 
