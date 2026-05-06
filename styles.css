@@ -1545,7 +1545,7 @@ p {
 
 .menu-main-link {
   font-family: "Montserrat", "Inter", sans-serif;
-  font-weight: 300;
+  font-weight: 600;
   font-size: 15px;
   letter-spacing: 0.15em;
   text-transform: capitalize;
@@ -1581,7 +1581,7 @@ p {
 
 .menu-sub a {
   font-family: "Montserrat", "Inter", sans-serif;
-  font-weight: 300;
+  font-weight: 600;
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: capitalize;
@@ -1863,19 +1863,19 @@ p {
 .footer-columns h2 {
   margin: 0 0 0.4rem;
   color: #1A0A10;
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   font-family: "Montserrat", "Inter", sans-serif;
-  font-weight: 300;
+  font-weight: 600;
   font-style: normal;
   letter-spacing: 0.26em;
   text-transform: uppercase;
 }
 
 .footer-columns a {
-  color: rgba(26, 10, 16, 0.65);
+  color: rgba(26, 10, 16, 0.82);
   font-family: "Montserrat", "Inter", sans-serif;
-  font-weight: 300;
-  font-size: 0.8rem;
+  font-weight: 400;
+  font-size: 0.88rem;
   letter-spacing: 0.08em;
   text-transform: lowercase;
   transition: color 0.15s;
