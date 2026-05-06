@@ -58,27 +58,6 @@ export function enhanceSessionLink() {
     );
   }
 
-  const menuLinks = document.querySelector(".menu-links");
   const existingLogout = document.querySelector("[data-logout-session]");
-
-  if (!menuLinks) return;
-
-  if (!session?.email) {
-    existingLogout?.remove();
-    return;
-  }
-
-  if (existingLogout) return;
-
-  const logoutButton = document.createElement("button");
-  logoutButton.type = "button";
-  logoutButton.className = "menu-main-link menu-logout-link";
-  logoutButton.dataset.logoutSession = "true";
-  logoutButton.textContent = "cerrar sesion";
-  logoutButton.addEventListener("click", () => {
-    clearSession();
-    window.location.href = "./index.html";
-  });
-
-  menuLinks.append(logoutButton);
+  existingLogout?.remove();
 }
