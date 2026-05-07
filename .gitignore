@@ -1,0 +1,9 @@
+node_modules/
+nextjs-app/node_modules/
+nextjs-app/.next/
+nextjs-app/out/
+react-app/node_modules/
+react-app/dist/
+react-app/build/
+.DS_Store
+*.env.local
