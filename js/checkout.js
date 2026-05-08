@@ -230,6 +230,14 @@ function bindEvents() {
     if (toggleCartTrigger) return setCartOpen(!state.cartOpen);
     const toggleMenuTrigger = event.target.closest("[data-toggle-menu]");
     if (toggleMenuTrigger) return setMenuOpen(!state.menuOpen);
+    const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
+    if (toggleSearchTrigger) {
+      els.searchForm?.classList.toggle("is-open");
+      if (els.searchForm?.classList.contains("is-open")) {
+        requestAnimationFrame(() => els.searchInput?.focus());
+      }
+      return;
+    }
   });
 
   els.searchForm?.addEventListener("submit", (event) => {

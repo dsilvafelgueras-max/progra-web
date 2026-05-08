@@ -368,7 +368,10 @@ function bindEvents() {
     const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
     if (toggleSearchTrigger) {
       els.searchForm?.classList.toggle("is-open");
-      els.searchInput?.focus();
+      if (els.searchForm?.classList.contains("is-open")) {
+        requestAnimationFrame(() => els.searchInput?.focus());
+      }
+      return;
     }
   });
 

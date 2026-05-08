@@ -28,6 +28,8 @@ const els = {
   menuDrawer: document.querySelector("#menu-drawer"),
   overlay: document.querySelector("#overlay"),
   menuButtons: Array.from(document.querySelectorAll("[data-toggle-menu]")),
+  searchForm: document.querySelector("[data-search-form]"),
+  searchInput: document.querySelector("[data-search-input]"),
   currencyButtons: Array.from(document.querySelectorAll("[data-currency]")),
 };
 
@@ -214,6 +216,14 @@ function bindEvents() {
 
     const toggleMenuTrigger = event.target.closest("[data-toggle-menu]");
     if (toggleMenuTrigger) return setMenuOpen(!state.menuOpen);
+    const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
+    if (toggleSearchTrigger) {
+      els.searchForm?.classList.toggle("is-open");
+      if (els.searchForm?.classList.contains("is-open")) {
+        requestAnimationFrame(() => els.searchInput?.focus());
+      }
+      return;
+    }
   });
 
   els.overlay?.addEventListener("click", () => {

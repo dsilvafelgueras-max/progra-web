@@ -89,10 +89,19 @@ function handleSearchSubmit(rawValue) {
   const value = normalize(rawValue.trim());
   if (!value) return;
 
+  // Search by exact or partial product name first
+  const productMatch = products.find((p) =>
+    normalize(p.name).includes(value) || value.includes(normalize(p.name))
+  );
+  if (productMatch) {
+    window.location.href = `./producto.html?id=${productMatch.id}`;
+    return;
+  }
+
+  // Fallback to category routes
   const match = searchRoutes.find((route) =>
     route.keywords.some((keyword) => value.includes(keyword))
   );
-
   window.location.href = match?.href ?? "./anillos.html";
 }
 
@@ -505,15 +514,10 @@ function bindEvents() {
     if (closeSortTrigger) return setSortOpen(false);
     const toggleSearchTrigger = event.target.closest("[data-toggle-search]");
     if (toggleSearchTrigger) {
-      if (document.body.classList.contains("home-page")) {
-        requestAnimationFrame(() => {
-          els.searchInput?.focus();
-          els.searchInput?.select();
-        });
-        return;
-      }
       els.searchForm?.classList.toggle("is-open");
-      els.searchInput?.focus();
+      if (els.searchForm?.classList.contains("is-open")) {
+        requestAnimationFrame(() => els.searchInput?.focus());
+      }
       return;
     }
 
@@ -539,6 +543,16 @@ function bindEvents() {
     setCartOpen(false);
     setMenuOpen(false);
   });
+
+  document.addEventListener("click", (event) => {
+    if (
+      els.searchForm?.classList.contains("is-open") &&
+      !event.target.closest("[data-search-form]") &&
+      !event.target.closest("[data-toggle-search]")
+    ) {
+      els.searchForm.classList.remove("is-open");
+    }
+  }, true);
 }
 
 function init() {
