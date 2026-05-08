@@ -76,12 +76,6 @@ function handleSearchSubmit(rawValue) {
   window.location.href = match?.href ?? "./anillos.html";
 }
 
-function mountCurrencySwitch() {
-  if (!els.currencySwitch || !els.topbarRight) return;
-  els.currencySwitch.classList.add("topbar-currency");
-  els.topbarRight.appendChild(els.currencySwitch);
-}
-
 function getCurrentProduct() {
   const params = new URLSearchParams(window.location.search);
   return getProductById(params.get("id"));
@@ -401,6 +395,14 @@ function addToCart(productId, quantity = 1) {
   saveCart(state.cart);
   renderCart();
   setCartOpen(true);
+  requestAnimationFrame(() => {
+    const rows = els.cartItems?.querySelectorAll(".cart-row");
+    if (rows?.length) {
+      const last = rows[rows.length - 1];
+      last.classList.add("is-new");
+      last.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  });
 }
 
 function removeFromCart(productId) {
@@ -543,7 +545,6 @@ function init() {
   setPaymentOpen(false);
   ensureClearCartButton();
   enhanceSessionLink();
-  mountCurrencySwitch();
   renderCurrencyButtons();
   renderProduct();
   renderCart();

@@ -1654,11 +1654,20 @@ p {
   grid-template-rows: auto 1fr auto;
   gap: 1rem;
   transform: translateX(calc(100% + 2rem));
-  transition: transform 220ms ease;
+  transition: transform 380ms cubic-bezier(0.32, 0, 0.15, 1);
 }
 
 .cart-drawer.open {
   transform: translateX(0);
+}
+
+@keyframes cart-item-pop {
+  0%   { background: rgba(43, 36, 32, 0.08); }
+  100% { background: transparent; }
+}
+
+.cart-row.is-new {
+  animation: cart-item-pop 1.2s ease forwards;
 }
 
 .cart-header,

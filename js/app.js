@@ -393,6 +393,14 @@ function addToCart(productId) {
   saveCart(state.cart);
   renderCart();
   setCartOpen(true);
+  requestAnimationFrame(() => {
+    const rows = els.cartItems?.querySelectorAll(".cart-row");
+    if (rows?.length) {
+      const last = rows[rows.length - 1];
+      last.classList.add("is-new");
+      last.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  });
 }
 
 function removeFromCart(productId) {

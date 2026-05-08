@@ -198,12 +198,6 @@ function renderCurrencyButtons() {
   });
 }
 
-function mountCurrencySwitch() {
-  if (!els.currencySwitch || !els.topbarRight) return;
-  els.currencySwitch.classList.add("topbar-currency");
-  els.topbarRight.appendChild(els.currencySwitch);
-}
-
 function renderPageHeader(items) {
   const copy = pageCopy[page] ?? { title: "Catalogo", subtitle: "Piezas de la coleccion." };
   if (els.title) {
@@ -285,6 +279,14 @@ function addToCart(productId) {
   saveCart(state.cart);
   renderCart();
   setCartOpen(true);
+  requestAnimationFrame(() => {
+    const rows = els.cartItems?.querySelectorAll(".cart-row");
+    if (rows?.length) {
+      const last = rows[rows.length - 1];
+      last.classList.add("is-new");
+      last.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  });
 }
 
 function removeFromCart(productId) {
@@ -386,7 +388,6 @@ function init() {
   bindEvents();
   ensureClearCartButton();
   enhanceSessionLink();
-  mountCurrencySwitch();
   renderSortToolbar();
   renderCurrencyButtons();
   renderProducts();
