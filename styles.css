@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --text: #E8D5C4;
   --muted: rgba(247, 245, 241, 0.78);
   --line: rgba(255, 255, 255, 0.18);
@@ -2158,9 +2158,9 @@ p {
   cursor: pointer;
   list-style: none;
   font-family: "Montserrat", "Inter", sans-serif;
-  font-weight: 300;
-  font-size: 0.88rem;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.04em;
   color: #2B2420;
   gap: 1rem;
 }
@@ -2172,7 +2172,7 @@ p {
 .faq-question::after {
   content: "+";
   font-size: 1rem;
-  font-weight: 300;
+  font-weight: 600;
   color: rgba(43, 36, 32, 0.45);
   flex-shrink: 0;
   transition: transform 0.2s ease;
@@ -2213,7 +2213,7 @@ p {
 
 .historia-copy h1 {
   margin: 0.2rem 0 0.8rem;
-  font-weight: 300;
+  font-weight: 400;
   font-style: normal;
   font-size: clamp(1.7rem, 3.6vw, 2.9rem);
   line-height: 0.95;
@@ -2223,7 +2223,7 @@ p {
 .historia-copy p {
   margin: 0;
   font-family: "Montserrat", "Inter", sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 0.95rem;
   line-height: 1.85;
   letter-spacing: 0.04em;
@@ -3882,7 +3882,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
   padding: 0.75rem 0.9rem;
   border: 1px solid rgba(43, 36, 32, 0.15);
   border-radius: 6px;
-  background: #f5f1ec;
+  background: #ffffff;
   color: #2B2420;
   font-family: "Montserrat", "Inter", sans-serif;
   font-weight: 300;
@@ -3895,7 +3895,7 @@ body:not(.home-page) .topbar .topbar-currency:focus-within {
 .csf-field input:focus,
 .csf-field textarea:focus {
   border-color: rgba(43, 36, 32, 0.5);
-  background: #f0ebe3;
+  background: #ffffff;
 }
 
 .csf-row {
