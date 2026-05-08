@@ -199,6 +199,19 @@ function showConfirmation() {
   }
 }
 
+function bindPaymentPanels() {
+  const radios = document.querySelectorAll('input[name="payment"]');
+  radios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      document.querySelectorAll("[data-payment-panel]").forEach((panel) => {
+        panel.classList.remove("is-open");
+      });
+      const active = document.querySelector(`[data-payment-panel="${radio.value}"]`);
+      if (active) active.classList.add("is-open");
+    });
+  });
+}
+
 function bindEvents() {
   els.currencyButtons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -210,9 +223,16 @@ function bindEvents() {
     });
   });
 
+  const cartEmptyError = document.getElementById("cart-empty-error");
+
   els.checkoutForm?.addEventListener("submit", (event) => {
     event.preventDefault();
-    if (state.cart.length === 0) return;
+    if (state.cart.length === 0) {
+      cartEmptyError?.classList.add("is-visible");
+      cartEmptyError?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    cartEmptyError?.classList.remove("is-visible");
     if (!els.checkoutForm.reportValidity()) {
       if (els.checkoutError) els.checkoutError.hidden = false;
       return;
@@ -258,6 +278,7 @@ function init() {
   renderCart();
   renderCheckoutSummary();
   bindEvents();
+  bindPaymentPanels();
   fetchUsdToArsRate().then(() => {
     renderCart();
     renderCheckoutSummary();
