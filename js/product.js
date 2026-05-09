@@ -474,7 +474,7 @@ function bindEvents() {
     if (addTrigger) {
       addToCart(addTrigger.dataset.addCart, state.selectedQuantity);
       state.selectedQuantity = 1;
-      renderProduct();
+      requestAnimationFrame(() => renderProduct());
       return;
     }
     const decreaseQtyTrigger = event.target.closest("[data-decrease-qty]");

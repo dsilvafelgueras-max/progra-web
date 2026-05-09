@@ -54,28 +54,28 @@
           </p>
         </div>
 
-        <form class="contact-form contact-form-page regret-form">
+        <form class="contact-form contact-form-page regret-form" id="regret-form" data-validate-form data-confirmation-title="Tu solicitud fue enviada." data-confirmation-subtitle="Te respondemos por correo para continuar con la cancelacion." novalidate>
           <label>
             <span>Nombre</span>
-            <input type="text" placeholder="ej.: Maria Perez" />
+            <input type="text" name="name" placeholder="ej.: Maria Perez" minlength="2" required />
           </label>
           <label>
             <span>Email</span>
-            <input type="email" placeholder="ej.: tuemail@email.com" />
+            <input type="email" name="email" placeholder="ej.: tuemail@email.com" required />
           </label>
           <label>
             <span>Telefono</span>
-            <input type="tel" placeholder="ej.: 1123445567" />
+            <input type="tel" name="phone" placeholder="ej.: 1123445567" minlength="8" required />
           </label>
           <label>
             <span>Numero de orden</span>
-            <input type="text" placeholder="ej.: SG-1024" />
+            <input type="text" name="order" placeholder="ej.: SG-1024" minlength="4" required />
           </label>
           <label class="full-row">
             <span>Mensaje</span>
-            <textarea rows="7" placeholder="ej.: Tu mensaje"></textarea>
+            <textarea rows="7" name="message" placeholder="ej.: Tu mensaje" minlength="10" required></textarea>
           </label>
-          <button class="primary-button full-width" type="button">Enviar solicitud</button>
+          <button class="primary-button full-width" type="submit">Enviar solicitud</button>
         </form>
       </section>
     </main>
@@ -173,7 +173,6 @@
     <script type="module" src="./js/static-pages.js"></script>
   </body>
 </html>
-
 
 
 

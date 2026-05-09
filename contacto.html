@@ -92,18 +92,18 @@
           </p>
         </div>
 
-        <form class="contact-form contact-form-page" id="contact-form">
+        <form class="contact-form contact-form-page" id="contact-form" data-validate-form data-confirmation-title="Tu consulta fue enviada." data-confirmation-subtitle="Te respondemos a la brevedad." novalidate>
           <label>
             <span>Nombre</span>
-            <input type="text" placeholder="Tu nombre" />
+            <input type="text" name="name" placeholder="Tu nombre" minlength="2" required />
           </label>
           <label>
             <span>Email</span>
-            <input type="email" placeholder="tu@email.com" />
+            <input type="email" name="email" placeholder="tu@email.com" required />
           </label>
           <label class="full-row">
             <span>Mensaje</span>
-            <textarea rows="6" placeholder="Contanos que pieza te interesa"></textarea>
+            <textarea rows="6" name="message" placeholder="Contanos que pieza te interesa" minlength="10" required></textarea>
           </label>
           <button class="primary-button full-width" type="submit">
             Enviar consulta
@@ -206,7 +206,6 @@
     <script type="module" src="./js/static-pages.js"></script>
   </body>
 </html>
-
 
 
 

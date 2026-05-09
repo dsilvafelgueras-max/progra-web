@@ -30,6 +30,8 @@ const els = {
   contactForm: document.querySelector("#contact-form"),
 };
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const searchRoutes = [
   { keywords: ["anillo", "anillos", "ring"], href: "./anillos.html" },
   { keywords: ["pulsera", "pulseras", "bracelet"], href: "./pulseras.html" },
@@ -175,6 +177,91 @@ function setMenuOpen(nextValue) {
   syncOverlay();
 }
 
+function getInlineError(field) {
+  const wrapper = field.closest("label") ?? field.parentElement;
+  if (!wrapper) return null;
+
+  let error = wrapper.querySelector(".form-inline-error");
+  if (!error) {
+    error = document.createElement("span");
+    error.className = "form-inline-error";
+    wrapper.append(error);
+  }
+  return error;
+}
+
+function setFieldError(field, message) {
+  const error = getInlineError(field);
+  field.classList.toggle("form-invalid", Boolean(message));
+  field.setAttribute("aria-invalid", message ? "true" : "false");
+  if (!error) return;
+  error.textContent = message;
+  error.classList.toggle("is-visible", Boolean(message));
+}
+
+function validateField(field) {
+  const value = field.value.trim();
+
+  if (field.hasAttribute("required") && !value) {
+    setFieldError(field, "Completa este campo.");
+    return false;
+  }
+
+  if (field.type === "email" && value && !EMAIL_REGEX.test(value)) {
+    setFieldError(field, "Ingresa un correo valido.");
+    return false;
+  }
+
+  const minLength = Number(field.getAttribute("minlength"));
+  if (Number.isFinite(minLength) && minLength > 0 && value && value.length < minLength) {
+    setFieldError(field, `Ingresa al menos ${minLength} caracteres.`);
+    return false;
+  }
+
+  setFieldError(field, "");
+  return true;
+}
+
+function bindValidatedForms() {
+  const forms = Array.from(document.querySelectorAll("[data-validate-form]"));
+
+  forms.forEach((form) => {
+    const fields = Array.from(form.querySelectorAll("input, textarea"));
+
+    fields.forEach((field) => {
+      field.addEventListener("blur", () => validateField(field));
+      field.addEventListener("input", () => {
+        if (field.classList.contains("form-invalid")) {
+          validateField(field);
+        }
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const invalidField = fields.find((field) => !validateField(field));
+      if (invalidField) {
+        invalidField.focus();
+        return;
+      }
+
+      const confirmation = document.createElement("div");
+      confirmation.className = "contact-confirmation";
+      confirmation.innerHTML = `
+        <p class="contact-confirmation-main">${form.dataset.confirmationTitle ?? "Tu consulta fue enviada."}</p>
+        <p class="contact-confirmation-sub">${form.dataset.confirmationSubtitle ?? "Te respondemos a la brevedad."}</p>
+      `;
+      form.replaceWith(confirmation);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          confirmation.classList.add("is-visible");
+        });
+      });
+    });
+  });
+}
+
 function bindEvents() {
   els.currencyButtons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -237,21 +324,6 @@ function bindEvents() {
     }
   }, true);
 
-  els.contactForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const confirmation = document.createElement("div");
-    confirmation.className = "contact-confirmation";
-    confirmation.innerHTML = `
-      <p class="contact-confirmation-main">Tu consulta fue enviada.</p>
-      <p class="contact-confirmation-sub">Te respondemos a la brevedad.</p>
-    `;
-    els.contactForm.replaceWith(confirmation);
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        confirmation.classList.add("is-visible");
-      });
-    });
-  });
 }
 
 function init() {
@@ -259,6 +331,7 @@ function init() {
   renderCurrencyButtons();
   renderCart();
   bindEvents();
+  bindValidatedForms();
   enhanceSessionLink();
 }
 
