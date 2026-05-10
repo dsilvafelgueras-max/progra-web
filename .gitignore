@@ -1,4 +1,8 @@
 node_modules/
+.next/
+.next-build/
+.next-runtime/
+out/
 nextjs-app/node_modules/
 nextjs-app/.next/
 nextjs-app/out/

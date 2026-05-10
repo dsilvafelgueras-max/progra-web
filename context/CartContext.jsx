@@ -5,25 +5,30 @@ import { fetchUsdRate } from '../lib/currency';
 
 const CartContext = createContext(null);
 
+function readStoredValue(key, fallback, parseAsJson = false) {
+  if (typeof window === 'undefined') return fallback;
+
+  try {
+    const value = window.localStorage.getItem(key);
+    if (!value) return fallback;
+    return parseAsJson ? JSON.parse(value) : value;
+  } catch {
+    return fallback;
+  }
+}
+
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => readStoredValue('sangria-next-cart', [], true));
   const [cartOpen, setCartOpen] = useState(false);
-  const [currency, setCurrency] = useState('ARS');
+  const [currency, setCurrency] = useState(() => readStoredValue('sangria-next-currency', 'ARS'));
   const [usdRate, setUsdRate] = useState(1400);
 
   useEffect(() => {
-    const savedCart = localStorage.getItem('sangria-next-cart');
-    const savedCurrency = localStorage.getItem('sangria-next-currency');
-    if (savedCart) setCart(JSON.parse(savedCart));
-    if (savedCurrency) setCurrency(savedCurrency);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('sangria-next-cart', JSON.stringify(cart));
+    window.localStorage.setItem('sangria-next-cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
-    localStorage.setItem('sangria-next-currency', currency);
+    window.localStorage.setItem('sangria-next-currency', currency);
   }, [currency]);
 
   useEffect(() => {
@@ -45,15 +50,15 @@ export function CartProvider({ children }) {
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  function addToCart(productId) {
+  function addToCart(productId, quantity = 1) {
     setCart((current) => {
       const existing = current.find((item) => item.id === productId);
       if (existing) {
         return current.map((item) =>
-          item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === productId ? { ...item, quantity: item.quantity + quantity } : item
         );
       }
-      return [...current, { id: productId, quantity: 1 }];
+      return [...current, { id: productId, quantity }];
     });
     setCartOpen(true);
   }

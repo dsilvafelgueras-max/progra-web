@@ -18,7 +18,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  font-family: 'Montserrat', Arial, sans-serif;
   font-weight: 300;
   background: var(--bg);
   color: var(--text);
@@ -26,7 +26,7 @@ body {
 
 h1,
 h2 {
-  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 400;
 }
 
@@ -269,41 +269,28 @@ a {
 .header-home .cart-chip,
 .header-home .header-user,
 .header-home .header-login {
-  color: transparent;
+  color: var(--wine);
   border-color: transparent;
-  transition: color 0.2s, border-bottom-color 0.2s;
 }
 
 .header-home .currency-switcher {
-  background: transparent;
-  border-color: transparent;
+  background: rgba(232, 227, 220, 0.9);
+  border-color: rgba(26, 10, 16, 0.12);
 }
 
 .header-home .currency-switcher .is-active {
-  background: transparent;
-  color: transparent;
+  background: var(--wine);
+  color: #fff;
 }
 
 .header-home .cart-chip {
-  background: transparent;
-  border-color: transparent;
+  background: rgba(232, 227, 220, 0.9);
+  border-color: rgba(26, 10, 16, 0.12);
 }
 
 .header-home .cart-chip strong {
-  background: transparent;
-  color: transparent;
-}
-
-.header-home .header-brand:hover,
-.header-home .header-nav a:hover,
-.header-home .currency-switcher button:hover,
-.header-home .cart-chip:hover,
-.header-home .header-user:hover,
-.header-home .header-login:hover {
-  color: white;
-  border-bottom: 1px solid white;
-  border-radius: 0;
-  background: transparent;
+  background: rgba(26, 10, 16, 0.12);
+  color: var(--wine);
 }
 
 /* ── Hero ── */
@@ -447,26 +434,40 @@ a {
   object-fit: contain;
 }
 
+.product-image-react.is-square-crop img {
+  height: 200px;
+}
+
+.image-scale-sm {
+  transform: scale(0.86);
+}
+
+.image-scale-md {
+  transform: scale(0.94);
+}
+
+.image-scale-lg {
+  transform: scale(1);
+}
+
+.image-scale-xl {
+  transform: scale(1.08);
+}
+
 .product-copy-react {
   display: grid;
   gap: 0.35rem;
 }
 
-.product-copy-react p,
 .product-copy-react h3,
 .product-copy-react span {
   margin: 0;
 }
 
-.product-copy-react p {
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.78rem;
-  color: var(--muted);
-}
-
 .product-copy-react h3 {
   font-size: 1.2rem;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 300;
 }
 
 .product-card-react button,
@@ -508,6 +509,10 @@ a {
   background: #fff;
 }
 
+.product-detail-image.is-square-crop img {
+  height: 420px;
+}
+
 .product-detail-info {
   display: grid;
   gap: 1rem;
@@ -528,6 +533,29 @@ a {
 .product-detail-price {
   font-size: 1.6rem;
   display: block;
+}
+
+.product-detail-actions-react {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.quantity-picker-react {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--line);
+  padding: 0.6rem 0.9rem;
+}
+
+.quantity-picker-react button {
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 1rem;
+  padding: 0;
 }
 
 /* ── Cart overlay ── */
@@ -785,8 +813,23 @@ a {
 /* ── Cuenta ── */
 
 .cuenta-page {
-  max-width: 640px;
+  max-width: 960px;
   padding-top: 2.5rem;
+}
+
+.cuenta-header-react {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 1.25rem;
+}
+
+.cuenta-header-react h1 {
+  margin: 0;
+}
+
+.cuenta-mail-react {
+  margin: 0;
+  color: var(--text-secondary);
 }
 
 .cuenta-tabs {
@@ -820,6 +863,32 @@ a {
   padding-top: 0.5rem;
 }
 
+.cuenta-profile-form-react {
+  display: grid;
+  gap: 1rem;
+  max-width: 680px;
+}
+
+.cuenta-profile-form-react label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.cuenta-profile-form-react input {
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  padding: 0.7rem 0;
+  outline: none;
+}
+
+.cuenta-profile-actions-react {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
 .cuenta-empty {
   color: var(--text-secondary);
   margin: 0 0 1.5rem;
@@ -849,6 +918,41 @@ a {
 .cuenta-order {
   padding: 1.5rem 0;
   border-bottom: 1px solid var(--line);
+}
+
+.cuenta-order-summary-react {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.cuenta-order-summary-react::-webkit-details-marker {
+  display: none;
+}
+
+.cuenta-order-progress-react {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 1rem 0 0.75rem;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: lowercase;
+}
+
+.cuenta-order-progress-react span {
+  color: var(--line);
+}
+
+.cuenta-order-progress-react span.is-done {
+  color: var(--text-secondary);
+}
+
+.cuenta-order-progress-react span.is-active {
+  color: var(--text);
 }
 
 .cuenta-order-date {
@@ -929,5 +1033,184 @@ a {
 @media (max-width: 480px) {
   .product-grid-react {
     grid-template-columns: 1fr;
+  }
+}
+
+.site-footer-react {
+  width: min(100% - 2rem, 1440px);
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+  border-top: 1px solid var(--line);
+}
+
+.site-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.footer-links-react {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.footer-links-react a {
+  text-decoration: none;
+  color: var(--text-secondary);
+}
+
+.footer-socials-react {
+  grid-template-columns: repeat(2, max-content);
+  gap: 1rem;
+}
+
+.footer-payments-react {
+  margin-top: 2rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.footer-payments-react > span {
+  color: var(--text-secondary);
+}
+
+.footer-payment-grid-react {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.footer-payment-box-react {
+  width: 72px;
+  height: 42px;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  background: #fff;
+}
+
+.footer-payment-box-react img {
+  max-width: 80%;
+  max-height: 60%;
+  object-fit: contain;
+}
+
+.footer-brand-react {
+  margin: 2rem 0 0;
+  text-align: center;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+}
+
+.static-page-react {
+  padding-top: 2.5rem;
+}
+
+.static-page-header-react {
+  margin-bottom: 1.5rem;
+}
+
+.static-page-header-react h1 {
+  margin: 0;
+}
+
+.static-page-body-react {
+  display: grid;
+  gap: 2rem;
+}
+
+.static-copy-react {
+  max-width: 860px;
+  display: grid;
+  gap: 1rem;
+}
+
+.static-copy-react h2 {
+  margin: 0.6rem 0 0;
+  font-size: 1.35rem;
+}
+
+.static-copy-react p,
+.static-copy-react li {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.static-form-react {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 900px;
+}
+
+.static-form-react label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.static-form-react label.is-full {
+  grid-column: 1 / -1;
+}
+
+.static-form-react input,
+.static-form-react textarea {
+  border: 1px solid var(--line);
+  padding: 0.95rem 1rem;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.static-form-react textarea {
+  resize: vertical;
+}
+
+.size-grid-react {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1.2rem;
+  max-width: 980px;
+}
+
+.size-item-react {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  color: var(--text-secondary);
+}
+
+.size-circle-react {
+  width: 88px;
+  height: 88px;
+  border: 1px solid var(--text-secondary);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+}
+
+.care-note-react {
+  border-left: 2px solid var(--line);
+  padding-left: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .size-grid-react {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 780px) {
+  .site-footer-grid,
+  .static-form-react {
+    grid-template-columns: 1fr;
+  }
+
+  .size-grid-react {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .size-grid-react {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

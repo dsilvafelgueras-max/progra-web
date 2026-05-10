@@ -6,34 +6,27 @@ import { useAuth } from '../context/AuthContext';
 import { formatMoney } from '../lib/currency';
 import { useCart } from '../context/CartContext';
 
+function profileFromUser(user) {
+  return {
+    name: user?.name ?? '',
+    email: user?.email ?? '',
+    phone: user?.phone ?? '',
+    city: user?.city ?? '',
+  };
+}
+
 export default function CuentaClient() {
   const { user, logout, orders, updateProfile } = useAuth();
   const { currency, usdRate } = useCart();
   const router = useRouter();
   const [tab, setTab] = useState('perfil');
-  const [ready, setReady] = useState(false);
-  const [profile, setProfile] = useState({ name: '', email: '', phone: '', city: '' });
+  const [profile, setProfile] = useState(() => profileFromUser(user));
 
   useEffect(() => {
-    setReady(true);
-  }, []);
+    if (!user) router.push('/login');
+  }, [user, router]);
 
-  useEffect(() => {
-    if (user) {
-      setProfile({
-        name: user.name ?? '',
-        email: user.email ?? '',
-        phone: user.phone ?? '',
-        city: user.city ?? '',
-      });
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (ready && !user) router.push('/login');
-  }, [ready, user, router]);
-
-  if (!ready || !user) return null;
+  if (!user) return null;
 
   function handleLogout() {
     logout();
@@ -84,7 +77,11 @@ export default function CuentaClient() {
 
       {tab === 'perfil' && (
         <div className="cuenta-section">
-          <form className="cuenta-profile-form-react" onSubmit={handleSubmit}>
+          <form
+            key={user.email}
+            className="cuenta-profile-form-react"
+            onSubmit={handleSubmit}
+          >
             <label>
               <span>Nombre</span>
               <input name="name" value={profile.name} onChange={handleChange} />

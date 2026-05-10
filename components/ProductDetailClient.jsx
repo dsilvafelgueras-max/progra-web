@@ -16,7 +16,7 @@ export default function ProductDetailClient({ product }) {
   }
 
   function handleAdd() {
-    for (let i = 0; i < quantity; i += 1) addToCart(product.id);
+    addToCart(product.id, quantity);
   }
 
   return (

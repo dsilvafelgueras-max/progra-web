@@ -3,16 +3,25 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext(null);
 
+function readStoredJson(key, fallback) {
+  if (typeof window === 'undefined') return fallback;
+
+  try {
+    const value = window.localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [orders, setOrders] = useState([]);
+  const [user, setUser] = useState(() => readStoredJson('sangria-user', null));
+  const [orders, setOrders] = useState(() => readStoredJson('sangria-orders', []));
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('sangria-user');
-    const savedOrders = localStorage.getItem('sangria-orders');
-    if (savedUser) setUser(JSON.parse(savedUser));
-    if (savedOrders) setOrders(JSON.parse(savedOrders));
-  }, []);
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem('sangria-orders', JSON.stringify(orders));
+  }, [orders]);
 
   function login(userData) {
     const normalized = {
@@ -22,13 +31,13 @@ export function AuthProvider({ children }) {
       city: userData.city ?? '',
     };
     setUser(normalized);
-    localStorage.setItem('sangria-user', JSON.stringify(normalized));
+    window.localStorage.setItem('sangria-user', JSON.stringify(normalized));
   }
 
   function updateProfile(profileData) {
     setUser((current) => {
       const updated = { ...current, ...profileData };
-      localStorage.setItem('sangria-user', JSON.stringify(updated));
+      window.localStorage.setItem('sangria-user', JSON.stringify(updated));
       return updated;
     });
   }
@@ -36,16 +45,12 @@ export function AuthProvider({ children }) {
   function logout() {
     setUser(null);
     setOrders([]);
-    localStorage.removeItem('sangria-user');
-    localStorage.removeItem('sangria-orders');
+    window.localStorage.removeItem('sangria-user');
+    window.localStorage.removeItem('sangria-orders');
   }
 
   function addOrder(order) {
-    setOrders((current) => {
-      const updated = [...current, order];
-      localStorage.setItem('sangria-orders', JSON.stringify(updated));
-      return updated;
-    });
+    setOrders((current) => [...current, order]);
   }
 
   return (
