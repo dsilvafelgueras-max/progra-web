@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="44" viewBox="0 0 120 44" fill="none">
+  <rect width="120" height="44" rx="10" fill="#EAF6FF"/>
+  <ellipse cx="22" cy="22" rx="13" ry="9" fill="#009EE3"/>
+  <path d="M15 22c2-3 5-3 7 0 2-3 5-3 7 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <text x="44" y="19" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#009EE3">mercado</text>
+  <text x="44" y="28" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#009EE3">pago</text>
+</svg>
