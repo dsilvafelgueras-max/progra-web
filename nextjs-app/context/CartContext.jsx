@@ -10,17 +10,20 @@ export function CartProvider({ children }) {
   const [cartOpen, setCartOpen] = useState(false);
   const [currency, setCurrency] = useState('ARS');
   const [usdRate, setUsdRate] = useState(1400);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     const savedCart = localStorage.getItem('sangria-next-cart');
     const savedCurrency = localStorage.getItem('sangria-next-currency');
     if (savedCart) setCart(JSON.parse(savedCart));
     if (savedCurrency) setCurrency(savedCurrency);
+    setInitialized(true);
   }, []);
 
   useEffect(() => {
+    if (!initialized) return;
     localStorage.setItem('sangria-next-cart', JSON.stringify(cart));
-  }, [cart]);
+  }, [cart, initialized]);
 
   useEffect(() => {
     localStorage.setItem('sangria-next-currency', currency);
