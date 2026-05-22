@@ -61,7 +61,7 @@ export default function CuentaClient() {
               {orders.map((order) => (
                 <div key={order.id} className="cuenta-order">
                   <p className="cuenta-order-date">
-                    {new Date(order.date).toLocaleDateString('es-AR', {
+                    {new Date(order.created_at).toLocaleDateString('es-AR', {
                       day: 'numeric',
                       month: 'long',
                       year: 'numeric',

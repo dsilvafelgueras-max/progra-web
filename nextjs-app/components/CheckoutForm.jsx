@@ -68,8 +68,6 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     }
     if (user) {
       addOrder({
-        id: Date.now().toString(),
-        date: new Date().toISOString(),
         items: items.map((item) => ({
           id: item.id,
           name: item.name,
@@ -77,6 +75,12 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
           quantity: item.quantity,
         })),
         total: subtotal,
+        deliveryMethod: formValues.deliveryMethod,
+        address: formValues.address || null,
+        city: formValues.city || null,
+        fullName: formValues.fullName,
+        email: formValues.email,
+        phone: formValues.phone,
       });
     }
     setSubmitted(true);
