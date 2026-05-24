@@ -7,17 +7,17 @@ import { useAuth } from './AuthContext';
 const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
-  const [cart, setCart]           = useState([]);  // [{ id, quantity }]
-  const [cartOpen, setCartOpen]   = useState(false);
-  const [currency, setCurrency]   = useState('ARS');
-  const [usdRate, setUsdRate]     = useState(1400);
+  const [cart, setCart]               = useState([]);  // [{ id, quantity }]
+  const [cartOpen, setCartOpen]       = useState(false);
+  const [currency, setCurrency]       = useState('ARS');
+  const [usdRate, setUsdRate]         = useState(1400);
   const [initialized, setInitialized] = useState(false);
 
   const { user, loading } = useAuth();
 
-  // ── Carga el carrito según si el usuario está logueado o no ──────
+  // ── Carga el carrito cuando se resuelve la sesión ────────────────────────
   useEffect(() => {
-    if (loading) return; // esperar a que AuthContext resuelva la sesión
+    if (loading) return;
 
     setInitialized(false);
 
@@ -25,7 +25,6 @@ export function CartProvider({ children }) {
       const token = localStorage.getItem('sangria-token');
 
       if (user && token) {
-        // Usuario logueado → cargar desde Supabase
         try {
           const res = await fetch('/api/cart', {
             headers: { Authorization: `Bearer ${token}` },
@@ -37,9 +36,8 @@ export function CartProvider({ children }) {
               quantity: item.quantity,
             })));
           }
-        } catch {}
+        } catch { /* usa carrito local como fallback */ }
       } else {
-        // Invitado → cargar desde localStorage
         const saved = localStorage.getItem('sangria-next-cart');
         setCart(saved ? JSON.parse(saved) : []);
       }
@@ -53,7 +51,7 @@ export function CartProvider({ children }) {
     if (savedCurrency) setCurrency(savedCurrency);
   }, [user, loading]);
 
-  // ── Guarda en localStorage SOLO para invitados y después de inicializar ──
+  // ── Guarda en localStorage solo para invitados ───────────────────────────
   useEffect(() => {
     if (!initialized || user) return;
     localStorage.setItem('sangria-next-cart', JSON.stringify(cart));
@@ -78,67 +76,31 @@ export function CartProvider({ children }) {
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  // ── Agregar al carrito ────────────────────────────────────────────────────
+  // ── Agregar al carrito (optimistic update) ───────────────────────────────
+  // El estado local se actualiza YA — sin importar si hay sesión o API.
+  // La persistencia en Supabase ocurre después, en background.
   async function addToCart(productId) {
-    const token = localStorage.getItem('sangria-token');
-
-    if (user && token) {
-      const existing = cart.find((item) => item.id === productId);
-      const newQty   = (existing?.quantity ?? 0) + 1;
-
-      const res = await fetch(`/api/cart/${productId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ quantity: newQty }),
-      });
-
-      if (res.ok) {
-        setCart((current) => {
-          const exists = current.find((item) => item.id === productId);
-          if (exists) {
-            return current.map((item) =>
-              item.id === productId ? { ...item, quantity: newQty } : item
-            );
-          }
-          return [...current, { id: productId, quantity: newQty }];
-        });
+    // 1. Actualizar estado local inmediatamente
+    setCart((current) => {
+      const existing = current.find((item) => item.id === productId);
+      if (existing) {
+        return current.map((item) =>
+          item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+        );
       }
-    } else {
-      // Invitado
-      setCart((current) => {
-        const existing = current.find((item) => item.id === productId);
-        if (existing) {
-          return current.map((item) =>
-            item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-          );
-        }
-        return [...current, { id: productId, quantity: 1 }];
-      });
-    }
+      return [...current, { id: productId, quantity: 1 }];
+    });
 
+    // 2. Abrir el carrito YA
     setCartOpen(true);
-  }
 
-  // ── Quitar del carrito ────────────────────────────────────────────────────
-  async function removeFromCart(productId) {
-    const token    = localStorage.getItem('sangria-token');
-    const existing = cart.find((item) => item.id === productId);
-    if (!existing) return;
-
-    const newQty = existing.quantity - 1;
-
+    // 3. Persistir en Supabase si hay sesión (no bloquea el UI)
+    const token = localStorage.getItem('sangria-token');
     if (user && token) {
-      if (newQty <= 0) {
+      try {
+        const existing = cart.find((item) => item.id === productId);
+        const newQty   = (existing?.quantity ?? 0) + 1;
         await fetch(`/api/cart/${productId}`, {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCart((current) => current.filter((item) => item.id !== productId));
-      } else {
-        const res = await fetch(`/api/cart/${productId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -146,23 +108,48 @@ export function CartProvider({ children }) {
           },
           body: JSON.stringify({ quantity: newQty }),
         });
-        if (res.ok) {
-          setCart((current) =>
-            current.map((item) =>
-              item.id === productId ? { ...item, quantity: newQty } : item
-            )
-          );
-        }
-      }
+      } catch { /* optimistic update ya aplicado, silenciar error */ }
+    }
+  }
+
+  // ── Quitar del carrito (optimistic update) ───────────────────────────────
+  async function removeFromCart(productId) {
+    const existing = cart.find((item) => item.id === productId);
+    if (!existing) return;
+
+    const newQty = existing.quantity - 1;
+
+    // 1. Actualizar estado local inmediatamente
+    if (newQty <= 0) {
+      setCart((current) => current.filter((item) => item.id !== productId));
     } else {
-      // Invitado
       setCart((current) =>
-        current
-          .map((item) =>
-            item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
-          )
-          .filter((item) => item.quantity > 0)
+        current.map((item) =>
+          item.id === productId ? { ...item, quantity: newQty } : item
+        )
       );
+    }
+
+    // 2. Persistir en Supabase si hay sesión
+    const token = localStorage.getItem('sangria-token');
+    if (user && token) {
+      try {
+        if (newQty <= 0) {
+          await fetch(`/api/cart/${productId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        } else {
+          await fetch(`/api/cart/${productId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ quantity: newQty }),
+          });
+        }
+      } catch { /* optimistic update ya aplicado */ }
     }
   }
 

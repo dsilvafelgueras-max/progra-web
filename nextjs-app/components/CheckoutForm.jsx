@@ -1,17 +1,7 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
-
-const initialValues = {
-  fullName: '',
-  email: '',
-  phone: '',
-  deliveryMethod: 'domicilio',
-  address: '',
-  city: '',
-  cardName: '',
-  cardNumber: '',
-};
 
 const STEPS = [
   { id: 1, label: 'Contacto' },
@@ -30,11 +20,37 @@ function isStepValid(step, values) {
 }
 
 export default function CheckoutForm({ items, currency, rate, formatMoney }) {
-  const { user, addOrder } = useAuth();
-  const [formValues, setFormValues] = useState(initialValues);
-  const [step, setStep] = useState(1);
-  const [touched, setTouched] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const { user, profile, addOrder } = useAuth();
+  const router = useRouter();
+
+  const [formValues, setFormValues] = useState({
+    fullName:       '',
+    email:          '',
+    phone:          '',
+    deliveryMethod: 'domicilio',
+    address:        '',
+    city:           '',
+    cardName:       '',
+    cardNumber:     '',
+  });
+  const [step,      setStep]      = useState(1);
+  const [touched,   setTouched]   = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error,     setError]     = useState('');
+
+  // ── Auto-fill con datos del perfil ───────────────────────────────
+  useEffect(() => {
+    if (user || profile) {
+      setFormValues((prev) => ({
+        ...prev,
+        fullName: profile?.fullName || user?.name || prev.fullName,
+        email:    user?.email       || prev.email,
+        phone:    profile?.phone    || prev.phone,
+        address:  profile?.address  || prev.address,
+        city:     profile?.city     || prev.city,
+      }));
+    }
+  }, [user, profile]);
 
   const subtotal = useMemo(
     () => items.reduce((acc, item) => acc + item.priceArs * item.quantity, 0),
@@ -47,10 +63,7 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
   }
 
   function handleNext() {
-    if (!isStepValid(step, formValues)) {
-      setTouched(true);
-      return;
-    }
+    if (!isStepValid(step, formValues)) { setTouched(true); return; }
     setTouched(false);
     setStep((s) => s + 1);
   }
@@ -60,42 +73,43 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     setStep((s) => s - 1);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    if (!isStepValid(3, formValues)) {
-      setTouched(true);
-      return;
-    }
-    if (user) {
-      addOrder({
-        items: items.map((item) => ({
-          id: item.id,
-          name: item.name,
-          priceArs: item.priceArs,
-          quantity: item.quantity,
-        })),
-        total: subtotal,
-        deliveryMethod: formValues.deliveryMethod,
-        address: formValues.address || null,
-        city: formValues.city || null,
-        fullName: formValues.fullName,
-        email: formValues.email,
-        phone: formValues.phone,
-      });
-    }
-    setSubmitted(true);
-  }
+    if (!isStepValid(3, formValues)) { setTouched(true); return; }
 
-  if (submitted) {
-    return (
-      <section className="checkout-panel-react" style={{ maxWidth: '100%' }}>
-        <div className="checkout-success-screen">
-          <p className="eyebrow">Listo</p>
-          <h2>Pedido confirmado</h2>
-          <p>Gracias por tu compra, {formValues.fullName}. Te contactamos a {formValues.email}.</p>
-        </div>
-      </section>
-    );
+    setSubmitting(true);
+    setError('');
+
+    try {
+      if (user) {
+        const order = await addOrder({
+          items: items.map((item) => ({
+            id:       item.id,
+            name:     item.name,
+            priceArs: item.priceArs,
+            quantity: item.quantity,
+          })),
+          total:          subtotal,
+          deliveryMethod: formValues.deliveryMethod,
+          address:        formValues.address  || null,
+          city:           formValues.city     || null,
+          fullName:       formValues.fullName,
+          email:          formValues.email,
+          phone:          formValues.phone,
+        });
+
+        if (order?.id) {
+          router.push(`/pedido/${order.id}`);
+          return;
+        }
+      }
+      // Sin sesión o si la API falló: pantalla de éxito local
+      router.push('/pedido/confirmado');
+    } catch {
+      setError('Hubo un error al procesar tu pedido. Intentá de nuevo.');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -114,9 +128,7 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
             <div className={`checkout-step-circle ${step === s.id ? 'is-active' : ''} ${step > s.id ? 'is-done' : ''}`}>
               {step > s.id ? '✓' : s.id}
             </div>
-            <span className={`checkout-step-label ${step === s.id ? 'is-active' : ''}`}>
-              {s.label}
-            </span>
+            <span className={`checkout-step-label ${step === s.id ? 'is-active' : ''}`}>{s.label}</span>
             {i < STEPS.length - 1 && <div className={`checkout-step-line ${step > s.id ? 'is-done' : ''}`} />}
           </div>
         ))}
@@ -130,40 +142,18 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
             <>
               <label>
                 <span>Nombre completo *</span>
-                <input
-                  name="fullName"
-                  value={formValues.fullName}
-                  onChange={handleChange}
-                  placeholder="Tu nombre"
-                />
-                {touched && !formValues.fullName && (
-                  <span className="field-error">Completá tu nombre</span>
-                )}
+                <input name="fullName" value={formValues.fullName} onChange={handleChange} placeholder="Tu nombre" />
+                {touched && !formValues.fullName && <span className="field-error">Completá tu nombre</span>}
               </label>
               <label>
                 <span>E-mail *</span>
-                <input
-                  type="email"
-                  name="email"
-                  value={formValues.email}
-                  onChange={handleChange}
-                  placeholder="tu@email.com"
-                />
-                {touched && !formValues.email && (
-                  <span className="field-error">Completá tu e-mail</span>
-                )}
+                <input type="email" name="email" value={formValues.email} onChange={handleChange} placeholder="tu@email.com" />
+                {touched && !formValues.email && <span className="field-error">Completá tu e-mail</span>}
               </label>
               <label>
-                <span>Telefono *</span>
-                <input
-                  name="phone"
-                  value={formValues.phone}
-                  onChange={handleChange}
-                  placeholder="+54 11 0000 0000"
-                />
-                {touched && !formValues.phone && (
-                  <span className="field-error">Completá tu teléfono</span>
-                )}
+                <span>Teléfono *</span>
+                <input name="phone" value={formValues.phone} onChange={handleChange} placeholder="+54 11 0000 0000" />
+                {touched && !formValues.phone && <span className="field-error">Completá tu teléfono</span>}
               </label>
             </>
           )}
@@ -172,12 +162,8 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
           {step === 2 && (
             <>
               <label>
-                <span>Metodo de entrega *</span>
-                <select
-                  name="deliveryMethod"
-                  value={formValues.deliveryMethod}
-                  onChange={handleChange}
-                >
+                <span>Método de entrega *</span>
+                <select name="deliveryMethod" value={formValues.deliveryMethod} onChange={handleChange}>
                   <option value="domicilio">Entrega a domicilio</option>
                   <option value="encuentro">Punto de encuentro</option>
                   <option value="retiro">Retiro en el local</option>
@@ -186,28 +172,14 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
               {formValues.deliveryMethod === 'domicilio' && (
                 <>
                   <label>
-                    <span>Direccion *</span>
-                    <input
-                      name="address"
-                      value={formValues.address}
-                      onChange={handleChange}
-                      placeholder="Calle y altura"
-                    />
-                    {touched && !formValues.address && (
-                      <span className="field-error">Completá la dirección</span>
-                    )}
+                    <span>Dirección *</span>
+                    <input name="address" value={formValues.address} onChange={handleChange} placeholder="Calle y altura" />
+                    {touched && !formValues.address && <span className="field-error">Completá la dirección</span>}
                   </label>
                   <label>
                     <span>Ciudad *</span>
-                    <input
-                      name="city"
-                      value={formValues.city}
-                      onChange={handleChange}
-                      placeholder="Ciudad"
-                    />
-                    {touched && !formValues.city && (
-                      <span className="field-error">Completá la ciudad</span>
-                    )}
+                    <input name="city" value={formValues.city} onChange={handleChange} placeholder="Ciudad" />
+                    {touched && !formValues.city && <span className="field-error">Completá la ciudad</span>}
                   </label>
                 </>
               )}
@@ -219,57 +191,39 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
             <>
               <label>
                 <span>Titular de tarjeta *</span>
-                <input
-                  name="cardName"
-                  value={formValues.cardName}
-                  onChange={handleChange}
-                  placeholder="Como figura en la tarjeta"
-                />
-                {touched && !formValues.cardName && (
-                  <span className="field-error">Completá el titular</span>
-                )}
+                <input name="cardName" value={formValues.cardName} onChange={handleChange} placeholder="Como figura en la tarjeta" />
+                {touched && !formValues.cardName && <span className="field-error">Completá el titular</span>}
               </label>
               <label>
-                <span>Numero de tarjeta *</span>
-                <input
-                  name="cardNumber"
-                  value={formValues.cardNumber}
-                  onChange={handleChange}
-                  placeholder="1234 5678 9012 3456"
-                />
-                {touched && !formValues.cardNumber && (
-                  <span className="field-error">Completá el número de tarjeta</span>
-                )}
+                <span>Número de tarjeta *</span>
+                <input name="cardNumber" value={formValues.cardNumber} onChange={handleChange} placeholder="1234 5678 9012 3456" />
+                {touched && !formValues.cardNumber && <span className="field-error">Completá el número de tarjeta</span>}
               </label>
             </>
           )}
 
-          {/* Navegación */}
+          {error && <p className="field-error" style={{ marginTop: '0.5rem' }}>{error}</p>}
+
           <div className="checkout-nav">
             {step > 1 && (
-              <button type="button" className="ghost-button-react" onClick={handleBack}>
-                Volver
-              </button>
+              <button type="button" className="ghost-button-react" onClick={handleBack}>Volver</button>
             )}
             {step < 3 ? (
-              <button type="button" className="primary-button-react" onClick={handleNext}>
-                Siguiente
-              </button>
+              <button type="button" className="primary-button-react" onClick={handleNext}>Siguiente</button>
             ) : (
-              <button type="submit" className="primary-button-react">
-                Confirmar compra
+              <button type="submit" className="primary-button-react" disabled={submitting}>
+                {submitting ? 'Procesando…' : 'Confirmar compra'}
               </button>
             )}
           </div>
+
         </form>
 
         <aside className="checkout-summary-react">
           <h3>Resumen</h3>
           {items.map((item) => (
             <div key={item.id} className="checkout-summary-row">
-              <span>
-                {item.name} x {item.quantity}
-              </span>
+              <span>{item.name} x {item.quantity}</span>
               <strong>{formatMoney(item.priceArs * item.quantity, currency, rate)}</strong>
             </div>
           ))}

@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
-// Helper: fetch autenticado con el token guardado
+// Helper: header de autorización con el token guardado
 function authHeader() {
   const token = typeof window !== 'undefined'
     ? localStorage.getItem('sangria-token')
@@ -12,11 +12,12 @@ function authHeader() {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser]     = useState(null);
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true); // true mientras verifica sesión
+  const [user,    setUser]    = useState(null);
+  const [profile, setProfile] = useState(null);  // datos extendidos de profiles
+  const [orders,  setOrders]  = useState([]);
+  const [loading, setLoading] = useState(true);   // true mientras verifica sesión
 
-  // Al montar: restaurar sesión desde token guardado
+  // ── Al montar: restaurar sesión desde token guardado ────────────
   useEffect(() => {
     async function restoreSession() {
       const token = localStorage.getItem('sangria-token');
@@ -29,6 +30,12 @@ export function AuthProvider({ children }) {
         if (res.ok) {
           const userData = await res.json();
           setUser(userData);
+          setProfile({
+            fullName: userData.name,
+            phone:    userData.phone,
+            address:  userData.address,
+            city:     userData.city,
+          });
           await fetchOrders(token);
         } else {
           // Token vencido o inválido
@@ -41,6 +48,7 @@ export function AuthProvider({ children }) {
     restoreSession();
   }, []);
 
+  // ── Órdenes ────────────────────────────────────────────────────
   async function fetchOrders(token) {
     try {
       const res = await fetch('/api/orders', {
@@ -50,7 +58,37 @@ export function AuthProvider({ children }) {
     } catch {}
   }
 
-  // Inicia sesión — lanza un Error con mensaje legible si falla
+  // ── Perfil ─────────────────────────────────────────────────────
+  async function updateProfile(fields) {
+    // fields: { fullName?, phone?, address?, city? }
+    const token = localStorage.getItem('sangria-token');
+    if (!token) return null;
+
+    const res = await fetch('/api/auth/profile', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(fields),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error ?? 'Error al actualizar perfil');
+    }
+    const updated = await res.json();
+    // Sincronizar estado local
+    setProfile({
+      fullName: updated.full_name,
+      phone:    updated.phone,
+      address:  updated.address,
+      city:     updated.city,
+    });
+    setUser((prev) => prev ? { ...prev, name: updated.full_name } : prev);
+    return updated;
+  }
+
+  // ── Login ──────────────────────────────────────────────────────
   async function login(email, password) {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
@@ -62,11 +100,17 @@ export function AuthProvider({ children }) {
 
     localStorage.setItem('sangria-token', data.access_token);
     setUser(data.user);
+    setProfile({
+      fullName: data.user?.user_metadata?.name ?? null,
+      phone:    null,
+      address:  null,
+      city:     null,
+    });
     await fetchOrders(data.access_token);
     return data;
   }
 
-  // Registra usuario nuevo — lanza Error si falla
+  // ── Registro ───────────────────────────────────────────────────
   async function register(email, password, name) {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
@@ -80,10 +124,12 @@ export function AuthProvider({ children }) {
     if (data.session) {
       localStorage.setItem('sangria-token', data.session.access_token);
       setUser(data.user);
+      setProfile({ fullName: name, phone: null, address: null, city: null });
     }
     return data;
   }
 
+  // ── Logout ─────────────────────────────────────────────────────
   async function logout() {
     const token = localStorage.getItem('sangria-token');
     if (token) {
@@ -96,10 +142,11 @@ export function AuthProvider({ children }) {
     }
     localStorage.removeItem('sangria-token');
     setUser(null);
+    setProfile(null);
     setOrders([]);
   }
 
-  // Crea una orden en Supabase y la agrega al estado local
+  // ── Crear orden ────────────────────────────────────────────────
   async function addOrder(orderData) {
     const token = localStorage.getItem('sangria-token');
     if (!token) return null;
@@ -120,7 +167,17 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, orders, login, register, logout, addOrder }}>
+    <AuthContext.Provider value={{
+      user,
+      profile,
+      loading,
+      orders,
+      login,
+      register,
+      logout,
+      addOrder,
+      updateProfile,
+    }}>
       {children}
     </AuthContext.Provider>
   );
