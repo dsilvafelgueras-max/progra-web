@@ -4,18 +4,20 @@ import { products } from '../data/catalog';
 import { fetchUsdRate } from '../lib/currency';
 import { useAuth } from './AuthContext';
 
+const CART_KEY = 'sangria-next-cart';
+
 const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
-  const [cart, setCart]               = useState([]);  // [{ id, quantity }]
-  const [cartOpen, setCartOpen]       = useState(false);
-  const [currency, setCurrency]       = useState('ARS');
-  const [usdRate, setUsdRate]         = useState(1400);
+  const [cart, setCart]         = useState([]);   // [{ id, quantity }]
+  const [cartOpen, setCartOpen] = useState(false);
+  const [currency, setCurrency] = useState('ARS');
+  const [usdRate, setUsdRate]   = useState(1400);
   const [initialized, setInitialized] = useState(false);
 
   const { user, loading } = useAuth();
 
-  // ── Carga el carrito cuando se resuelve la sesión ────────────────────────
+  // ── Carga el carrito cuando se resuelve la sesión ──────────────────────────
   useEffect(() => {
     if (loading) return;
 
@@ -25,6 +27,7 @@ export function CartProvider({ children }) {
       const token = localStorage.getItem('sangria-token');
 
       if (user && token) {
+        // Usuario logueado: carga desde Supabase
         try {
           const res = await fetch('/api/cart', {
             headers: { Authorization: `Bearer ${token}` },
@@ -32,13 +35,18 @@ export function CartProvider({ children }) {
           if (res.ok) {
             const items = await res.json();
             setCart(items.map((item) => ({
-              id: item.product_id,
+              id:       item.product_id,
               quantity: item.quantity,
             })));
           }
-        } catch { /* usa carrito local como fallback */ }
+        } catch {
+          // Fallback: leer localStorage si Supabase falla
+          const saved = localStorage.getItem(CART_KEY);
+          if (saved) setCart(JSON.parse(saved));
+        }
       } else {
-        const saved = localStorage.getItem('sangria-next-cart');
+        // Invitado: leer localStorage
+        const saved = localStorage.getItem(CART_KEY);
         setCart(saved ? JSON.parse(saved) : []);
       }
 
@@ -51,22 +59,26 @@ export function CartProvider({ children }) {
     if (savedCurrency) setCurrency(savedCurrency);
   }, [user, loading]);
 
-  // ── Guarda en localStorage solo para invitados ───────────────────────────
-  useEffect(() => {
-    if (!initialized || user) return;
-    localStorage.setItem('sangria-next-cart', JSON.stringify(cart));
-  }, [cart, initialized, user]);
-
+  // ── Guarda moneda ──────────────────────────────────────────────────────────
   useEffect(() => {
     localStorage.setItem('sangria-next-currency', currency);
   }, [currency]);
 
-  // ── Tasa USD ─────────────────────────────────────────────────────────────
+  // ── Tasa USD ───────────────────────────────────────────────────────────────
   useEffect(() => {
     fetchUsdRate().then(setUsdRate).catch(() => {});
   }, []);
 
-  // ── Derivados ─────────────────────────────────────────────────────────────
+  // ── Helper: guardar en localStorage (solo invitados) ───────────────────────
+  // Se llama DIRECTAMENTE en add/remove para evitar race conditions con
+  // el flag `initialized`. No usa useEffect para el guardado.
+  function saveLocalCart(newCart) {
+    if (!user) {
+      localStorage.setItem(CART_KEY, JSON.stringify(newCart));
+    }
+  }
+
+  // ── Derivados ──────────────────────────────────────────────────────────────
   const cartItems = cart
     .map((entry) => {
       const product = products.find((p) => p.id === entry.id);
@@ -76,30 +88,30 @@ export function CartProvider({ children }) {
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  // ── Agregar al carrito (optimistic update) ───────────────────────────────
-  // El estado local se actualiza YA — sin importar si hay sesión o API.
-  // La persistencia en Supabase ocurre después, en background.
+  // ── Agregar al carrito ─────────────────────────────────────────────────────
   async function addToCart(productId) {
-    // 1. Actualizar estado local inmediatamente
-    setCart((current) => {
-      const existing = current.find((item) => item.id === productId);
-      if (existing) {
-        return current.map((item) =>
-          item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [...current, { id: productId, quantity: 1 }];
-    });
+    // 1. Calcular el nuevo carrito
+    const existing = cart.find((item) => item.id === productId);
+    const newCart = existing
+      ? cart.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      : [...cart, { id: productId, quantity: 1 }];
 
-    // 2. Abrir el carrito YA
+    // 2. Actualizar estado local y guardar en localStorage (inmediato)
+    setCart(newCart);
+    saveLocalCart(newCart);
+
+    // 3. Abrir el carrito
     setCartOpen(true);
 
-    // 3. Persistir en Supabase si hay sesión (no bloquea el UI)
+    // 4. Persistir en Supabase si hay sesión (no bloquea el UI)
     const token = localStorage.getItem('sangria-token');
     if (user && token) {
+      const newQty = (existing?.quantity ?? 0) + 1;
       try {
-        const existing = cart.find((item) => item.id === productId);
-        const newQty   = (existing?.quantity ?? 0) + 1;
         await fetch(`/api/cart/${productId}`, {
           method: 'POST',
           headers: {
@@ -108,27 +120,25 @@ export function CartProvider({ children }) {
           },
           body: JSON.stringify({ quantity: newQty }),
         });
-      } catch { /* optimistic update ya aplicado, silenciar error */ }
+      } catch { /* optimistic update ya aplicado */ }
     }
   }
 
-  // ── Quitar del carrito (optimistic update) ───────────────────────────────
+  // ── Quitar del carrito ─────────────────────────────────────────────────────
   async function removeFromCart(productId) {
     const existing = cart.find((item) => item.id === productId);
     if (!existing) return;
 
     const newQty = existing.quantity - 1;
-
-    // 1. Actualizar estado local inmediatamente
-    if (newQty <= 0) {
-      setCart((current) => current.filter((item) => item.id !== productId));
-    } else {
-      setCart((current) =>
-        current.map((item) =>
+    const newCart = newQty <= 0
+      ? cart.filter((item) => item.id !== productId)
+      : cart.map((item) =>
           item.id === productId ? { ...item, quantity: newQty } : item
-        )
-      );
-    }
+        );
+
+    // 1. Actualizar estado local y guardar en localStorage (inmediato)
+    setCart(newCart);
+    saveLocalCart(newCart);
 
     // 2. Persistir en Supabase si hay sesión
     const token = localStorage.getItem('sangria-token');
@@ -164,6 +174,7 @@ export function CartProvider({ children }) {
         currency,
         setCurrency,
         usdRate,
+        initialized,
         addToCart,
         removeFromCart,
       }}
