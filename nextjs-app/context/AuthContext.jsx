@@ -3,24 +3,79 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
-// Helper: header de autorización con el token guardado
-function authHeader() {
-  const token = typeof window !== 'undefined'
-    ? localStorage.getItem('sangria-token')
-    : null;
-  return token ? { Authorization: `Bearer ${token}` } : {};
+const CART_KEY    = 'sangria-next-cart';
+const TOKEN_KEY   = 'sangria-token';
+const SESSION_COOKIE = 'sangria-session';
+
+// ── Helpers de cookie ──────────────────────────────────────────────────────
+// La cookie le dice al middleware (server) que el usuario tiene sesión.
+// El JWT real vive en localStorage y lo usan las API routes.
+
+function setSessionCookie() {
+  // 7 días, SameSite=Lax, accesible en todo el sitio
+  document.cookie = `${SESSION_COOKIE}=1; path=/; max-age=604800; SameSite=Lax`;
 }
+
+function clearSessionCookie() {
+  document.cookie = `${SESSION_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
+}
+
+// ── Merge del carrito invitado → Supabase ──────────────────────────────────
+// Al hacer login, si había ítems en localStorage los subimos a Supabase.
+// Usa UPSERT, así si el producto ya estaba en el carrito suma la cantidad.
+
+async function mergeGuestCart(token) {
+  const saved = localStorage.getItem(CART_KEY);
+  if (!saved) return;
+
+  let localCart;
+  try { localCart = JSON.parse(saved); } catch { return; }
+  if (!Array.isArray(localCart) || localCart.length === 0) return;
+
+  // Primero obtener el carrito actual en Supabase para sumar cantidades
+  let supabaseCart = [];
+  try {
+    const res = await fetch('/api/cart', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) supabaseCart = await res.json();
+  } catch { /* si falla, upsert con cantidad local */ }
+
+  // Para cada ítem local, calcular la cantidad final (local + supabase)
+  await Promise.all(
+    localCart.map(async (localItem) => {
+      const existing = supabaseCart.find((s) => s.product_id === localItem.id);
+      const finalQty = (existing?.quantity ?? 0) + localItem.quantity;
+
+      try {
+        await fetch(`/api/cart/${localItem.id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ quantity: finalQty }),
+        });
+      } catch { /* silenciar error individual */ }
+    })
+  );
+
+  // Limpiar carrito local después del merge
+  localStorage.removeItem(CART_KEY);
+}
+
+// ── Provider ───────────────────────────────────────────────────────────────
 
 export function AuthProvider({ children }) {
   const [user,    setUser]    = useState(null);
-  const [profile, setProfile] = useState(null);  // datos extendidos de profiles
+  const [profile, setProfile] = useState(null);
   const [orders,  setOrders]  = useState([]);
-  const [loading, setLoading] = useState(true);   // true mientras verifica sesión
+  const [loading, setLoading] = useState(true);
 
-  // ── Al montar: restaurar sesión desde token guardado ────────────
+  // Al montar: restaurar sesión desde token guardado
   useEffect(() => {
     async function restoreSession() {
-      const token = localStorage.getItem('sangria-token');
+      const token = localStorage.getItem(TOKEN_KEY);
       if (!token) { setLoading(false); return; }
 
       try {
@@ -36,19 +91,21 @@ export function AuthProvider({ children }) {
             address:  userData.address,
             city:     userData.city,
           });
+          setSessionCookie();   // asegurar que la cookie esté presente
           await fetchOrders(token);
         } else {
           // Token vencido o inválido
-          localStorage.removeItem('sangria-token');
+          localStorage.removeItem(TOKEN_KEY);
+          clearSessionCookie();
         }
-      } catch { /* network error: dejamos user = null */ }
+      } catch { /* network error */ }
 
       setLoading(false);
     }
     restoreSession();
   }, []);
 
-  // ── Órdenes ────────────────────────────────────────────────────
+  // ── Órdenes ────────────────────────────────────────────────────────────
   async function fetchOrders(token) {
     try {
       const res = await fetch('/api/orders', {
@@ -58,10 +115,9 @@ export function AuthProvider({ children }) {
     } catch {}
   }
 
-  // ── Perfil ─────────────────────────────────────────────────────
+  // ── Perfil ─────────────────────────────────────────────────────────────
   async function updateProfile(fields) {
-    // fields: { fullName?, phone?, address?, city? }
-    const token = localStorage.getItem('sangria-token');
+    const token = localStorage.getItem(TOKEN_KEY);
     if (!token) return null;
 
     const res = await fetch('/api/auth/profile', {
@@ -77,7 +133,6 @@ export function AuthProvider({ children }) {
       throw new Error(err.error ?? 'Error al actualizar perfil');
     }
     const updated = await res.json();
-    // Sincronizar estado local
     setProfile({
       fullName: updated.full_name,
       phone:    updated.phone,
@@ -88,7 +143,7 @@ export function AuthProvider({ children }) {
     return updated;
   }
 
-  // ── Login ──────────────────────────────────────────────────────
+  // ── Login ──────────────────────────────────────────────────────────────
   async function login(email, password) {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
@@ -98,7 +153,18 @@ export function AuthProvider({ children }) {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error ?? 'Error al iniciar sesión');
 
-    localStorage.setItem('sangria-token', data.access_token);
+    const token = data.access_token;
+    localStorage.setItem(TOKEN_KEY, token);
+
+    // 1. Setear cookie para el middleware (antes de setUser para que
+    //    el middleware vea la sesión si el router redirige)
+    setSessionCookie();
+
+    // 2. Mergear carrito invitado → Supabase (antes de que CartContext
+    //    recargue el carrito al detectar el cambio de user)
+    await mergeGuestCart(token);
+
+    // 3. Actualizar estado
     setUser(data.user);
     setProfile({
       fullName: data.user?.user_metadata?.name ?? null,
@@ -106,11 +172,11 @@ export function AuthProvider({ children }) {
       address:  null,
       city:     null,
     });
-    await fetchOrders(data.access_token);
+    await fetchOrders(token);
     return data;
   }
 
-  // ── Registro ───────────────────────────────────────────────────
+  // ── Registro ───────────────────────────────────────────────────────────
   async function register(email, password, name) {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
@@ -120,18 +186,20 @@ export function AuthProvider({ children }) {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error ?? 'Error al registrarse');
 
-    // Supabase puede requerir confirmación de email antes de dar sesión
     if (data.session) {
-      localStorage.setItem('sangria-token', data.session.access_token);
+      const token = data.session.access_token;
+      localStorage.setItem(TOKEN_KEY, token);
+      setSessionCookie();
+      await mergeGuestCart(token);
       setUser(data.user);
       setProfile({ fullName: name, phone: null, address: null, city: null });
     }
     return data;
   }
 
-  // ── Logout ─────────────────────────────────────────────────────
+  // ── Logout ─────────────────────────────────────────────────────────────
   async function logout() {
-    const token = localStorage.getItem('sangria-token');
+    const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
       try {
         await fetch('/api/auth/logout', {
@@ -140,15 +208,16 @@ export function AuthProvider({ children }) {
         });
       } catch {}
     }
-    localStorage.removeItem('sangria-token');
+    localStorage.removeItem(TOKEN_KEY);
+    clearSessionCookie();
     setUser(null);
     setProfile(null);
     setOrders([]);
   }
 
-  // ── Crear orden ────────────────────────────────────────────────
+  // ── Crear orden ────────────────────────────────────────────────────────
   async function addOrder(orderData) {
-    const token = localStorage.getItem('sangria-token');
+    const token = localStorage.getItem(TOKEN_KEY);
     if (!token) return null;
 
     const res = await fetch('/api/orders', {

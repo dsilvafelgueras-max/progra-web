@@ -9,31 +9,57 @@ export async function POST(request) {
 
   if (!email || !password || !name) {
     return Response.json(
-      { error: 'Faltan campos: email, password, name' },
+      { error: 'Completá todos los campos: nombre, email y contraseña.' },
       { status: 400 }
     );
   }
 
-  const { data, error } = await supabase.auth.signUp({
+  if (password.length < 6) {
+    return Response.json(
+      { error: 'La contraseña debe tener al menos 6 caracteres.' },
+      { status: 400 }
+    );
+  }
+
+  // Usar admin.createUser con email_confirm: true para omitir
+  // la confirmación por mail — el usuario puede loguearse de inmediato.
+  const { data: created, error: createError } = await supabase.auth.admin.createUser({
     email,
     password,
-    options: {
-      data: { name },
-    },
+    email_confirm: true,      // ← omite confirmación de email
+    user_metadata: { name },
   });
 
-  if (error) {
-    return Response.json({ error: error.message }, { status: 400 });
+  if (createError) {
+    // Mensaje legible para errores comunes
+    const msg = createError.message.includes('already registered')
+      ? 'Ya existe una cuenta con ese email. Intentá ingresar.'
+      : createError.message;
+    return Response.json({ error: msg }, { status: 400 });
+  }
+
+  // Iniciar sesión inmediatamente para devolver el token
+  const { data: signIn, error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (signInError) {
+    // Usuario creado pero no se pudo loguear (raro) — igual avisar éxito
+    return Response.json(
+      { user: { id: created.user.id, email, name }, session: null },
+      { status: 201 }
+    );
   }
 
   return Response.json(
     {
       user: {
-        id: data.user.id,
-        email: data.user.email,
-        name: data.user.user_metadata?.name,
+        id:    signIn.user.id,
+        email: signIn.user.email,
+        name:  signIn.user.user_metadata?.name,
       },
-      session: data.session,
+      session: signIn.session,   // el cliente guarda session.access_token
     },
     { status: 201 }
   );

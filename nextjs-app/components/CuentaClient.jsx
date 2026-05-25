@@ -24,10 +24,9 @@ export default function CuentaClient() {
   const { currency, usdRate } = useCart();
   const router = useRouter();
 
-  const [tab,   setTab]   = useState('pedidos');
+  const [tab,   setTab]   = useState('perfil');
   const [ready, setReady] = useState(false);
 
-  // ── Formulario de perfil ─────────────────────────────────────────
   const [form,    setForm]    = useState({ fullName: '', phone: '', address: '', city: '' });
   const [saving,  setSaving]  = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
@@ -38,7 +37,6 @@ export default function CuentaClient() {
     if (ready && !user) router.push('/login');
   }, [ready, user, router]);
 
-  // Sincronizar formulario cuando carga el perfil
   useEffect(() => {
     if (profile) {
       setForm({
@@ -79,14 +77,123 @@ export default function CuentaClient() {
   return (
     <main className="react-content cuenta-page">
 
-      <div className="cuenta-tabs">
-        <button type="button" className={tab === 'pedidos' ? 'is-active' : ''} onClick={() => setTab('pedidos')}>
-          pedidos
-        </button>
-        <button type="button" className={tab === 'perfil' ? 'is-active' : ''} onClick={() => setTab('perfil')}>
-          perfil
-        </button>
+      {/* ── Header ── */}
+      <div className="cuenta-header">
+        <h1 className="cuenta-title">Mi cuenta</h1>
+        <p className="cuenta-user-email">{user.email}</p>
       </div>
+
+      {/* ── Tabs ── */}
+      <nav className="cuenta-tabs" aria-label="Secciones de cuenta">
+        {['perfil', 'favoritos', 'pedidos'].map((t) => (
+          <button
+            key={t}
+            type="button"
+            className={tab === t ? 'is-active' : ''}
+            onClick={() => setTab(t)}
+          >
+            {t}
+          </button>
+        ))}
+      </nav>
+
+      {/* ── Perfil ── */}
+      {tab === 'perfil' && (
+        <div className="cuenta-section">
+          <form className="cuenta-profile-form" onSubmit={handleSave} noValidate>
+
+            {/* Grid de 2 columnas */}
+            <div className="cuenta-profile-grid">
+
+              {/* Fila 1 */}
+              <label className="cuenta-profile-label">
+                <span>Nombre</span>
+                <input
+                  name="fullName"
+                  value={form.fullName}
+                  onChange={handleChange}
+                  placeholder="Tu nombre"
+                  autoComplete="name"
+                />
+              </label>
+
+              <label className="cuenta-profile-label">
+                <span>Correo electrónico</span>
+                <input
+                  type="email"
+                  value={user.email}
+                  disabled
+                  autoComplete="email"
+                />
+              </label>
+
+              {/* Fila 2 */}
+              <label className="cuenta-profile-label">
+                <span>Teléfono</span>
+                <input
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="+54 11 0000 0000"
+                  autoComplete="tel"
+                />
+              </label>
+
+              <label className="cuenta-profile-label">
+                <span>Ciudad</span>
+                <input
+                  name="city"
+                  value={form.city}
+                  onChange={handleChange}
+                  placeholder="Ciudad"
+                  autoComplete="address-level2"
+                />
+              </label>
+
+            </div>
+
+            {/* Dirección — full width */}
+            <label className="cuenta-profile-label">
+              <span>Dirección</span>
+              <input
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                placeholder="Calle y altura"
+                autoComplete="street-address"
+              />
+            </label>
+
+            {/* Acciones */}
+            <div className="cuenta-profile-actions">
+              <button type="submit" className="cuenta-save-btn" disabled={saving}>
+                {saving ? 'guardando…' : 'guardar cambios'}
+              </button>
+              {saveMsg && (
+                <p className={`cuenta-save-msg${saveMsg.includes('error') || saveMsg.includes('Error') ? ' is-error' : ''}`}>
+                  {saveMsg}
+                </p>
+              )}
+            </div>
+
+          </form>
+
+          {/* Divisoria + Cerrar sesión */}
+          <div className="cuenta-logout-wrap">
+            <button type="button" className="cuenta-logout" onClick={handleLogout}>
+              cerrar sesión
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Favoritos ── */}
+      {tab === 'favoritos' && (
+        <div className="cuenta-section">
+          <p className="cuenta-empty">todavía no guardaste ninguna pieza como favorita.</p>
+          <Link href="/" className="cuenta-link-outline">ver piezas</Link>
+        </div>
+      )}
 
       {/* ── Pedidos ── */}
       {tab === 'pedidos' && (
@@ -135,75 +242,6 @@ export default function CuentaClient() {
               ))}
             </div>
           )}
-        </div>
-      )}
-
-      {/* ── Perfil ── */}
-      {tab === 'perfil' && (
-        <div className="cuenta-section">
-          <form className="cuenta-profile-form" onSubmit={handleSave} noValidate>
-
-            <label className="cuenta-profile-label">
-              <span>nombre completo</span>
-              <input
-                name="fullName"
-                value={form.fullName}
-                onChange={handleChange}
-                placeholder="Tu nombre"
-              />
-            </label>
-
-            <label className="cuenta-profile-label">
-              <span>e-mail</span>
-              <input type="email" value={user.email} disabled />
-            </label>
-
-            <label className="cuenta-profile-label">
-              <span>teléfono</span>
-              <input
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                placeholder="+54 11 0000 0000"
-              />
-            </label>
-
-            <label className="cuenta-profile-label">
-              <span>dirección</span>
-              <input
-                name="address"
-                value={form.address}
-                onChange={handleChange}
-                placeholder="Calle y altura"
-              />
-            </label>
-
-            <label className="cuenta-profile-label">
-              <span>ciudad</span>
-              <input
-                name="city"
-                value={form.city}
-                onChange={handleChange}
-                placeholder="Ciudad"
-              />
-            </label>
-
-            <div className="cuenta-profile-actions">
-              <button type="submit" className="cuenta-save-btn" disabled={saving}>
-                {saving ? 'guardando…' : 'guardar cambios'}
-              </button>
-              {saveMsg && (
-                <p className={`cuenta-save-msg ${saveMsg.includes('error') || saveMsg.includes('Error') ? 'is-error' : ''}`}>
-                  {saveMsg}
-                </p>
-              )}
-            </div>
-
-          </form>
-
-          <button type="button" className="cuenta-logout" onClick={handleLogout}>
-            cerrar sesión
-          </button>
         </div>
       )}
 

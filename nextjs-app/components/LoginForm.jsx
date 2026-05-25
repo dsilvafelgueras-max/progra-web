@@ -1,11 +1,13 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginForm() {
   const { login, register } = useAuth();
-  const router = useRouter();
+  const router       = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo   = searchParams.get('redirect') || '/cuenta';
 
   const [mode, setMode]       = useState('login'); // 'login' | 'register'
   const [values, setValues]   = useState({ name: '', email: '', password: '' });
@@ -25,16 +27,17 @@ export default function LoginForm() {
     try {
       if (mode === 'login') {
         await login(values.email, values.password);
-        router.push('/');
+        router.push(redirectTo);       // vuelve a la página que pidió login
       } else {
         const data = await register(values.email, values.password, values.name);
-        // Si Supabase requiere confirmación de email, avisamos en vez de redirigir
         if (!data.session) {
-          setError('Revisá tu casilla: te enviamos un mail de confirmación.');
+          // Muy raro ahora que usamos admin.createUser — por si acaso
+          setError('Cuenta creada. Ya podés ingresar con tu email y contraseña.');
+          setMode('login');
           setLoading(false);
           return;
         }
-        router.push('/');
+        router.push(redirectTo);
       }
     } catch (err) {
       setError(err.message ?? 'Ocurrió un error. Intentá de nuevo.');
