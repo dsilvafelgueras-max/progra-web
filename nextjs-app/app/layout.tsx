@@ -5,6 +5,9 @@ import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
 import SiteHeader from "../components/SiteHeader";
 import CartOverlays from "../components/CartOverlays";
+import PopupDescuento from "../components/PopupDescuento";
+import NewsletterSection from "../components/NewsletterSection";
+import SiteFooter from "../components/SiteFooter";
 
 const cormorant = Cormorant_Garamond({
   weight: "400",
@@ -40,7 +43,10 @@ export default function RootLayout({
           <CartProvider>
             <SiteHeader />
             {children}
+            <NewsletterSection />
+            <SiteFooter />
             <CartOverlays />
+            <PopupDescuento />
           </CartProvider>
         </AuthProvider>
       </body>

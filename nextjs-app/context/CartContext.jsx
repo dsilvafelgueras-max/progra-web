@@ -14,6 +14,7 @@ export function CartProvider({ children }) {
   const [currency, setCurrency] = useState('ARS');
   const [usdRate, setUsdRate]   = useState(1400);
   const [initialized, setInitialized] = useState(false);
+  const [discount, setDiscountState] = useState(0); // porcentaje (0–100)
 
   const { user, loading } = useAuth();
 
@@ -57,6 +58,9 @@ export function CartProvider({ children }) {
 
     const savedCurrency = localStorage.getItem('sangria-next-currency');
     if (savedCurrency) setCurrency(savedCurrency);
+
+    const savedDiscount = Number(localStorage.getItem('sangria-descuento'));
+    if (savedDiscount > 0) setDiscountState(savedDiscount);
   }, [user, loading]);
 
   // ── Guarda moneda ──────────────────────────────────────────────────────────
@@ -68,6 +72,17 @@ export function CartProvider({ children }) {
   useEffect(() => {
     fetchUsdRate().then(setUsdRate).catch(() => {});
   }, []);
+
+  // ── Descuento ──────────────────────────────────────────────────────────────
+  function setDiscount(pct) {
+    setDiscountState(pct);
+    localStorage.setItem('sangria-descuento', String(pct));
+  }
+
+  function clearDiscount() {
+    setDiscountState(0);
+    localStorage.removeItem('sangria-descuento');
+  }
 
   // ── Helper: guardar en localStorage (solo invitados) ───────────────────────
   // Se llama DIRECTAMENTE en add/remove para evitar race conditions con
@@ -175,6 +190,9 @@ export function CartProvider({ children }) {
         setCurrency,
         usdRate,
         initialized,
+        discount,
+        setDiscount,
+        clearDiscount,
         addToCart,
         removeFromCart,
       }}

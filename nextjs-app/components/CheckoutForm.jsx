@@ -2,6 +2,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 const STEPS = [
   { id: 1, label: 'Contacto' },
@@ -21,6 +22,7 @@ function isStepValid(step, values) {
 
 export default function CheckoutForm({ items, currency, rate, formatMoney }) {
   const { user, profile, addOrder } = useAuth();
+  const { discount, clearDiscount } = useCart();
   const router = useRouter();
 
   const [formValues, setFormValues] = useState({
@@ -56,6 +58,8 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     () => items.reduce((acc, item) => acc + item.priceArs * item.quantity, 0),
     [items]
   );
+  const discountAmount = discount > 0 ? Math.round(subtotal * discount / 100) : 0;
+  const total = subtotal - discountAmount;
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -89,7 +93,7 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
             priceArs: item.priceArs,
             quantity: item.quantity,
           })),
-          total:          subtotal,
+          total,
           deliveryMethod: formValues.deliveryMethod,
           address:        formValues.address  || null,
           city:           formValues.city     || null,
@@ -99,6 +103,7 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
         });
 
         if (order?.id) {
+          clearDiscount();
           router.push(`/pedido/${order.id}`);
           return;
         }
@@ -227,9 +232,21 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
               <strong>{formatMoney(item.priceArs * item.quantity, currency, rate)}</strong>
             </div>
           ))}
+          {discount > 0 && (
+            <>
+              <div className="checkout-summary-row">
+                <span>Subtotal</span>
+                <strong>{formatMoney(subtotal, currency, rate)}</strong>
+              </div>
+              <div className="checkout-summary-row is-discount">
+                <span>Descuento {discount}%</span>
+                <strong>− {formatMoney(discountAmount, currency, rate)}</strong>
+              </div>
+            </>
+          )}
           <div className="checkout-summary-row is-total">
             <span>Total</span>
-            <strong>{formatMoney(subtotal, currency, rate)}</strong>
+            <strong>{formatMoney(total, currency, rate)}</strong>
           </div>
         </aside>
       </div>
