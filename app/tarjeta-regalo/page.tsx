@@ -3,7 +3,9 @@ import { products } from '../../data/catalog';
 import CategoryGrid from '../../components/CategoryGrid';
 
 export default function TarjetaRegaloPage() {
-  const giftCards = products.filter((product) => product.isGiftCard);
+  const giftCards = products.filter(
+    (product) => 'isGiftCard' in product && product.isGiftCard === true
+  );
 
   return (
     <StaticPageShell eyebrow="Gift cards" title="Tarjetas regalo">
