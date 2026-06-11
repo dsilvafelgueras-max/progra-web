@@ -680,6 +680,62 @@ a {
   color: var(--wine);
 }
 
+.home-category-strip {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.25rem;
+  padding: 2rem 1.45rem 2.2rem;
+  background: #ece7df;
+}
+
+.home-category-card {
+  display: grid;
+  gap: 1rem;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.home-category-image {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #ded8cf;
+}
+
+.home-category-image img {
+  width: 74%;
+  height: 74%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.home-category-card span {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 0.78rem;
+  color: rgba(43, 36, 32, 0.62);
+}
+
+.home-category-card:hover span {
+  color: var(--text);
+}
+
+@media (max-width: 900px) {
+  .home-category-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .home-category-strip {
+    grid-template-columns: 1fr;
+    padding: 1.25rem;
+  }
+}
+
 /* ── Content ── */
 
 .react-content {

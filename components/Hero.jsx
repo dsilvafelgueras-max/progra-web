@@ -9,9 +9,8 @@ export default function Hero() {
       <div className="hero-copy">
         <div className="hero-origin">
           <p>MADE A MANO IN BUENOS AIRES, ARGENTINA</p>
-          <p>EFFORTLESS PIECES</p>
         </div>
-        <Link href="/anillos" className="hero-cta">ver piezas</Link>
+        <Link href="/anillos" className="hero-cta">VER ANILLOS</Link>
       </div>
     </section>
   );

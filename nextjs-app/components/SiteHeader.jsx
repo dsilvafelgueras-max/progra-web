@@ -89,7 +89,7 @@ export default function SiteHeader() {
 
           <div className="side-menu-bottom">
             <div className="side-menu-social">
-              <a href="https://www.instagram.com/sangriajewelry/" target="_blank" rel="noreferrer">instagram</a>
+              <a href="https://www.instagram.com/sangria_studio?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer">instagram</a>
               <a href="https://www.tiktok.com/@lolisilvafelgue" target="_blank" rel="noreferrer">tiktok</a>
             </div>
 
