@@ -26,7 +26,7 @@ export default function NewsletterSection() {
       }
 
       setStatus('success');
-      setMessage(data.already ? 'Ya estabas suscripta.' : '¡Gracias! Te agregamos a la lista.');
+      setMessage(data.already ? 'Ya estabas en la lista. ¡Tu descuento sigue vigente!' : '¡Listo! Revisá tu mail — te enviamos un 10% de descuento.');
       setEmail('');
     } catch {
       setStatus('error');
@@ -39,9 +39,9 @@ export default function NewsletterSection() {
       <div className="newsletter-inner">
         <div className="newsletter-text">
           <p className="newsletter-eyebrow">newsletter</p>
-          <h2 className="newsletter-title">Suscribite</h2>
+          <h2 className="newsletter-title">10% off en<br />tu primera compra</h2>
           <p className="newsletter-subtitle">
-            Novedades, lanzamientos y piezas exclusivas antes que nadie.
+            Dejá tu mail y recibí un descuento exclusivo, más novedades y lanzamientos antes que nadie.
           </p>
         </div>
 
@@ -61,7 +61,7 @@ export default function NewsletterSection() {
                   aria-label="Tu email"
                 />
                 <button type="submit" disabled={status === 'loading'}>
-                  {status === 'loading' ? '...' : 'Suscribirme'}
+                  {status === 'loading' ? '...' : 'Quiero el descuento'}
                 </button>
               </div>
               {status === 'error' && (
