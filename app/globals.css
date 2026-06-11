@@ -414,7 +414,8 @@ a {
 
 .header-brand,
 .header-home .header-brand,
-.side-menu-brand {
+.side-menu-brand,
+.login-brand {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
   font-size: clamp(1.65rem, 2vw, 2.1rem);
   line-height: 1;
@@ -1267,6 +1268,78 @@ a {
   display: block;
 }
 
+.payment-summary {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.payment-summary-line {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(43, 36, 32, 0.8);
+  font-weight: 300;
+}
+
+.product-material-line {
+  margin: 0;
+  font-family: var(--font-montserrat), 'Montserrat', 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.88rem;
+  color: rgba(43, 36, 32, 0.72);
+  letter-spacing: 0.04em;
+}
+
+.product-accordion {
+  margin-top: 0.5rem;
+}
+
+.product-accordion-item {
+  border-top: 1px solid rgba(43, 36, 32, 0.14);
+}
+
+.product-accordion-item:last-child {
+  border-bottom: 1px solid rgba(43, 36, 32, 0.14);
+}
+
+.product-accordion-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-montserrat), 'Montserrat', 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.product-accordion-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.product-accordion-trigger::after {
+  content: "+";
+  font-size: 0.9rem;
+  color: rgba(43, 36, 32, 0.45);
+  flex-shrink: 0;
+}
+
+.product-accordion-item[open] .product-accordion-trigger::after {
+  content: "\2212";
+}
+
+.product-accordion-body {
+  padding: 0 0 0.9rem;
+  font-size: 0.82rem;
+  color: rgba(43, 36, 32, 0.75);
+  line-height: 1.7;
+}
+
+.product-accordion-body p {
+  margin: 0;
+}
+
 .gift-card-detail {
   align-items: stretch;
 }
@@ -1586,23 +1659,89 @@ a {
 
 /* ── Login ── */
 
-.login-panel {
-  max-width: 480px;
-  margin: 3rem auto;
-  background: #faf7f4;
-  border: none;
-  padding: 2rem min(6vw, 4rem);
+.login-shell {
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.login-panel h1 {
-  margin: 0 0 1.5rem;
+.login-card {
+  padding: 4rem min(6vw, 5rem);
+  background: #faf7f4;
+  border: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-brand {
+  display: inline-block;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.login-copy h1 {
+  margin: 0;
   color: var(--text);
   font-size: clamp(1.3rem, 3vw, 2rem);
   line-height: 0.95;
 }
 
+.login-copy p {
+  margin: 0.5rem 0 0;
+  color: rgba(43, 36, 32, 0.82);
+}
+
 .login-form {
   max-width: 100%;
+  margin-top: 1.75rem;
+}
+
+.login-toggle {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.88rem;
+  color: rgba(43, 36, 32, 0.64);
+}
+
+.text-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.login-note {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: rgba(43, 36, 32, 0.82);
+}
+
+.login-image-panel {
+  height: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.login-image-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 780px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .login-image-panel {
+    display: none;
+  }
 }
 
 /* ── Checkout steps ── */
@@ -1686,6 +1825,15 @@ a {
 .field-error {
   font-size: 0.82rem;
   color: #b91c1c;
+}
+
+.checkout-payment-note {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--text);
+  background: rgba(43, 36, 32, 0.05);
+  border: 1px solid var(--line);
+  padding: 1rem 1.2rem;
 }
 
 .checkout-success-screen {
@@ -2071,6 +2219,22 @@ a {
 .pedido-badge.is-shipped   { background: #d4edda; color: #155724; }
 .pedido-badge.is-delivered { background: #cce5ff; color: #004085; }
 .pedido-badge.is-cancelled { background: #f8d7da; color: #721c24; }
+.pedido-badge.is-approved   { background: #d4edda; color: #155724; }
+.pedido-badge.is-in_process { background: #fff3cd; color: #856404; }
+.pedido-badge.is-rejected   { background: #f8d7da; color: #721c24; }
+
+.pedido-mp-status {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  padding: 0.9rem 1.2rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--line);
+  background: rgba(43, 36, 32, 0.05);
+}
+
+.pedido-mp-status.is-approved { background: #d4edda; color: #155724; border-color: #c3e6cb; }
+.pedido-mp-status.is-pending  { background: #fff3cd; color: #856404; border-color: #ffeeba; }
+.pedido-mp-status.is-failure  { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
 
 .pedido-divider {
   border: none;

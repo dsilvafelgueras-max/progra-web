@@ -10,7 +10,7 @@ import NewsletterSection from "../components/NewsletterSection";
 import SiteFooter from "../components/SiteFooter";
 
 const cormorant = Cormorant_Garamond({
-  weight: "400",
+  weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-cormorant",
   display: "swap",

@@ -87,17 +87,20 @@ create trigger on_auth_user_created
 -- ── 3. ORDERS ─────────────────────────────────────────────────────
 
 create table public.orders (
-  id              uuid primary key default gen_random_uuid(),
-  user_id         uuid references auth.users(id) on delete cascade not null,
-  total           numeric not null,
-  status          text not null default 'pending',
-  delivery_method text,
-  address         text,
-  city            text,
-  full_name       text,
-  email           text,
-  phone           text,
-  created_at      timestamptz default now()
+  id               uuid primary key default gen_random_uuid(),
+  user_id          uuid references auth.users(id) on delete cascade not null,
+  total            numeric not null,
+  status           text not null default 'pending',
+  payment_status   text not null default 'pending',
+  mp_payment_id    text,
+  mp_preference_id text,
+  delivery_method  text,
+  address          text,
+  city             text,
+  full_name        text,
+  email            text,
+  phone            text,
+  created_at       timestamptz default now()
 );
 
 alter table public.orders enable row level security;

@@ -16,7 +16,7 @@ function isStepValid(step, values) {
     if (values.deliveryMethod === 'domicilio') return values.address && values.city;
     return true;
   }
-  if (step === 3) return values.cardName && values.cardNumber;
+  if (step === 3) return true;
   return false;
 }
 
@@ -32,8 +32,6 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     deliveryMethod: 'domicilio',
     address:        '',
     city:           '',
-    cardName:       '',
-    cardNumber:     '',
   });
   const [step,      setStep]      = useState(1);
   const [touched,   setTouched]   = useState(false);
@@ -104,6 +102,22 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
 
         if (order?.id) {
           clearDiscount();
+
+          const token = localStorage.getItem('sangria-token');
+          const paymentRes = await fetch(`/api/orders/${order.id}/payment`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (paymentRes.ok) {
+            const { init_point, sandbox_init_point } = await paymentRes.json();
+            const redirectUrl = sandbox_init_point || init_point;
+            if (redirectUrl) {
+              window.location.href = redirectUrl;
+              return;
+            }
+          }
+
           router.push(`/pedido/${order.id}`);
           return;
         }
@@ -193,18 +207,10 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
 
           {/* Paso 3: Pago */}
           {step === 3 && (
-            <>
-              <label>
-                <span>Titular de tarjeta *</span>
-                <input name="cardName" value={formValues.cardName} onChange={handleChange} placeholder="Como figura en la tarjeta" />
-                {touched && !formValues.cardName && <span className="field-error">Completá el titular</span>}
-              </label>
-              <label>
-                <span>Número de tarjeta *</span>
-                <input name="cardNumber" value={formValues.cardNumber} onChange={handleChange} placeholder="1234 5678 9012 3456" />
-                {touched && !formValues.cardNumber && <span className="field-error">Completá el número de tarjeta</span>}
-              </label>
-            </>
+            <p className="checkout-payment-note">
+              Vas a pagar <strong>{formatMoney(total, currency, rate)}</strong> con Mercado Pago.
+              Al confirmar te redirigimos al checkout seguro de Mercado Pago.
+            </p>
           )}
 
           {error && <p className="field-error" style={{ marginTop: '0.5rem' }}>{error}</p>}
@@ -217,7 +223,7 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
               <button type="button" className="primary-button-react" onClick={handleNext}>Siguiente</button>
             ) : (
               <button type="submit" className="primary-button-react" disabled={submitting}>
-                {submitting ? 'Procesando…' : 'Confirmar compra'}
+                {submitting ? 'Procesando…' : 'Pagar con Mercado Pago'}
               </button>
             )}
           </div>

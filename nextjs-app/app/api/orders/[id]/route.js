@@ -16,6 +16,7 @@ export async function GET(request, ctx) {
       created_at,
       total,
       status,
+      payment_status,
       delivery_method,
       address,
       city,

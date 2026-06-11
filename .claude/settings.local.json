@@ -9,7 +9,10 @@
       "Bash(git push *)",
       "Bash(git rm *)",
       "Bash(cp /dev/null nextjs-app/vercel.json)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Read(//c/c/Users/Lola/OneDrive/Desktop/progra web/nextjs-app/app/api/**)",
+      "Read(//c/c/Users/Lola/OneDrive/Desktop/progra web/nextjs-app/**)",
+      "Read(//c/c/Users/Lola/OneDrive/Desktop/progra web/**)"
     ],
     "additionalDirectories": [
       "c:\\c\\Users\\Lola\\OneDrive\\Desktop\\progra web"

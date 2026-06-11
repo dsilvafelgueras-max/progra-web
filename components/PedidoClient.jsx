@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useCart } from '../context/CartContext';
 import { formatMoney } from '../lib/currency';
 
@@ -11,6 +12,20 @@ const STATUS_LABEL = {
   cancelled: 'Cancelado',
 };
 
+const PAYMENT_STATUS_LABEL = {
+  pending:    'Pendiente',
+  in_process: 'En proceso',
+  approved:   'Aprobado',
+  rejected:   'Rechazado',
+  cancelled:  'Cancelado',
+};
+
+const MP_STATUS_MESSAGE = {
+  approved: '¡Pago aprobado! Ya estamos procesando tu pedido.',
+  pending:  'Estamos procesando tu pago. Te avisamos por e-mail cuando se confirme.',
+  failure:  'El pago no pudo procesarse. Podés intentar de nuevo desde tu cuenta.',
+};
+
 const DELIVERY_LABEL = {
   domicilio: 'Envío a domicilio',
   encuentro: 'Punto de encuentro',
@@ -19,6 +34,8 @@ const DELIVERY_LABEL = {
 
 export default function PedidoClient({ orderId }) {
   const { currency, usdRate } = useCart();
+  const searchParams = useSearchParams();
+  const mpStatus = searchParams.get('mp_status');
   const [order,   setOrder]   = useState(null);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState('');
@@ -75,6 +92,10 @@ export default function PedidoClient({ orderId }) {
         </p>
       </div>
 
+      {mpStatus && MP_STATUS_MESSAGE[mpStatus] && (
+        <p className={`pedido-mp-status is-${mpStatus}`}>{MP_STATUS_MESSAGE[mpStatus]}</p>
+      )}
+
       <div className="pedido-card">
 
         {/* Número de pedido */}
@@ -88,6 +109,14 @@ export default function PedidoClient({ orderId }) {
           <span className="pedido-label">Estado</span>
           <span className={`pedido-badge is-${order.status}`}>
             {STATUS_LABEL[order.status] ?? order.status}
+          </span>
+        </div>
+
+        {/* Estado de pago */}
+        <div className="pedido-row">
+          <span className="pedido-label">Pago</span>
+          <span className={`pedido-badge is-${order.payment_status}`}>
+            {PAYMENT_STATUS_LABEL[order.payment_status] ?? order.payment_status}
           </span>
         </div>
 

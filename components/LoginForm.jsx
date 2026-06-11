@@ -47,10 +47,15 @@ export default function LoginForm() {
   }
 
   return (
-    <main className="react-content">
-      <section className="login-panel">
-        <p className="eyebrow">Cuenta</p>
-        <h1>{mode === 'login' ? 'Ingresar' : 'Crear cuenta'}</h1>
+    <main className="login-shell">
+      <section className="login-card">
+        <span className="login-brand">SANGRIA</span>
+
+        <div className="login-copy">
+          <p className="eyebrow">Cuenta</p>
+          <h1>{mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}</h1>
+          <p>Ingresá con tu correo para guardar favoritos y ver tus compras.</p>
+        </div>
 
         <form className="checkout-form-react login-form" onSubmit={handleSubmit} noValidate>
 
@@ -104,17 +109,23 @@ export default function LoginForm() {
           </button>
         </form>
 
-        <button
-          type="button"
-          className="cuenta-logout"
-          style={{ marginTop: '1.2rem' }}
-          onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); }}
-        >
-          {mode === 'login'
-            ? '¿No tenés cuenta? Registrate'
-            : '¿Ya tenés cuenta? Ingresá'}
-        </button>
+        <p className="login-toggle">
+          <span>{mode === 'login' ? '¿No tenés cuenta?' : '¿Ya tenés cuenta?'}</span>{' '}
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); }}
+          >
+            {mode === 'login' ? 'Crear cuenta' : 'Ingresá'}
+          </button>
+        </p>
+
+        <p className="login-note">Al continuar aceptás nuestros Términos del servicio.</p>
       </section>
+
+      <div className="login-image-panel">
+        <img src="/mujer.jpg" alt="SANGRIA" />
+      </div>
     </main>
   );
 }
