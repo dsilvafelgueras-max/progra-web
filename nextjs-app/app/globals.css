@@ -1018,6 +1018,122 @@ a {
   color: var(--muted);
 }
 
+.static-page-react {
+  padding-top: 2.5rem;
+}
+
+.static-page-header-react {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.static-page-header-react h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4.4rem);
+  font-weight: 400;
+  line-height: 0.95;
+  color: var(--text);
+}
+
+.static-page-body-react {
+  display: grid;
+  gap: 2rem;
+}
+
+.static-copy-react {
+  max-width: 760px;
+  display: grid;
+  gap: 1rem;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.75;
+}
+
+.static-copy-react h2 {
+  margin: 1rem 0 0;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.static-copy-react p,
+.static-copy-react ul {
+  margin: 0;
+}
+
+.static-form-react {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  max-width: 860px;
+}
+
+.static-form-react label {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.static-form-react label.is-full {
+  grid-column: 1 / -1;
+}
+
+.static-form-react span {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.static-form-react input,
+.static-form-react textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+  padding: 0.85rem 0.95rem;
+  color: var(--text);
+  font: inherit;
+}
+
+.static-form-react textarea {
+  resize: vertical;
+}
+
+.static-form-react button {
+  justify-self: start;
+}
+
+.size-grid-react {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 1rem;
+}
+
+.size-item-react {
+  display: grid;
+  justify-items: center;
+  gap: 0.65rem;
+  color: var(--muted);
+}
+
+.size-circle-react {
+  width: 72px;
+  height: 72px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+}
+
+.care-note-react {
+  border-left: 1px solid var(--line);
+  padding-left: 1rem;
+}
+
 /* ── Cart overlay ── */
 
 .overlay-react {
@@ -1855,6 +1971,10 @@ a {
 
   .product-grid-react {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .static-form-react {
+    grid-template-columns: 1fr;
   }
 }
 
