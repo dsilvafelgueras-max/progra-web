@@ -43,11 +43,10 @@ export default function PedidoClient({ orderId }) {
   useEffect(() => {
     async function fetchOrder() {
       const token = localStorage.getItem('sangria-token');
-      if (!token) { setError('No hay sesión activa.'); setLoading(false); return; }
 
       try {
         const res = await fetch(`/api/orders/${orderId}`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         if (!res.ok) throw new Error('Orden no encontrada');
         setOrder(await res.json());

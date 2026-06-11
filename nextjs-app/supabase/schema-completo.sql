@@ -88,7 +88,7 @@ create trigger on_auth_user_created
 
 create table public.orders (
   id               uuid primary key default gen_random_uuid(),
-  user_id          uuid references auth.users(id) on delete cascade not null,
+  user_id          uuid references auth.users(id) on delete cascade,
   total            numeric not null,
   status           text not null default 'pending',
   payment_status   text not null default 'pending',

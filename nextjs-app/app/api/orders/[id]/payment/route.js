@@ -1,17 +1,17 @@
 import { Preference } from 'mercadopago';
 import { getMpClient } from '../../../../../lib/mercadopago';
 import { createServerClient } from '../../../../../lib/supabase-server';
-import { getUserFromRequest, unauthorized } from '../../../../../lib/auth';
+import { getUserFromRequest } from '../../../../../lib/auth';
 
 // POST /api/orders/:id/payment — crea una preferencia de Mercado Pago para la orden
+// Disponible tanto para usuarios logueados (sus propias órdenes) como invitados (órdenes sin user_id).
 export async function POST(request, ctx) {
   const user = await getUserFromRequest(request);
-  if (!user) return unauthorized();
 
   const { id } = await ctx.params;
   const supabase = createServerClient();
 
-  const { data: order, error } = await supabase
+  let query = supabase
     .from('orders')
     .select(`
       id,
@@ -22,9 +22,11 @@ export async function POST(request, ctx) {
         price_ars
       )
     `)
-    .eq('id', id)
-    .eq('user_id', user.id)
-    .single();
+    .eq('id', id);
+
+  query = user ? query.eq('user_id', user.id) : query.is('user_id', null);
+
+  const { data: order, error } = await query.single();
 
   if (error || !order) {
     return Response.json({ error: 'Orden no encontrada' }, { status: 404 });

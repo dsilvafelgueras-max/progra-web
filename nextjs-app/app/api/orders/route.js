@@ -56,12 +56,11 @@ export async function GET(request) {
   return Response.json(orders);
 }
 
-// POST /api/orders — crea una orden nueva
+// POST /api/orders — crea una orden nueva (con o sin sesión iniciada)
 // Body: { items, total, deliveryMethod, address, city, fullName, email, phone }
 // items: [{ id, name, priceArs, quantity }]
 export async function POST(request) {
   const user = await getUserFromRequest(request);
-  if (!user) return unauthorized();
 
   const supabase = createServerClient();
   const body = await request.json();
@@ -75,7 +74,7 @@ export async function POST(request) {
   const { data: order, error: orderError } = await supabase
     .from('orders')
     .insert({
-      user_id:         user.id,
+      user_id:         user?.id ?? null,
       total,
       delivery_method: deliveryMethod,
       address:         address ?? null,

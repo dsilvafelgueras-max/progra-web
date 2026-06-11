@@ -82,47 +82,59 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     setSubmitting(true);
     setError('');
 
+    const orderPayload = {
+      items: items.map((item) => ({
+        id:       item.id,
+        name:     item.name,
+        priceArs: item.priceArs,
+        quantity: item.quantity,
+      })),
+      total,
+      deliveryMethod: formValues.deliveryMethod,
+      address:        formValues.address  || null,
+      city:           formValues.city     || null,
+      fullName:       formValues.fullName,
+      email:          formValues.email,
+      phone:          formValues.phone,
+    };
+
     try {
+      const token = localStorage.getItem('sangria-token');
+      let order;
+
       if (user) {
-        const order = await addOrder({
-          items: items.map((item) => ({
-            id:       item.id,
-            name:     item.name,
-            priceArs: item.priceArs,
-            quantity: item.quantity,
-          })),
-          total,
-          deliveryMethod: formValues.deliveryMethod,
-          address:        formValues.address  || null,
-          city:           formValues.city     || null,
-          fullName:       formValues.fullName,
-          email:          formValues.email,
-          phone:          formValues.phone,
+        order = await addOrder(orderPayload);
+      } else {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload),
+        });
+        if (res.ok) order = await res.json();
+      }
+
+      if (order?.id) {
+        clearDiscount();
+
+        const paymentRes = await fetch(`/api/orders/${order.id}/payment`, {
+          method: 'POST',
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
 
-        if (order?.id) {
-          clearDiscount();
-
-          const token = localStorage.getItem('sangria-token');
-          const paymentRes = await fetch(`/api/orders/${order.id}/payment`, {
-            method: 'POST',
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          if (paymentRes.ok) {
-            const { init_point, sandbox_init_point } = await paymentRes.json();
-            const redirectUrl = sandbox_init_point || init_point;
-            if (redirectUrl) {
-              window.location.href = redirectUrl;
-              return;
-            }
+        if (paymentRes.ok) {
+          const { init_point, sandbox_init_point } = await paymentRes.json();
+          const redirectUrl = sandbox_init_point || init_point;
+          if (redirectUrl) {
+            window.location.href = redirectUrl;
+            return;
           }
-
-          router.push(`/pedido/${order.id}`);
-          return;
         }
+
+        router.push(`/pedido/${order.id}`);
+        return;
       }
-      // Sin sesión o si la API falló: pantalla de éxito local
+
+      // La API falló sin devolver una orden: pantalla de éxito local
       router.push('/pedido/confirmado');
     } catch {
       setError('Hubo un error al procesar tu pedido. Intentá de nuevo.');
