@@ -835,12 +835,99 @@ a {
   font-size: 1.2rem;
 }
 
+.gift-card-product {
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.gift-card-product .product-card-link {
+  gap: 0;
+}
+
+.gift-card-visual-react {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  border: 1px solid rgba(43, 36, 32, 0.12);
+  background: #e9e4dc;
+}
+
+.gift-card-visual-react img {
+  position: absolute;
+  inset: -12%;
+  width: 124%;
+  height: 124%;
+  object-fit: contain;
+  filter: blur(12px);
+  opacity: 0.48;
+  transform: scale(1.08);
+  mix-blend-mode: multiply;
+}
+
+.gift-card-visual-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.45rem 1.65rem;
+}
+
+.gift-card-brand-react,
+.gift-card-label-react {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.36em;
+  color: rgba(43, 36, 32, 0.55);
+}
+
+.gift-card-brand-react {
+  font-size: 0.72rem;
+}
+
+.gift-card-label-react {
+  margin-bottom: 0.75rem;
+  font-size: 0.78rem;
+}
+
+.gift-card-visual-content strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.95rem, 3vw, 2.35rem);
+  font-weight: 400;
+  color: var(--text);
+}
+
+.gift-card-product button {
+  width: 100%;
+  margin-top: 1rem;
+  border: 1px solid rgba(43, 36, 32, 0.28);
+  background: transparent;
+  color: rgba(43, 36, 32, 0.68);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+.gift-card-product button:hover {
+  background: rgba(43, 36, 32, 0.06);
+  color: var(--text);
+}
+
 .product-card-react button,
 .primary-button-react {
   border: none;
   padding: 0.9rem 1rem;
   background: var(--wine);
   color: #fff;
+}
+
+.product-card-react.gift-card-product button {
+  border: 1px solid rgba(43, 36, 32, 0.28);
+  background: transparent;
+  color: rgba(43, 36, 32, 0.68);
 }
 
 .btn-link {
@@ -894,6 +981,41 @@ a {
 .product-detail-price {
   font-size: 1.6rem;
   display: block;
+}
+
+.gift-card-detail {
+  align-items: stretch;
+}
+
+.gift-card-detail-visual {
+  min-height: 480px;
+}
+
+.gift-card-detail-box {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.gift-card-detail-box p,
+.gift-card-detail-box ul {
+  margin: 0;
+}
+
+.gift-card-detail-box p {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.gift-card-detail-box ul {
+  display: grid;
+  gap: 0.45rem;
+  padding-left: 1rem;
+  color: var(--muted);
 }
 
 /* ── Cart overlay ── */

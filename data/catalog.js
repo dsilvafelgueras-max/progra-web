@@ -1,4 +1,66 @@
 export const products = [
+  // Gift cards
+  {
+    id: "gift-card-50000",
+    name: "Gift Card 50.000",
+    category: "Gift Card",
+    priceArs: 50000,
+    image: "/products/aros-2.png",
+    giftImage: "/products/aros-2.png",
+    description: "Tarjeta regalo digital SANGRIA por ARS 50.000 para usar online.",
+    details: [
+      "Se envia por email despues de confirmar la compra.",
+      "Puede usarse como credito para elegir cualquier pieza online.",
+      "Valida por 6 meses desde la fecha de compra.",
+    ],
+    isGiftCard: true,
+  },
+  {
+    id: "gift-card-75000",
+    name: "Gift Card 75.000",
+    category: "Gift Card",
+    priceArs: 75000,
+    image: "/products/aros-2.png",
+    giftImage: "/products/aros-2.png",
+    description: "Tarjeta regalo digital SANGRIA por ARS 75.000 para usar online.",
+    details: [
+      "Se envia por email despues de confirmar la compra.",
+      "Puede usarse como credito para elegir cualquier pieza online.",
+      "Valida por 6 meses desde la fecha de compra.",
+    ],
+    isGiftCard: true,
+  },
+  {
+    id: "gift-card-100000",
+    name: "Gift Card 100.000",
+    category: "Gift Card",
+    priceArs: 100000,
+    image: "/products/earcuff-crudo.png",
+    giftImage: "/products/earcuff-crudo.png",
+    description: "Tarjeta regalo digital SANGRIA por ARS 100.000 para usar online.",
+    details: [
+      "Se envia por email despues de confirmar la compra.",
+      "Puede usarse como credito para elegir cualquier pieza online.",
+      "Valida por 6 meses desde la fecha de compra.",
+    ],
+    isGiftCard: true,
+  },
+  {
+    id: "gift-card-150000",
+    name: "Gift Card 150.000",
+    category: "Gift Card",
+    priceArs: 150000,
+    image: "/products/earcuff-2.png",
+    giftImage: "/products/earcuff-2.png",
+    description: "Tarjeta regalo digital SANGRIA por ARS 150.000 para usar online.",
+    details: [
+      "Se envia por email despues de confirmar la compra.",
+      "Puede usarse como credito para elegir cualquier pieza online.",
+      "Valida por 6 meses desde la fecha de compra.",
+    ],
+    isGiftCard: true,
+  },
+
   // ── Collares ──────────────────────────────────────────────────
   {
     id: "collar-gargantilla-toggle",
