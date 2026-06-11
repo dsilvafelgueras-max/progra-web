@@ -343,9 +343,6 @@ a {
 
 .app-header,
 .header-home {
-  position: sticky;
-  top: 0;
-  z-index: 70;
   width: 100%;
   max-width: none;
   height: 82px;
@@ -355,8 +352,64 @@ a {
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 1rem;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 70;
   background: rgba(255, 255, 255, 0.96);
   border-bottom: 1px solid rgba(43, 36, 32, 0.08);
+}
+
+/* Header del home: transparente y flotando sobre el hero, revela fondo al hover/focus */
+.header-home {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.2s ease, border-bottom-color 0.2s ease;
+}
+
+.header-home:hover,
+.header-home:focus-within {
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom-color: rgba(43, 36, 32, 0.08);
+}
+
+.header-home .header-brand,
+.header-home .header-icon-button {
+  color: #fff;
+}
+
+.header-home .header-menu-button span {
+  background: #fff;
+}
+
+.header-home .header-cart-button strong {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--wine);
+}
+
+.header-home:hover .header-brand,
+.header-home:focus-within .header-brand,
+.header-home:hover .header-icon-button,
+.header-home:focus-within .header-icon-button {
+  color: var(--wine);
+}
+
+.header-home:hover .header-menu-button span,
+.header-home:focus-within .header-menu-button span {
+  background: var(--wine);
+}
+
+.header-home:hover .header-cart-button strong,
+.header-home:focus-within .header-cart-button strong {
+  background: var(--wine);
+  color: #fff;
 }
 
 .header-brand,
@@ -815,7 +868,7 @@ a {
 
 .product-grid-react {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -2073,6 +2126,12 @@ a {
 }
 
 /* ── Responsive ── */
+
+@media (max-width: 1300px) {
+  .product-grid-react {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
 
 @media (max-width: 1100px) {
   .product-grid-react {
