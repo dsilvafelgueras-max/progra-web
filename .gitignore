@@ -11,3 +11,5 @@ react-app/dist/
 react-app/build/
 .DS_Store
 *.env.local
+
+.vercel
