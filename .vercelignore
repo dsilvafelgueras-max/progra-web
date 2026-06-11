@@ -1,0 +1,8 @@
+.next
+node_modules
+.vercel/output
+.vercel/node
+nextjs-app/.next
+nextjs-app/node_modules
+nextjs-app/.vercel/output
+nextjs-app/.vercel/node
