@@ -15,6 +15,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -22,24 +26,33 @@ body {
   font-weight: 300;
   background: var(--bg);
   color: var(--text);
+  letter-spacing: 0.08em;
 }
 
-h1,
+h1 {
+  font-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  letter-spacing: 0.01em;
+}
+
 h2 {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
-  font-weight: 400;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.02em;
 }
 
 h3,
 h4,
 h5,
 h6 {
+  font-family: var(--font-montserrat), 'Montserrat', sans-serif;
   font-weight: 300;
 }
 
-strong,
-b {
-  font-weight: 300;
+p {
+  line-height: 1.6;
 }
 
 button,
@@ -143,7 +156,7 @@ a {
 .primary-button-react,
 .ghost-button-react,
 .checkout-form-react button {
-  border-radius: 999px;
+  border-radius: 0;
 }
 
 .search-box {
@@ -165,7 +178,27 @@ a {
   color: var(--text);
   padding: 0.9rem 1rem;
   outline: none;
-  border-radius: 12px;
+  border-radius: 6px;
+  transition: border-color 0.15s;
+}
+
+.checkout-form-react input:focus,
+.checkout-form-react select:focus {
+  border-color: rgba(43, 36, 32, 0.5);
+}
+
+/* Login: inputs solo con línea inferior (sin caja) */
+.login-form input {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid rgba(43, 36, 32, 0.22);
+  background: transparent;
+  padding: 0.65rem 0;
+  transition: border-bottom-color 0.15s;
+}
+
+.login-form input:focus {
+  border-bottom-color: var(--text);
 }
 
 .currency-switcher {
@@ -788,34 +821,42 @@ a {
 
 .product-card-react {
   display: grid;
-  gap: 1rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid var(--line);
+  gap: 0;
+  padding: 0;
+  background: #ddd8d0;
+  border: none;
+  overflow: hidden;
 }
 
 .product-card-link {
   text-decoration: none;
+  color: var(--text);
   display: grid;
-  gap: 1rem;
+  gap: 0;
 }
 
 .product-image-react {
-  background: #fff;
-  min-height: 240px;
+  background: #ddd8d0;
+  aspect-ratio: 1 / 1;
   display: grid;
   place-items: center;
+  padding: 28px;
+  overflow: hidden;
 }
 
 .product-image-react img {
-  width: 100%;
-  height: 220px;
+  width: 84%;
+  height: 84%;
   object-fit: contain;
+  mix-blend-mode: multiply;
+  transition: opacity 0.22s ease;
 }
 
 .product-copy-react {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.15rem;
+  padding: 0.55rem 0.6rem 0.65rem;
+  background: #ddd8d0;
 }
 
 .product-copy-react p,
@@ -826,13 +867,22 @@ a {
 
 .product-copy-react p {
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.78rem;
-  color: var(--muted);
+  letter-spacing: 0.18em;
+  font-size: 0.68rem;
+  color: rgba(43, 36, 32, 0.75);
 }
 
 .product-copy-react h3 {
-  font-size: 1.2rem;
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.18;
+}
+
+.product-copy-react span {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.67);
+  letter-spacing: 0.04em;
 }
 
 .gift-card-product {
@@ -916,12 +966,46 @@ a {
   color: var(--text);
 }
 
-.product-card-react button,
 .primary-button-react {
   border: none;
-  padding: 0.9rem 1rem;
+  padding: 0.95rem 1.15rem;
   background: var(--wine);
-  color: #fff;
+  color: #f5ede6;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.primary-button-react:hover {
+  background: #2b2420;
+  color: #f5ede6;
+}
+
+/* Botón "Agregar" en card de producto (no gift card) */
+.product-card-react:not(.gift-card-product) button {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(43, 36, 32, 0.3);
+  border-radius: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.75rem 1rem;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s, transform 0.2s, background 0.15s, color 0.15s;
+}
+
+.product-card-react:not(.gift-card-product):hover button {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.product-card-react:not(.gift-card-product) button:hover {
+  background: #2b2420;
+  color: #f5ede6;
+  border-color: #2b2420;
 }
 
 .product-card-react.gift-card-product button {
@@ -946,40 +1030,56 @@ a {
 
 .product-detail {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
   gap: 2rem;
   margin-top: 2rem;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid var(--line);
-  padding: 1.5rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.product-detail-image {
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  padding: 1.4rem;
+  aspect-ratio: 1 / 1;
 }
 
 .product-detail-image img {
-  width: 100%;
-  height: 480px;
+  width: 78%;
+  height: 78%;
   object-fit: contain;
-  background: #fff;
+  mix-blend-mode: multiply;
 }
 
 .product-detail-info {
   display: grid;
   gap: 1rem;
   align-content: start;
+  background: #edeae4;
+  border: 1px solid rgba(43, 36, 32, 0.12);
+  padding: 2rem;
 }
 
 .product-detail-title {
   margin: 0;
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  color: var(--wine);
+  font-size: clamp(1.45rem, 3vw, 2.5rem);
+  line-height: 0.92;
+  color: var(--text);
+  letter-spacing: 0.04em;
 }
 
 .product-detail-desc {
-  color: var(--muted);
+  color: rgba(43, 36, 32, 0.68);
   margin: 0;
+  max-width: 46ch;
 }
 
 .product-detail-price {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
   display: block;
 }
 
@@ -1140,18 +1240,24 @@ a {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(20, 14, 14, 0.38);
-  display: grid;
-  justify-items: end;
+  background: rgba(0, 0, 0, 0.38);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 1rem;
 }
 
 .cart-drawer-react {
-  width: min(480px, 100vw);
-  min-height: 100vh;
-  padding: 1.5rem;
-  background: var(--surface);
-  border-left: 1px solid var(--line);
+  width: min(380px, calc(100vw - 2rem));
+  height: calc(100vh - 2rem);
+  overflow-y: auto;
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(43, 36, 32, 0.12);
   box-shadow: var(--shadow);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
 }
 
 .cart-drawer-head,
@@ -1166,6 +1272,7 @@ a {
 .cart-drawer-head h2,
 .checkout-panel-head h2 {
   margin: 0;
+  font-style: normal;
 }
 
 .cart-drawer-items {
@@ -1212,12 +1319,30 @@ a {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  border-top: 1px solid rgba(43, 36, 32, 0.12);
+  padding-top: 0.75rem;
+}
+
+.cart-total-react strong {
+  font-weight: 300;
 }
 
 .ghost-button-react {
   padding: 0.8rem 0.95rem;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(43, 36, 32, 0.3);
+  background: transparent;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.ghost-button-react:hover {
+  background: var(--text);
+  color: #f5ede6;
+  border-color: var(--text);
 }
 
 .cart-empty,
@@ -1280,14 +1405,16 @@ a {
 .login-panel {
   max-width: 480px;
   margin: 3rem auto;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  padding: 2rem;
+  background: #faf7f4;
+  border: none;
+  padding: 2rem min(6vw, 4rem);
 }
 
 .login-panel h1 {
   margin: 0 0 1.5rem;
-  color: var(--wine);
+  color: var(--text);
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  line-height: 0.95;
 }
 
 .login-form {
