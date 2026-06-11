@@ -19,7 +19,6 @@ export default function CatalogClient() {
       .replace(/\p{Diacritic}/gu, '');
 
     return products
-      .filter((p) => !p.isGiftCard)
       .filter((p) => activeCategory === 'Todas' || p.category === activeCategory)
       .filter((p) => {
         if (!normalized) return true;

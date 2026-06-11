@@ -4,8 +4,7 @@ import CartDrawer from './CartDrawer';
 import { formatMoney } from '../lib/currency';
 
 export default function CartOverlays() {
-  const { cartItems, currency, usdRate, cartOpen, setCartOpen, removeFromCart, clearCart } =
-    useCart();
+  const { cartItems, currency, usdRate, cartOpen, setCartOpen, removeFromCart } = useCart();
 
   if (!cartOpen) return null;
 
@@ -19,7 +18,6 @@ export default function CartOverlays() {
           formatMoney={formatMoney}
           onClose={() => setCartOpen(false)}
           onRemove={removeFromCart}
-          onClear={clearCart}
         />
       </div>
     </div>

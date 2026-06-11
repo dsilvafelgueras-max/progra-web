@@ -1,59 +1,42 @@
 import Link from 'next/link';
 
-const paymentLogos = [
-  { src: '/assets/payments/mercado-pago.webp', alt: 'Mercado Pago' },
-  { src: '/assets/payments/apple-pay.png', alt: 'Apple Pay' },
-  { src: '/assets/payments/visa.png', alt: 'Visa' },
-  { src: '/assets/payments/mastercard.svg', alt: 'Mastercard' },
-  { src: '/assets/payments/amex.svg', alt: 'American Express' },
-  { src: '/assets/payments/naranja.png', alt: 'Naranja' },
-];
-
 export default function SiteFooter() {
   return (
-    <footer className="site-footer-react">
-      <div className="site-footer-grid">
-        <div>
-          <p className="eyebrow">Ayuda</p>
-          <div className="footer-links-react">
-            <Link href="/contacto">contactanos</Link>
-            <Link href="/guia-talles">guia de talles</Link>
-            <Link href="/cuidados">cuidados</Link>
-          </div>
+    <footer className="site-footer">
+
+      <div className="footer-columns">
+
+        <div className="footer-col">
+          <h3 className="footer-col-title">Ayuda</h3>
+          <Link href="/contacto">Contactanos</Link>
+          <Link href="/cambios">Cambios y devoluciones</Link>
+          <Link href="/guia-talles">Guia de talles</Link>
+          <Link href="/cuidados">Cuidados</Link>
         </div>
 
-        <div>
-          <p className="eyebrow">Legal</p>
-          <div className="footer-links-react">
-            <Link href="/arrepentimiento">boton de arrepentimiento</Link>
-          </div>
+        <div className="footer-col">
+          <h3 className="footer-col-title">Legal</h3>
+          <Link href="/arrepentimiento">Boton de arrepentimiento</Link>
         </div>
 
-        <div>
-          <p className="eyebrow">Seguinos</p>
-          <div className="footer-links-react footer-socials-react">
-            <a href="https://www.instagram.com/sangriajewelry/" target="_blank" rel="noreferrer">
-              Instagram
-            </a>
-            <a href="https://www.tiktok.com/" target="_blank" rel="noreferrer">
-              TikTok
-            </a>
-          </div>
+        <div className="footer-col">
+          <h3 className="footer-col-title">Sobre Sangria</h3>
+          <Link href="/nuestra-historia">Nuestra historia</Link>
         </div>
+
+        <div className="footer-col">
+          <h3 className="footer-col-title">Seguinos</h3>
+          <a href="https://www.instagram.com/sangriajewelry/" target="_blank" rel="noreferrer">Instagram</a>
+          <a href="https://www.tiktok.com/@lolisilvafelgue" target="_blank" rel="noreferrer">Tiktok</a>
+        </div>
+
       </div>
 
-      <div className="footer-payments-react">
-        <span>Medios de pago</span>
-        <div className="footer-payment-grid-react">
-          {paymentLogos.map((logo) => (
-            <div key={logo.alt} className="footer-payment-box-react">
-              <img src={logo.src} alt={logo.alt} />
-            </div>
-          ))}
-        </div>
+      <div className="footer-bottom">
+        <p className="footer-copy">© {new Date().getFullYear()} Sangria. Todos los derechos reservados.</p>
+        <p className="footer-signature">SANGRIA</p>
       </div>
 
-      <p className="footer-brand-react">SANGRIA</p>
     </footer>
   );
 }

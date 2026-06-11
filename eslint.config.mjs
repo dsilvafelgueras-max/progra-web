@@ -9,15 +9,9 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
-    ".next-build/**",
-    ".next-runtime/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Legacy and parallel workspaces kept in the repo:
-    "nextjs-app/**",
-    "react-app/**",
-    "js/**",
   ]),
 ]);
 

@@ -5,10 +5,11 @@ export default function ProductCard({ product, price, onAdd }) {
   return (
     <article className="product-card-react">
       <Link href={`/producto/${product.id}`} className="product-card-link">
-        <div className={`product-image-react ${product.imageClass ?? ''}`}>
-          <img src={product.image} alt={product.name} className={product.imageSizeClass ?? ''} />
+        <div className="product-image-react">
+          <img src={product.image} alt={product.name} />
         </div>
         <div className="product-copy-react">
+          <p>{product.category}</p>
           <h3>{product.name}</h3>
           <span>{price}</span>
         </div>

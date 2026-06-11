@@ -1,15 +1,7 @@
 'use client';
 import Link from 'next/link';
 
-export default function CartDrawer({
-  items,
-  currency,
-  rate,
-  formatMoney,
-  onClose,
-  onRemove,
-  onClear,
-}) {
+export default function CartDrawer({ items, currency, rate, formatMoney, onClose, onRemove }) {
   const total = items.reduce((acc, item) => acc + item.priceArs * item.quantity, 0);
 
   return (
@@ -33,7 +25,7 @@ export default function CartDrawer({
               <div>
                 <h3>{item.name}</h3>
                 <p>
-                  {item.quantity} unidad{item.quantity > 1 ? 'es' : ''}
+                  {item.category} · {item.quantity} unidad{item.quantity > 1 ? 'es' : ''}
                 </p>
               </div>
               <div className="cart-row-side">
@@ -52,9 +44,6 @@ export default function CartDrawer({
           <span>Total</span>
           <strong>{formatMoney(total, currency, rate)}</strong>
         </div>
-        <button type="button" className="ghost-button-react" onClick={onClear} disabled={!items.length}>
-          Vaciar carrito
-        </button>
         <Link href="/checkout" className="primary-button-react btn-link" onClick={onClose}>
           Finalizar compra
         </Link>
