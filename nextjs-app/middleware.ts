@@ -7,12 +7,14 @@ import type { NextRequest } from 'next/server';
  * Rutas protegidas → requieren cookie `sangria-session`.
  * Si no existe → redirige a /login?redirect=<ruta-original>.
  *
+ * /checkout es público: no se necesita iniciar sesión para comprar.
+ *
  * La cookie la setea AuthContext en el browser al hacer login/register.
  * La verificación real del JWT ocurre en las API routes (lib/auth.ts).
  * Esto es protección de navegación (UX), no seguridad de datos.
  */
 
-const PROTECTED_PATHS = ['/cuenta', '/checkout', '/admin'];
+const PROTECTED_PATHS = ['/cuenta', '/admin'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -35,5 +37,5 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   // Solo corre el middleware en estas rutas (no en assets, api, _next)
-  matcher: ['/cuenta/:path*', '/checkout/:path*', '/admin/:path*'],
+  matcher: ['/cuenta/:path*', '/admin/:path*'],
 };

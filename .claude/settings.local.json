@@ -12,10 +12,12 @@
       "Read(//tmp/**)",
       "Read(//c/c/Users/Lola/OneDrive/Desktop/progra web/nextjs-app/app/api/**)",
       "Read(//c/c/Users/Lola/OneDrive/Desktop/progra web/nextjs-app/**)",
-      "Read(//c/c/Users/Lola/OneDrive/Desktop/progra web/**)"
+      "Read(//c/c/Users/Lola/OneDrive/Desktop/progra web/**)",
+      "Bash(cd \"/c/Users/Lola/OneDrive/Desktop/progra web\" && cp \"nextjs-app/middleware.ts\" \"middleware.ts\" && echo done)"
     ],
     "additionalDirectories": [
-      "c:\\c\\Users\\Lola\\OneDrive\\Desktop\\progra web"
+      "c:\\c\\Users\\Lola\\OneDrive\\Desktop\\progra web",
+      "c:\\c\\Users\\Lola\\OneDrive\\Desktop\\progra web\\nextjs-app"
     ]
   }
 }

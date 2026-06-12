@@ -4,20 +4,35 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
-const STEPS = [
-  { id: 1, label: 'Contacto' },
-  { id: 2, label: 'Entrega' },
-  { id: 3, label: 'Pago' },
+const PAYMENT_METHODS = [
+  {
+    id: 'mercado-pago',
+    label: 'Mercado Pago',
+    note: 'Te redirigimos al checkout seguro de Mercado Pago para completar el pago.',
+  },
+  {
+    id: 'tarjeta',
+    label: 'Tarjeta de crédito / débito',
+    note: 'Visa, Mastercard, Amex — ingresás los datos en el checkout seguro de Mercado Pago.',
+  },
+  {
+    id: 'transferencia',
+    label: 'Transferencia bancaria',
+    note: 'CBU / Alias al confirmar',
+  },
+  {
+    id: 'efectivo',
+    label: 'Efectivo',
+    note: 'Al momento del retiro o encuentro',
+  },
 ];
 
-function isStepValid(step, values) {
-  if (step === 1) return values.fullName && values.email && values.phone;
-  if (step === 2) {
-    if (values.deliveryMethod === 'domicilio') return values.address && values.city;
-    return true;
-  }
-  if (step === 3) return true;
-  return false;
+const REDIRECT_TO_MP = new Set(['mercado-pago', 'tarjeta']);
+
+function isFormValid(values) {
+  if (!values.fullName || !values.email || !values.phone) return false;
+  if (values.deliveryMethod === 'domicilio') return Boolean(values.address && values.city);
+  return true;
 }
 
 export default function CheckoutForm({ items, currency, rate, formatMoney }) {
@@ -29,14 +44,14 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     fullName:       '',
     email:          '',
     phone:          '',
+    paymentMethod:  'mercado-pago',
     deliveryMethod: 'domicilio',
     address:        '',
     city:           '',
   });
-  const [step,      setStep]      = useState(1);
-  const [touched,   setTouched]   = useState(false);
+  const [touched,    setTouched]    = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [error,     setError]     = useState('');
+  const [error,      setError]      = useState('');
 
   // ── Auto-fill con datos del perfil ───────────────────────────────
   useEffect(() => {
@@ -64,20 +79,9 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     setFormValues((current) => ({ ...current, [name]: value }));
   }
 
-  function handleNext() {
-    if (!isStepValid(step, formValues)) { setTouched(true); return; }
-    setTouched(false);
-    setStep((s) => s + 1);
-  }
-
-  function handleBack() {
-    setTouched(false);
-    setStep((s) => s - 1);
-  }
-
   async function handleSubmit(event) {
     event.preventDefault();
-    if (!isStepValid(3, formValues)) { setTouched(true); return; }
+    if (!isFormValid(formValues)) { setTouched(true); return; }
 
     setSubmitting(true);
     setError('');
@@ -116,21 +120,23 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
       if (order?.id) {
         clearDiscount();
 
-        const paymentRes = await fetch(`/api/orders/${order.id}/payment`, {
-          method: 'POST',
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
+        if (REDIRECT_TO_MP.has(formValues.paymentMethod)) {
+          const paymentRes = await fetch(`/api/orders/${order.id}/payment`, {
+            method: 'POST',
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+          });
 
-        if (paymentRes.ok) {
-          const { init_point, sandbox_init_point } = await paymentRes.json();
-          const redirectUrl = sandbox_init_point || init_point;
-          if (redirectUrl) {
-            window.location.href = redirectUrl;
-            return;
+          if (paymentRes.ok) {
+            const { init_point, sandbox_init_point } = await paymentRes.json();
+            const redirectUrl = sandbox_init_point || init_point;
+            if (redirectUrl) {
+              window.location.href = redirectUrl;
+              return;
+            }
           }
         }
 
-        router.push(`/pedido/${order.id}`);
+        router.push(`/pedido/${order.id}?payment_method=${formValues.paymentMethod}`);
         return;
       }
 
@@ -152,30 +158,18 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
         </div>
       </div>
 
-      {/* Step indicator */}
-      <div className="checkout-steps">
-        {STEPS.map((s, i) => (
-          <div key={s.id} className="checkout-step-item">
-            <div className={`checkout-step-circle ${step === s.id ? 'is-active' : ''} ${step > s.id ? 'is-done' : ''}`}>
-              {step > s.id ? '✓' : s.id}
-            </div>
-            <span className={`checkout-step-label ${step === s.id ? 'is-active' : ''}`}>{s.label}</span>
-            {i < STEPS.length - 1 && <div className={`checkout-step-line ${step > s.id ? 'is-done' : ''}`} />}
-          </div>
-        ))}
-      </div>
-
       <div className="checkout-panel-layout">
-        <form className="checkout-form-react" onSubmit={handleSubmit} noValidate>
+        <form className="checkout-form-react checkout-form-single" onSubmit={handleSubmit} noValidate>
 
-          {/* Paso 1: Contacto */}
-          {step === 1 && (
-            <>
-              <label>
-                <span>Nombre completo *</span>
-                <input name="fullName" value={formValues.fullName} onChange={handleChange} placeholder="Tu nombre" />
-                {touched && !formValues.fullName && <span className="field-error">Completá tu nombre</span>}
-              </label>
+          {/* Datos de contacto */}
+          <div className="checkout-form-section">
+            <h3 className="checkout-section-title">Datos de contacto</h3>
+            <label>
+              <span>Nombre completo *</span>
+              <input name="fullName" value={formValues.fullName} onChange={handleChange} placeholder="Tu nombre" />
+              {touched && !formValues.fullName && <span className="field-error">Completá tu nombre</span>}
+            </label>
+            <div className="checkout-form-row">
               <label>
                 <span>E-mail *</span>
                 <input type="email" name="email" value={formValues.email} onChange={handleChange} placeholder="tu@email.com" />
@@ -186,59 +180,87 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
                 <input name="phone" value={formValues.phone} onChange={handleChange} placeholder="+54 11 0000 0000" />
                 {touched && !formValues.phone && <span className="field-error">Completá tu teléfono</span>}
               </label>
-            </>
-          )}
+            </div>
+          </div>
 
-          {/* Paso 2: Entrega */}
-          {step === 2 && (
-            <>
-              <label>
-                <span>Método de entrega *</span>
-                <select name="deliveryMethod" value={formValues.deliveryMethod} onChange={handleChange}>
-                  <option value="domicilio">Entrega a domicilio</option>
-                  <option value="encuentro">Punto de encuentro</option>
-                  <option value="retiro">Retiro en el local</option>
-                </select>
-              </label>
-              {formValues.deliveryMethod === 'domicilio' && (
-                <>
-                  <label>
-                    <span>Dirección *</span>
-                    <input name="address" value={formValues.address} onChange={handleChange} placeholder="Calle y altura" />
-                    {touched && !formValues.address && <span className="field-error">Completá la dirección</span>}
-                  </label>
-                  <label>
-                    <span>Ciudad *</span>
-                    <input name="city" value={formValues.city} onChange={handleChange} placeholder="Ciudad" />
-                    {touched && !formValues.city && <span className="field-error">Completá la ciudad</span>}
-                  </label>
-                </>
-              )}
-            </>
-          )}
+          <hr className="checkout-divider" />
 
-          {/* Paso 3: Pago */}
-          {step === 3 && (
-            <p className="checkout-payment-note">
-              Vas a pagar <strong>{formatMoney(total, currency, rate)}</strong> con Mercado Pago.
-              Al confirmar te redirigimos al checkout seguro de Mercado Pago.
-            </p>
-          )}
+          {/* Forma de pago */}
+          <div className="checkout-form-section">
+            <h3 className="checkout-section-title">Forma de pago</h3>
+            <div className="checkout-payment-options">
+              {PAYMENT_METHODS.map((method) => {
+                const checked = formValues.paymentMethod === method.id;
+                return (
+                  <div key={method.id} className="checkout-payment-item">
+                    <label className={`checkout-payment-option ${checked ? 'is-checked' : ''}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value={method.id}
+                        checked={checked}
+                        onChange={handleChange}
+                      />
+                      <span className="checkout-payment-option-label">
+                        <strong>{method.label}</strong>
+                      </span>
+                    </label>
+                    {checked && method.id === 'transferencia' && (
+                      <div className="checkout-payment-panel">
+                        <div className="checkout-bank-info">
+                          <p><span>Banco</span><strong>Banco Galicia</strong></p>
+                          <p><span>Titular</span><strong>SANGRIA</strong></p>
+                          <p><span>CBU</span><strong>0070999920000000000000</strong></p>
+                          <p><span>Alias</span><strong>SANGRIA.JOYAS</strong></p>
+                        </div>
+                        <p className="checkout-bank-note">Una vez realizada la transferencia, envianos el comprobante por Instagram o por correo.</p>
+                      </div>
+                    )}
+                    {checked && method.id !== 'transferencia' && (
+                      <div className="checkout-payment-panel">
+                        <p className="checkout-bank-note">{method.note}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <hr className="checkout-divider" />
+
+          {/* Envío */}
+          <div className="checkout-form-section">
+            <h3 className="checkout-section-title">Envío</h3>
+            <label>
+              <span>Método de entrega *</span>
+              <select name="deliveryMethod" value={formValues.deliveryMethod} onChange={handleChange}>
+                <option value="domicilio">Entrega a domicilio</option>
+                <option value="encuentro">Punto de encuentro</option>
+                <option value="retiro">Retiro en el local</option>
+              </select>
+            </label>
+            {formValues.deliveryMethod === 'domicilio' && (
+              <div className="checkout-form-row">
+                <label>
+                  <span>Dirección *</span>
+                  <input name="address" value={formValues.address} onChange={handleChange} placeholder="Calle y altura" />
+                  {touched && !formValues.address && <span className="field-error">Completá la dirección</span>}
+                </label>
+                <label>
+                  <span>Ciudad *</span>
+                  <input name="city" value={formValues.city} onChange={handleChange} placeholder="Ciudad" />
+                  {touched && !formValues.city && <span className="field-error">Completá la ciudad</span>}
+                </label>
+              </div>
+            )}
+          </div>
 
           {error && <p className="field-error" style={{ marginTop: '0.5rem' }}>{error}</p>}
 
-          <div className="checkout-nav">
-            {step > 1 && (
-              <button type="button" className="ghost-button-react" onClick={handleBack}>Volver</button>
-            )}
-            {step < 3 ? (
-              <button type="button" className="primary-button-react" onClick={handleNext}>Siguiente</button>
-            ) : (
-              <button type="submit" className="primary-button-react" disabled={submitting}>
-                {submitting ? 'Procesando…' : 'Pagar con Mercado Pago'}
-              </button>
-            )}
-          </div>
+          <button type="submit" className="primary-button-react checkout-submit-button" disabled={submitting}>
+            {submitting ? 'Procesando…' : 'Finalizar compra'}
+          </button>
 
         </form>
 

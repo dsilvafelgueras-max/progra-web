@@ -26,6 +26,13 @@ const MP_STATUS_MESSAGE = {
   failure:  'El pago no pudo procesarse. Podés intentar de nuevo desde tu cuenta.',
 };
 
+const BANK_INFO = [
+  { label: 'Banco',   value: 'Banco Galicia' },
+  { label: 'Titular', value: 'SANGRIA' },
+  { label: 'CBU',     value: '0070999920000000000000' },
+  { label: 'Alias',   value: 'SANGRIA.JOYAS' },
+];
+
 const DELIVERY_LABEL = {
   domicilio: 'Envío a domicilio',
   encuentro: 'Punto de encuentro',
@@ -36,6 +43,7 @@ export default function PedidoClient({ orderId }) {
   const { currency, usdRate } = useCart();
   const searchParams = useSearchParams();
   const mpStatus = searchParams.get('mp_status');
+  const paymentMethod = searchParams.get('payment_method');
   const [order,   setOrder]   = useState(null);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState('');
@@ -93,6 +101,23 @@ export default function PedidoClient({ orderId }) {
 
       {mpStatus && MP_STATUS_MESSAGE[mpStatus] && (
         <p className={`pedido-mp-status is-${mpStatus}`}>{MP_STATUS_MESSAGE[mpStatus]}</p>
+      )}
+
+      {paymentMethod === 'transferencia' && (
+        <div className="checkout-payment-panel pedido-payment-panel">
+          <div className="checkout-bank-info">
+            {BANK_INFO.map(({ label, value }) => (
+              <p key={label}><span>{label}</span><strong>{value}</strong></p>
+            ))}
+          </div>
+          <p className="checkout-bank-note">Una vez realizada la transferencia, envianos el comprobante por Instagram o por correo para confirmar tu pedido.</p>
+        </div>
+      )}
+
+      {paymentMethod === 'efectivo' && (
+        <div className="checkout-payment-panel pedido-payment-panel">
+          <p className="checkout-bank-note">Vas a pagar en efectivo al momento del retiro o encuentro. Te contactamos para coordinar.</p>
+        </div>
       )}
 
       <div className="pedido-card">

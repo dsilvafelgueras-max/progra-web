@@ -5,6 +5,8 @@ import { products } from '../data/catalog';
 import { formatMoney } from '../lib/currency';
 import { useCart } from '../context/CartContext';
 
+const shopProducts = products.filter((product) => !product.isGiftCard);
+
 export default function HomeProductCarousel() {
   const trackRef = useRef(null);
   const { currency, usdRate, addToCart } = useCart();
@@ -52,7 +54,7 @@ export default function HomeProductCarousel() {
         </button>
 
         <div className="product-carousel" ref={trackRef} onScroll={updateControls}>
-          {products.map((product) => (
+          {shopProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
