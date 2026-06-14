@@ -579,6 +579,86 @@ a {
   font-size: 0.62rem;
 }
 
+.search-overlay-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.search-overlay-layer.is-open {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.search-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(23, 21, 18, 0.48);
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+
+.search-overlay-layer.is-open .search-overlay-backdrop {
+  opacity: 1;
+}
+
+.search-overlay {
+  position: absolute;
+  inset: 0 0 auto 0;
+  background: #f4f0ea;
+  transform: translateY(-100%);
+  transition: transform 0.28s ease;
+}
+
+.search-overlay-layer.is-open .search-overlay {
+  transform: translateY(0);
+}
+
+.search-overlay-form {
+  width: min(100% - 2rem, 1440px);
+  margin: 0 auto;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0 2.4rem;
+}
+
+.search-overlay-form .icon-search {
+  flex-shrink: 0;
+  width: 1.3rem;
+  height: 1.3rem;
+  color: var(--wine);
+}
+
+.search-overlay-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--text);
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  letter-spacing: 0.02em;
+}
+
+.search-overlay-input::placeholder {
+  color: var(--muted);
+}
+
+.search-overlay-close {
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0.5rem;
+}
+
 .side-menu-layer {
   position: fixed;
   inset: 0;

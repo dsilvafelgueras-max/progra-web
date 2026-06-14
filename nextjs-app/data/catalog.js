@@ -104,14 +104,6 @@ export const products = [
 
   // ── Pulseras ──────────────────────────────────────────────────
   {
-    id: "pulsera-onda",
-    name: "Pulsera Onda",
-    category: "Pulseras",
-    priceArs: 138000,
-    image: "/products/pulsera-onda-catalogo.png",
-    description: "Pulsera ancha con capas fluidas y gesto organico en plata.",
-  },
-  {
     id: "pulsera-cadena-toggle",
     name: "Cadena Toggle",
     category: "Pulseras",
@@ -169,15 +161,6 @@ export const products = [
   },
 
   // ── Earcuff ───────────────────────────────────────────────────
-  {
-    id: "earcuff-crudo",
-    name: "Earcuff Crudo",
-    category: "Earcuff",
-    priceArs: 68000,
-    image: "/products/earcuff-crudo.png",
-    imageSizeClass: "image-scale-lg",
-    description: "Earcuff de plata con forma organica y textura irregular.",
-  },
   {
     id: "earcuff-gema-azul",
     name: "Gema Azul",
@@ -286,17 +269,6 @@ export const products = [
   },
   {
     id: "anillo-magma",
-    name: "Magma",
-    category: "Anillos",
-    priceArs: 95000,
-    image: "/products/anillo-pina.jpg",
-    imageClass: "is-square-crop",
-    imageSizeClass: "image-scale-xl",
-    description: "Anillo ancho de plata con relieve organico y ondas suaves.",
-  },
-  // alias por si llega del HTML viejo
-  {
-    id: "anillo-pina",
     name: "Magma",
     category: "Anillos",
     priceArs: 95000,

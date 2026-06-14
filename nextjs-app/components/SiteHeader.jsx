@@ -1,7 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -14,11 +14,41 @@ export default function SiteHeader() {
   const { currency, setCurrency, cartCount, setCartOpen } = useCart();
   const { user } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === '/';
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    if (searchOpen) searchInputRef.current?.focus();
+  }, [searchOpen]);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') closeSearch();
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [searchOpen]);
 
   function closeMenu() {
     setMenuOpen(false);
+  }
+
+  function closeSearch() {
+    setSearchOpen(false);
+    setSearchValue('');
+  }
+
+  function handleSearchSubmit(event) {
+    event.preventDefault();
+    const query = searchValue.trim();
+    if (!query) return;
+    router.push(`/buscar?q=${encodeURIComponent(query)}`);
+    closeSearch();
   }
 
   return (
@@ -41,7 +71,13 @@ export default function SiteHeader() {
         </Link>
 
         <div className="header-tools" aria-label="Accesos rapidos">
-          <button type="button" className="header-icon-button" aria-label="Buscar">
+          <button
+            type="button"
+            className="header-icon-button"
+            aria-label="Buscar"
+            aria-expanded={searchOpen}
+            onClick={() => setSearchOpen(true)}
+          >
             <span className="icon-search" />
           </button>
 
@@ -66,6 +102,27 @@ export default function SiteHeader() {
           </button>
         </div>
       </header>
+
+      <div className={`search-overlay-layer${searchOpen ? ' is-open' : ''}`} aria-hidden={!searchOpen}>
+        <button type="button" className="search-overlay-backdrop" aria-label="Cerrar buscador" onClick={closeSearch} />
+
+        <div className="search-overlay" role="search">
+          <form className="search-overlay-form" onSubmit={handleSearchSubmit}>
+            <span className="icon-search" />
+            <input
+              ref={searchInputRef}
+              type="search"
+              className="search-overlay-input"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Buscar productos..."
+            />
+            <button type="button" className="search-overlay-close" aria-label="Cerrar buscador" onClick={closeSearch}>
+              x
+            </button>
+          </form>
+        </div>
+      </div>
 
       <div className={`side-menu-layer${menuOpen ? ' is-open' : ''}`} aria-hidden={!menuOpen}>
         <button type="button" className="side-menu-backdrop" aria-label="Cerrar menu" onClick={closeMenu} />
