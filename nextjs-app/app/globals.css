@@ -1098,7 +1098,7 @@ a {
   width: 124%;
   height: 124%;
   object-fit: contain;
-  filter: blur(6px);
+  filter: blur(1.2px);
   opacity: 0.48;
   transform: scale(1.08);
   mix-blend-mode: multiply;
