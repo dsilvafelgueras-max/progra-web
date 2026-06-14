@@ -8,7 +8,7 @@ export default function TarjetaRegaloPage() {
   );
 
   return (
-    <StaticPageShell eyebrow="Gift cards" title="Tarjetas regalo">
+    <StaticPageShell eyebrow="" title="Tarjetas de Regalo">
       <div className="static-copy-react">
         <p>
           Elegi una gift card digital de SANGRIA para regalar una pieza sin tener que elegir el

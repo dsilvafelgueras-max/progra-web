@@ -139,6 +139,22 @@ export function CartProvider({ children }) {
     }
   }
 
+  // ── Vaciar carrito (al finalizar una compra) ────────────────────────────────
+  async function clearCart() {
+    setCart([]);
+    saveLocalCart([]);
+
+    const token = localStorage.getItem('sangria-token');
+    if (user && token) {
+      try {
+        await fetch('/api/cart', {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch { /* optimistic update ya aplicado */ }
+    }
+  }
+
   // ── Quitar del carrito ─────────────────────────────────────────────────────
   async function removeFromCart(productId) {
     const existing = cart.find((item) => item.id === productId);
@@ -195,6 +211,7 @@ export function CartProvider({ children }) {
         clearDiscount,
         addToCart,
         removeFromCart,
+        clearCart,
       }}
     >
       {children}

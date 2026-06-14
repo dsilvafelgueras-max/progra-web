@@ -37,7 +37,7 @@ function isFormValid(values) {
 
 export default function CheckoutForm({ items, currency, rate, formatMoney }) {
   const { user, profile, addOrder } = useAuth();
-  const { discount, clearDiscount } = useCart();
+  const { discount, clearDiscount, clearCart } = useCart();
   const router = useRouter();
 
   const [formValues, setFormValues] = useState({
@@ -119,6 +119,7 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
 
       if (order?.id) {
         clearDiscount();
+        clearCart();
 
         if (REDIRECT_TO_MP.has(formValues.paymentMethod)) {
           const paymentRes = await fetch(`/api/orders/${order.id}/payment`, {

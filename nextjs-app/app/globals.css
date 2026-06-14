@@ -51,6 +51,10 @@ h6 {
   font-weight: 300;
 }
 
+h3 {
+  color: var(--wine);
+}
+
 p {
   line-height: 1.6;
 }
@@ -1082,7 +1086,7 @@ a {
 
 .gift-card-visual-react {
   position: relative;
-  min-height: 260px;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   border: 1px solid rgba(43, 36, 32, 0.12);
   background: #e9e4dc;
@@ -1094,7 +1098,7 @@ a {
   width: 124%;
   height: 124%;
   object-fit: contain;
-  filter: blur(12px);
+  filter: blur(6px);
   opacity: 0.48;
   transform: scale(1.08);
   mix-blend-mode: multiply;
@@ -1136,21 +1140,6 @@ a {
   color: var(--text);
 }
 
-.gift-card-product button {
-  width: 100%;
-  margin-top: 1rem;
-  border: 1px solid rgba(43, 36, 32, 0.28);
-  background: transparent;
-  color: rgba(43, 36, 32, 0.68);
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-}
-
-.gift-card-product button:hover {
-  background: rgba(43, 36, 32, 0.06);
-  color: var(--text);
-}
-
 .primary-button-react {
   border: none;
   padding: 0.95rem 1.15rem;
@@ -1167,8 +1156,8 @@ a {
   color: #f5ede6;
 }
 
-/* Botón "Agregar" en card de producto (no gift card) */
-.product-card-react:not(.gift-card-product) button {
+/* Botón "Agregar" en card de producto (incluye gift cards) */
+.product-card-react button {
   background: transparent;
   color: var(--text);
   border: 1px solid rgba(43, 36, 32, 0.3);
@@ -1182,21 +1171,15 @@ a {
   transition: opacity 0.2s, transform 0.2s, background 0.15s, color 0.15s;
 }
 
-.product-card-react:not(.gift-card-product):hover button {
+.product-card-react:hover button {
   opacity: 1;
   transform: translateY(0);
 }
 
-.product-card-react:not(.gift-card-product) button:hover {
+.product-card-react button:hover {
   background: #2b2420;
   color: #f5ede6;
   border-color: #2b2420;
-}
-
-.product-card-react.gift-card-product button {
-  border: 1px solid rgba(43, 36, 32, 0.28);
-  background: transparent;
-  color: rgba(43, 36, 32, 0.68);
 }
 
 .btn-link {
@@ -1420,6 +1403,13 @@ a {
 .static-copy-react p,
 .static-copy-react ul {
   margin: 0;
+}
+
+.static-copy-react .historia-cierre {
+  margin-top: 0.5rem;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--text);
 }
 
 .static-form-react {
