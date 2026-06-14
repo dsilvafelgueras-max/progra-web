@@ -25,6 +25,11 @@ function isValidSignature(request, dataId) {
   return expected === v1;
 }
 
+// GET /api/payments/webhook — chequeo de conectividad usado por el panel de Mercado Pago
+export async function GET() {
+  return Response.json({ ok: true });
+}
+
 // POST /api/payments/webhook — notificaciones de Mercado Pago
 export async function POST(request) {
   const url = new URL(request.url);
