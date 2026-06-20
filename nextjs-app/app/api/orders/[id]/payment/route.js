@@ -41,19 +41,28 @@ export async function POST(request, ctx) {
     currency_id: 'ARS',
   }));
 
-  const preference = await new Preference(getMpClient()).create({
-    body: {
-      items,
-      external_reference: order.id,
-      back_urls: {
-        success: `${siteUrl}/pedido/${order.id}?mp_status=approved`,
-        pending: `${siteUrl}/pedido/${order.id}?mp_status=pending`,
-        failure: `${siteUrl}/pedido/${order.id}?mp_status=failure`,
+  let preference;
+  try {
+    preference = await new Preference(getMpClient()).create({
+      body: {
+        items,
+        external_reference: order.id,
+        back_urls: {
+          success: `${siteUrl}/pedido/${order.id}?mp_status=approved`,
+          pending: `${siteUrl}/pedido/${order.id}?mp_status=pending`,
+          failure: `${siteUrl}/pedido/${order.id}?mp_status=failure`,
+        },
+        auto_return: 'approved',
+        notification_url: `${siteUrl}/api/payments/webhook`,
       },
-      auto_return: 'approved',
-      notification_url: `${siteUrl}/api/payments/webhook`,
-    },
-  });
+    });
+  } catch (err) {
+    console.error('[MP] Error creando preferencia:', err?.message ?? err);
+    return Response.json(
+      { error: 'No se pudo crear la preferencia de pago', detail: err?.message },
+      { status: 500 }
+    );
+  }
 
   await supabase
     .from('orders')
