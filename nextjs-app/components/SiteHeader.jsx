@@ -86,7 +86,7 @@ export default function SiteHeader() {
               <span className="header-user-initials">{getInitials(user.name)}</span>
             </Link>
           ) : (
-            <Link href="/login" className="header-icon-button" aria-label="Ingresar">
+            <Link href="/login" className="header-icon-button header-icon-button--guest" aria-label="Ingresar">
               <span className="icon-user" />
             </Link>
           )}

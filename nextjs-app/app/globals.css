@@ -469,9 +469,6 @@ a {
   justify-content: flex-end;
   align-items: center;
   gap: 1.35rem;
-  border: 1.4px solid currentColor;
-  border-radius: 2px;
-  padding: 0.45rem 0.85rem;
 }
 
 .header-icon-button {
@@ -560,6 +557,14 @@ a {
   top: -0.34rem;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.header-icon-button--guest {
+  border: 1.4px solid currentColor;
+  border-radius: 2px;
+  padding: 0.25rem;
+  width: 1.7rem;
+  height: 1.7rem;
 }
 
 .header-user-initials {
