@@ -12,7 +12,7 @@ export default function ProductCard({ product, price, onAdd }) {
       {!isGiftCard && (
         <button
           type="button"
-          className="product-fav-btn"
+          className={`product-fav-btn${saved ? ' is-saved' : ''}`}
           aria-label={saved ? 'Quitar de favoritos' : 'Guardar en favoritos'}
           onClick={() => toggle(product.id)}
         >

@@ -1129,19 +1129,36 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transform: none;
+  transition: opacity 0.2s;
+}
+
+/* Siempre visible cuando está guardado */
+.product-card-react .product-fav-btn.is-saved {
+  opacity: 1;
+}
+
+/* Aparece al hacer hover en la card */
+.product-card-react:hover .product-fav-btn {
   opacity: 1;
   transform: none;
-  transition: none;
+}
+
+/* Sin fondo cuadrado al hacer hover en el botón */
+.product-card-react .product-fav-btn:hover {
+  background: transparent;
+  border: none;
 }
 
 .product-card-react .product-fav-btn svg {
   display: block;
-  transition: fill 0.15s;
+  transition: fill 0.15s, transform 0.15s;
 }
 
-.product-card-react:hover .product-fav-btn {
-  opacity: 1;
-  transform: none;
+/* Leve escala al pasar el mouse sobre el corazón */
+.product-card-react .product-fav-btn:hover svg {
+  transform: scale(1.15);
 }
 
 /* ── Filter bar ── */
