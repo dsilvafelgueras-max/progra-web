@@ -2062,6 +2062,9 @@ a {
   display: flex;
   flex-direction: column;
   gap: 2.25rem;
+  border: 1.4px solid var(--wine);
+  border-radius: 4px;
+  padding: 2rem 2.5rem;
   margin-bottom: 0;
 }
 
