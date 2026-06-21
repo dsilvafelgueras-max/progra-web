@@ -2096,6 +2096,93 @@ a {
   padding-top: 0.25rem;
 }
 
+/* ── Favoritos en cuenta ── */
+
+.cuenta-favorites {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cuenta-fav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid #e0dbd4;
+  padding-bottom: 1rem;
+}
+
+.cuenta-fav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cuenta-fav-img {
+  width: 4.5rem;
+  height: 4.5rem;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cuenta-fav-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cuenta-fav-category {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+
+.cuenta-fav-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.cuenta-fav-price {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.cuenta-fav-remove {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.4rem;
+  flex-shrink: 0;
+}
+
+.cuenta-fav-remove svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  fill: #1A0A10;
+  stroke: #1A0A10;
+  stroke-width: 1;
+}
+
+.cuenta-tab-fav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.cuenta-tab-heart {
+  width: 0.85rem;
+  height: 0.85rem;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1;
+}
+
 .cuenta-empty {
   color: var(--text-secondary);
   font-weight: 300;
