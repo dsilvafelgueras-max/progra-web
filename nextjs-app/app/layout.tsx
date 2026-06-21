@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
+import { FavoritesProvider } from "../context/FavoritesContext";
 import SiteHeader from "../components/SiteHeader";
 import CartOverlays from "../components/CartOverlays";
 import PopupDescuento from "../components/PopupDescuento";
@@ -40,6 +41,7 @@ export default function RootLayout({
     <html lang="es" className={`${cormorant.variable} ${montserrat.variable}`}>
       <body>
         <AuthProvider>
+          <FavoritesProvider>
           <CartProvider>
             <SiteHeader />
             {children}
@@ -48,6 +50,7 @@ export default function RootLayout({
             <CartOverlays />
             <PopupDescuento />
           </CartProvider>
+          </FavoritesProvider>
         </AuthProvider>
       </body>
     </html>
