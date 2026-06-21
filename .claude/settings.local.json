@@ -14,7 +14,9 @@
       "Read(//c/c/Users/Lola/OneDrive/Desktop/progra web/nextjs-app/**)",
       "Read(//c/c/Users/Lola/OneDrive/Desktop/progra web/**)",
       "Bash(cd \"/c/Users/Lola/OneDrive/Desktop/progra web\" && cp \"nextjs-app/middleware.ts\" \"middleware.ts\" && echo done)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(curl -s -X POST \"http://localhost:3100/api/orders/28a5adda-0f55-4919-a4df-495a9861383e/payment\" -H \"Content-Type: application/json\")",
+      "Bash(curl -s \"http://localhost:3100/api/orders/28a5adda-0f55-4919-a4df-495a9861383e\")"
     ],
     "additionalDirectories": [
       "c:\\c\\Users\\Lola\\OneDrive\\Desktop\\progra web",

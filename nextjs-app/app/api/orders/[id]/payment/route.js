@@ -41,6 +41,8 @@ export async function POST(request, ctx) {
     currency_id: 'ARS',
   }));
 
+  const isLocalhost = siteUrl?.includes('localhost') || siteUrl?.includes('127.0.0.1');
+
   let preference;
   try {
     preference = await new Preference(getMpClient()).create({
@@ -52,8 +54,9 @@ export async function POST(request, ctx) {
           pending: `${siteUrl}/pedido/${order.id}?mp_status=pending`,
           failure: `${siteUrl}/pedido/${order.id}?mp_status=failure`,
         },
-        auto_return: 'approved',
-        notification_url: `${siteUrl}/api/payments/webhook`,
+        // auto_return requiere back_urls con dominio público (no funciona con localhost)
+        ...(isLocalhost ? {} : { auto_return: 'approved' }),
+        ...(!isLocalhost && { notification_url: `${siteUrl}/api/payments/webhook` }),
       },
     });
   } catch (err) {
@@ -63,6 +66,9 @@ export async function POST(request, ctx) {
       { status: 500 }
     );
   }
+
+  console.log('[MP] init_point:', preference.init_point);
+  console.log('[MP] sandbox_init_point:', preference.sandbox_init_point);
 
   await supabase
     .from('orders')
