@@ -1132,17 +1132,18 @@ a {
 }
 
 .product-fav-btn svg {
-  width: 1.3rem;
-  height: 1.3rem;
-  fill: transparent;
+  width: 1.4rem;
+  height: 1.4rem;
+  fill: none;
   stroke: #1A0A10;
-  stroke-width: 1.5;
-  transition: fill 0.15s, stroke 0.15s;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: fill 0.15s;
 }
 
 .product-fav-btn.is-saved svg {
   fill: #1A0A10;
-  stroke: #1A0A10;
 }
 
 /* ── Filter bar ── */
@@ -2166,7 +2167,9 @@ a {
   height: 1.2rem;
   fill: #1A0A10;
   stroke: #1A0A10;
-  stroke-width: 1;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .cuenta-tab-fav {
@@ -2178,9 +2181,15 @@ a {
 .cuenta-tab-heart {
   width: 0.85rem;
   height: 0.85rem;
-  fill: currentColor;
+  fill: none;
   stroke: currentColor;
-  stroke-width: 1;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.is-active .cuenta-tab-heart {
+  fill: currentColor;
 }
 
 .cuenta-empty {
