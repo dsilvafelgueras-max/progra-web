@@ -16,13 +16,12 @@ export default function ProductCard({ product, price, onAdd }) {
           aria-label={saved ? 'Quitar de favoritos' : 'Guardar en favoritos'}
           onClick={() => toggle(product.id)}
         >
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="22" height="22">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="20" height="20">
             <path
-              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              d="M12 20C6 16 2 13 2 8.5C2 5.4 4.4 3 7.5 3C9.3 3 10.9 3.8 12 5.1C13.1 3.8 14.7 3 16.5 3C19.6 3 22 5.4 22 8.5C22 13 18 16 12 20Z"
               fill={saved ? '#1A0A10' : 'none'}
               stroke="#1A0A10"
-              strokeWidth="2"
-              strokeLinecap="round"
+              strokeWidth="1.8"
               strokeLinejoin="round"
             />
           </svg>

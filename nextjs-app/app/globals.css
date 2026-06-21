@@ -1115,7 +1115,7 @@ a {
 
 /* ── Botón favorito en product card ── */
 
-.product-fav-btn {
+.product-card-react .product-fav-btn {
   position: absolute;
   top: 0.6rem;
   right: 0.6rem;
@@ -1129,11 +1129,19 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
-.product-fav-btn svg {
+.product-card-react .product-fav-btn svg {
   display: block;
   transition: fill 0.15s;
+}
+
+.product-card-react:hover .product-fav-btn {
+  opacity: 1;
+  transform: none;
 }
 
 /* ── Filter bar ── */
