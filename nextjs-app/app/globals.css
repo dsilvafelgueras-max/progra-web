@@ -1081,6 +1081,38 @@ a {
   margin: 0.35rem 0 0;
 }
 
+/* ── Filtros página Productos ── */
+
+.productos-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.productos-filter-btn {
+  padding: 0.35rem 1rem;
+  border: 1.4px solid var(--wine);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--wine);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.productos-filter-btn:hover {
+  background: var(--wine);
+  color: #fff;
+}
+
+.productos-filter-btn.is-active {
+  background: var(--wine);
+  color: #fff;
+}
+
 /* ── Filter bar ── */
 
 .filter-bar {

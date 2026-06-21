@@ -138,7 +138,7 @@ export default function SiteHeader() {
           </div>
 
           <nav className="side-menu-nav">
-            <Link href="/anillos" onClick={closeMenu}>Productos</Link>
+            <Link href="/productos" onClick={closeMenu}>Productos</Link>
             <Link href="/guia-talles" onClick={closeMenu}>Guia De Talles</Link>
             <Link href="/tarjeta-regalo" onClick={closeMenu}>Tarjeta Regalo</Link>
             <Link href="/nuestra-historia" onClick={closeMenu}>Conocenos</Link>
