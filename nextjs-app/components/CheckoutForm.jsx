@@ -79,6 +79,11 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    if (items.length === 0) {
+      setError('Tu carrito está vacío. Agregá al menos un producto para finalizar la compra.');
+      return;
+    }
+
     const validationErrors = validateCheckout(formValues);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -261,8 +266,17 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
           </div>
 
           {error && <p className="field-error" style={{ marginTop: '0.5rem' }}>{error}</p>}
+          {items.length === 0 && (
+            <p className="field-error" style={{ marginTop: '0.5rem' }}>
+              Tu carrito está vacío. Agregá un producto para poder finalizar la compra.
+            </p>
+          )}
 
-          <button type="submit" className="primary-button-react checkout-submit-button" disabled={submitting}>
+          <button
+            type="submit"
+            className="primary-button-react checkout-submit-button"
+            disabled={submitting || items.length === 0}
+          >
             {submitting ? 'Procesando…' : 'Finalizar compra'}
           </button>
 
