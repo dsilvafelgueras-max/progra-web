@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { isValidEmail } from '../lib/validation';
 
 export default function NewsletterSection() {
   const [email,   setEmail]   = useState('');
@@ -8,6 +9,13 @@ export default function NewsletterSection() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if (!isValidEmail(email)) {
+      setStatus('error');
+      setMessage('Ingresá un e-mail válido (ej: nombre@correo.com).');
+      return;
+    }
+
     setStatus('loading');
     setMessage('');
 

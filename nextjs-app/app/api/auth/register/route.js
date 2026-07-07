@@ -1,4 +1,5 @@
 import { createServerClient } from '../../../../lib/supabase-server';
+import { isValidEmail } from '../../../../lib/validation';
 
 // POST /api/auth/register
 // Body: { email, password, name }
@@ -14,6 +15,13 @@ export async function POST(request) {
     );
   }
 
+  if (!isValidEmail(email)) {
+    return Response.json(
+      { error: 'Ingresá un email válido.' },
+      { status: 400 }
+    );
+  }
+
   if (password.length < 6) {
     return Response.json(
       { error: 'La contraseña debe tener al menos 6 caracteres.' },
@@ -23,12 +31,22 @@ export async function POST(request) {
 
   // Usar admin.createUser con email_confirm: true para omitir
   // la confirmación por mail — el usuario puede loguearse de inmediato.
-  const { data: created, error: createError } = await supabase.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,      // ← omite confirmación de email
-    user_metadata: { name },
-  });
+  let created, createError;
+  try {
+    ({ data: created, error: createError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,      // ← omite confirmación de email
+      user_metadata: { name },
+    }));
+  } catch (err) {
+    // Ej: base de datos pausada/caída → fetch failed. No es culpa del email.
+    console.error('[register] error de conexión:', err?.message ?? err);
+    return Response.json(
+      { error: 'El servicio no está disponible en este momento. Probá de nuevo en unos minutos.' },
+      { status: 503 }
+    );
+  }
 
   if (createError) {
     // Mensaje legible para errores comunes

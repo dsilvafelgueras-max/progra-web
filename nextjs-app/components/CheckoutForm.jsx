@@ -3,6 +3,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { validateCheckout } from '../lib/validation';
 
 const PAYMENT_METHODS = [
   {
@@ -29,12 +30,6 @@ const PAYMENT_METHODS = [
 
 const REDIRECT_TO_MP = new Set(['mercado-pago', 'tarjeta']);
 
-function isFormValid(values) {
-  if (!values.fullName || !values.email || !values.phone) return false;
-  if (values.deliveryMethod === 'domicilio') return Boolean(values.address && values.city);
-  return true;
-}
-
 export default function CheckoutForm({ items, currency, rate, formatMoney }) {
   const { user, profile, addOrder } = useAuth();
   const { discount, clearDiscount, clearCart } = useCart();
@@ -49,7 +44,7 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     address:        '',
     city:           '',
   });
-  const [touched,    setTouched]    = useState(false);
+  const [errors,     setErrors]     = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [error,      setError]      = useState('');
 
@@ -77,11 +72,19 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
   function handleChange(event) {
     const { name, value } = event.target;
     setFormValues((current) => ({ ...current, [name]: value }));
+    // Al corregir un campo, limpiar su error para feedback inmediato.
+    setErrors((current) => (current[name] ? { ...current, [name]: undefined } : current));
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
-    if (!isFormValid(formValues)) { setTouched(true); return; }
+
+    const validationErrors = validateCheckout(formValues);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    setErrors({});
 
     setSubmitting(true);
     setError('');
@@ -167,19 +170,19 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
             <h3 className="checkout-section-title">Datos de contacto</h3>
             <label>
               <span>Nombre completo *</span>
-              <input name="fullName" value={formValues.fullName} onChange={handleChange} placeholder="Tu nombre" />
-              {touched && !formValues.fullName && <span className="field-error">Completá tu nombre</span>}
+              <input name="fullName" value={formValues.fullName} onChange={handleChange} placeholder="Tu nombre" aria-invalid={Boolean(errors.fullName)} />
+              {errors.fullName && <span className="field-error">{errors.fullName}</span>}
             </label>
             <div className="checkout-form-row">
               <label>
                 <span>E-mail *</span>
-                <input type="email" name="email" value={formValues.email} onChange={handleChange} placeholder="tu@email.com" />
-                {touched && !formValues.email && <span className="field-error">Completá tu e-mail</span>}
+                <input type="email" name="email" value={formValues.email} onChange={handleChange} placeholder="tu@email.com" aria-invalid={Boolean(errors.email)} />
+                {errors.email && <span className="field-error">{errors.email}</span>}
               </label>
               <label>
                 <span>Teléfono *</span>
-                <input name="phone" value={formValues.phone} onChange={handleChange} placeholder="+54 11 0000 0000" />
-                {touched && !formValues.phone && <span className="field-error">Completá tu teléfono</span>}
+                <input name="phone" value={formValues.phone} onChange={handleChange} placeholder="+54 11 0000 0000" aria-invalid={Boolean(errors.phone)} />
+                {errors.phone && <span className="field-error">{errors.phone}</span>}
               </label>
             </div>
           </div>
@@ -245,13 +248,13 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
               <div className="checkout-form-row">
                 <label>
                   <span>Dirección *</span>
-                  <input name="address" value={formValues.address} onChange={handleChange} placeholder="Calle y altura" />
-                  {touched && !formValues.address && <span className="field-error">Completá la dirección</span>}
+                  <input name="address" value={formValues.address} onChange={handleChange} placeholder="Calle y altura" aria-invalid={Boolean(errors.address)} />
+                  {errors.address && <span className="field-error">{errors.address}</span>}
                 </label>
                 <label>
                   <span>Ciudad *</span>
-                  <input name="city" value={formValues.city} onChange={handleChange} placeholder="Ciudad" />
-                  {touched && !formValues.city && <span className="field-error">Completá la ciudad</span>}
+                  <input name="city" value={formValues.city} onChange={handleChange} placeholder="Ciudad" aria-invalid={Boolean(errors.city)} />
+                  {errors.city && <span className="field-error">{errors.city}</span>}
                 </label>
               </div>
             )}
