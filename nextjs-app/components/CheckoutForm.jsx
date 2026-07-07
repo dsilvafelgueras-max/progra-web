@@ -94,6 +94,30 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
     setSubmitting(true);
     setError('');
 
+    // Validar que la dirección exista de verdad (solo para entrega a domicilio).
+    if (formValues.deliveryMethod === 'domicilio') {
+      try {
+        const res = await fetch('/api/validate-address', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address: formValues.address, city: formValues.city }),
+        });
+        const data = await res.json();
+        if (!data.valid) {
+          setErrors((prev) => ({
+            ...prev,
+            address: data.error ?? 'No encontramos esa dirección. Revisá la calle, altura y ciudad.',
+          }));
+          setSubmitting(false);
+          return;
+        }
+      } catch {
+        setError('No pudimos verificar la dirección. Revisá tu conexión e intentá de nuevo.');
+        setSubmitting(false);
+        return;
+      }
+    }
+
     const orderPayload = {
       items: items.map((item) => ({
         id:       item.id,
