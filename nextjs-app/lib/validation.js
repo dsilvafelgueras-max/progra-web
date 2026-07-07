@@ -3,8 +3,16 @@
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Nombre: solo letras (incluye acentos y ñ), espacios, apóstrofes y guiones.
+// Rechaza números y símbolos. Requiere al menos 2 letras.
+const NAME_RE = /^[\p{L}][\p{L}\s'’-]*[\p{L}]$/u;
+
 export function isValidEmail(value) {
   return typeof value === 'string' && EMAIL_RE.test(value.trim());
+}
+
+export function isValidName(value) {
+  return typeof value === 'string' && NAME_RE.test(value.trim());
 }
 
 // Devuelve un objeto { campo: 'mensaje' } con los errores encontrados.
@@ -14,6 +22,8 @@ export function validateCheckout(values) {
 
   if (!values.fullName?.trim()) {
     errors.fullName = 'Completá tu nombre.';
+  } else if (!isValidName(values.fullName)) {
+    errors.fullName = 'El nombre solo puede tener letras (sin números ni símbolos).';
   }
   if (!values.email?.trim()) {
     errors.email = 'Completá tu e-mail.';

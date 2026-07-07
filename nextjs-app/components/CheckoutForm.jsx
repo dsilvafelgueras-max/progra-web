@@ -79,6 +79,11 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    if (items.length === 0) {
+      setError('Tu carrito está vacío. Agregá al menos un producto para finalizar la compra.');
+      return;
+    }
+
     const validationErrors = validateCheckout(formValues);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -88,6 +93,30 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
 
     setSubmitting(true);
     setError('');
+
+    // Validar que la dirección exista de verdad (solo para entrega a domicilio).
+    if (formValues.deliveryMethod === 'domicilio') {
+      try {
+        const res = await fetch('/api/validate-address', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address: formValues.address, city: formValues.city }),
+        });
+        const data = await res.json();
+        if (!data.valid) {
+          setErrors((prev) => ({
+            ...prev,
+            address: data.error ?? 'No encontramos esa dirección. Revisá la calle, altura y ciudad.',
+          }));
+          setSubmitting(false);
+          return;
+        }
+      } catch {
+        setError('No pudimos verificar la dirección. Revisá tu conexión e intentá de nuevo.');
+        setSubmitting(false);
+        return;
+      }
+    }
 
     const orderPayload = {
       items: items.map((item) => ({
@@ -261,8 +290,17 @@ export default function CheckoutForm({ items, currency, rate, formatMoney }) {
           </div>
 
           {error && <p className="field-error" style={{ marginTop: '0.5rem' }}>{error}</p>}
+          {items.length === 0 && (
+            <p className="field-error" style={{ marginTop: '0.5rem' }}>
+              Tu carrito está vacío. Agregá un producto para poder finalizar la compra.
+            </p>
+          )}
 
-          <button type="submit" className="primary-button-react checkout-submit-button" disabled={submitting}>
+          <button
+            type="submit"
+            className="primary-button-react checkout-submit-button"
+            disabled={submitting || items.length === 0}
+          >
             {submitting ? 'Procesando…' : 'Finalizar compra'}
           </button>
 

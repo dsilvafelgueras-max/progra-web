@@ -1,5 +1,5 @@
 import { createServerClient } from '../../../../lib/supabase-server';
-import { isValidEmail } from '../../../../lib/validation';
+import { isValidEmail, isValidName } from '../../../../lib/validation';
 
 // POST /api/auth/register
 // Body: { email, password, name }
@@ -18,6 +18,13 @@ export async function POST(request) {
   if (!isValidEmail(email)) {
     return Response.json(
       { error: 'Ingresá un email válido.' },
+      { status: 400 }
+    );
+  }
+
+  if (!isValidName(name)) {
+    return Response.json(
+      { error: 'El nombre solo puede tener letras (sin números ni símbolos).' },
       { status: 400 }
     );
   }
