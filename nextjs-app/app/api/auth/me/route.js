@@ -12,16 +12,17 @@ export async function GET(request) {
   // Traer perfil extendido
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, email, phone, address, city')
+    .select('full_name, email, phone, address, city, is_admin')
     .eq('id', user.id)
     .single();
 
   return Response.json({
-    id:      user.id,
-    email:   user.email,
-    name:    profile?.full_name ?? user.user_metadata?.name ?? null,
-    phone:   profile?.phone    ?? null,
-    address: profile?.address  ?? null,
-    city:    profile?.city     ?? null,
+    id:       user.id,
+    email:    user.email,
+    name:     profile?.full_name ?? user.user_metadata?.name ?? null,
+    phone:    profile?.phone    ?? null,
+    address:  profile?.address  ?? null,
+    city:     profile?.city     ?? null,
+    is_admin: profile?.is_admin ?? false,
   });
 }

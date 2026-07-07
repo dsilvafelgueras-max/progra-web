@@ -90,6 +90,7 @@ export function AuthProvider({ children }) {
             phone:    userData.phone,
             address:  userData.address,
             city:     userData.city,
+            is_admin: userData.is_admin ?? false,
           });
           setSessionCookie();   // asegurar que la cookie esté presente
           await fetchOrders(token);
@@ -164,14 +165,28 @@ export function AuthProvider({ children }) {
     //    recargue el carrito al detectar el cambio de user)
     await mergeGuestCart(token);
 
-    // 3. Actualizar estado
+    // 3. Actualizar estado — traer perfil completo (incluye is_admin)
     setUser(data.user);
-    setProfile({
-      fullName: data.user?.user_metadata?.name ?? null,
-      phone:    null,
-      address:  null,
-      city:     null,
-    });
+    try {
+      const meRes = await fetch('/api/auth/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (meRes.ok) {
+        const me = await meRes.json();
+        setUser(me);
+        setProfile({
+          fullName: me.name,
+          phone:    me.phone,
+          address:  me.address,
+          city:     me.city,
+          is_admin: me.is_admin ?? false,
+        });
+      } else {
+        setProfile({ fullName: data.user?.user_metadata?.name ?? null, phone: null, address: null, city: null, is_admin: false });
+      }
+    } catch {
+      setProfile({ fullName: data.user?.user_metadata?.name ?? null, phone: null, address: null, city: null, is_admin: false });
+    }
     await fetchOrders(token);
     return data;
   }

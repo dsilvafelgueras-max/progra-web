@@ -12,7 +12,7 @@ function getInitials(name) {
 
 export default function SiteHeader() {
   const { currency, setCurrency, cartCount, setCartOpen } = useCart();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === '/';
@@ -142,6 +142,9 @@ export default function SiteHeader() {
             <Link href="/guia-talles" onClick={closeMenu}>Guia De Talles</Link>
             <Link href="/tarjeta-regalo" onClick={closeMenu}>Tarjeta Regalo</Link>
             <Link href="/nuestra-historia" onClick={closeMenu}>Conocenos</Link>
+            {profile?.is_admin && (
+              <Link href="/admin/ordenes" onClick={closeMenu}>Admin — Órdenes</Link>
+            )}
           </nav>
 
           <div className="side-menu-bottom">

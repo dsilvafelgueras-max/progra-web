@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
+import { isValidEmail } from '../lib/validation';
 
 export default function LoginForm() {
   const { login, register } = useAuth();
@@ -22,6 +23,20 @@ export default function LoginForm() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+
+    if (!isValidEmail(values.email)) {
+      setError('Ingresá un e-mail válido (ej: nombre@correo.com).');
+      return;
+    }
+    if (mode === 'register' && !values.name.trim()) {
+      setError('Completá tu nombre.');
+      return;
+    }
+    if (values.password.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+
     setLoading(true);
 
     try {
