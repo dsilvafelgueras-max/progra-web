@@ -1,9 +1,11 @@
 // Validaciones compartidas entre cliente (formularios) y servidor (API routes).
 // Un único lugar para la regla de email evita que cliente y servidor difieran.
 
-// Antes del @: solo letras minúsculas y números (sin mayúsculas, puntos,
-// guiones ni símbolos). Después del @: solo dominios de proveedores conocidos.
-const EMAIL_LOCAL_RE = /^[a-z0-9]+$/;
+// Antes del @: letras minúsculas y números, con puntos como separadores entre
+// bloques (nombre.apellido, juan.perez.2026, 12345.juan). El punto no puede ir
+// al principio, al final ni repetido. Nada de mayúsculas ni otros símbolos.
+// Después del @: solo dominios de proveedores conocidos.
+const EMAIL_LOCAL_RE = /^[a-z0-9]+(\.[a-z0-9]+)*$/;
 const EMAIL_DOMAINS = [
   'gmail.com',
   'hotmail.com',
@@ -67,7 +69,7 @@ export function validateCheckout(values) {
   if (!values.email?.trim()) {
     errors.email = 'Completá tu e-mail.';
   } else if (!isValidEmail(values.email)) {
-    errors.email = 'Usá un e-mail de Gmail, Hotmail, Live, Outlook o Yahoo (ej: nombre@gmail.com).';
+    errors.email = 'Usá un e-mail válido con letras, números y puntos antes del @ (ej: juan.perez@gmail.com). Solo Gmail, Hotmail, Live, Outlook o Yahoo.';
   }
   if (!values.phone?.trim()) {
     errors.phone = 'Completá tu teléfono.';
