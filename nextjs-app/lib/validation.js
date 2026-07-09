@@ -1,18 +1,57 @@
 // Validaciones compartidas entre cliente (formularios) y servidor (API routes).
 // Un único lugar para la regla de email evita que cliente y servidor difieran.
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Antes del @: solo letras minúsculas y números (sin mayúsculas, puntos,
+// guiones ni símbolos). Después del @: solo dominios de proveedores conocidos.
+const EMAIL_LOCAL_RE = /^[a-z0-9]+$/;
+const EMAIL_DOMAINS = [
+  'gmail.com',
+  'hotmail.com',
+  'hotmail.com.ar',
+  'live.com',
+  'live.com.ar',
+  'outlook.com',
+  'outlook.com.ar',
+  'yahoo.com',
+  'yahoo.com.ar',
+];
 
 // Nombre: solo letras (incluye acentos y ñ), espacios, apóstrofes y guiones.
 // Rechaza números y símbolos. Requiere al menos 2 letras.
 const NAME_RE = /^[\p{L}][\p{L}\s'’-]*[\p{L}]$/u;
 
+// Teléfono argentino. Se normaliza quitando espacios, guiones y paréntesis, y
+// se valida sobre los dígitos: código de área + 8 números locales.
+// Acepta el +54 internacional (opcional), el 0 nacional y el 9 de móvil.
+// Ejemplos válidos: "+54 11 0000 0000", "011 1234 5678", "11 1234-5678".
+
 export function isValidEmail(value) {
-  return typeof value === 'string' && EMAIL_RE.test(value.trim());
+  if (typeof value !== 'string') return false;
+  const [local, domain, extra] = value.trim().split('@');
+  if (extra !== undefined || !local || !domain) return false; // 0 o >1 arrobas
+  return EMAIL_LOCAL_RE.test(local) && EMAIL_DOMAINS.includes(domain);
 }
 
 export function isValidName(value) {
   return typeof value === 'string' && NAME_RE.test(value.trim());
+}
+
+export function isValidPhone(value) {
+  if (typeof value !== 'string') return false;
+
+  // Nos quedamos solo con los dígitos y un + inicial opcional.
+  let digits = value.trim().replace(/[\s().+-]/g, '');
+  if (!/^\d+$/.test(digits)) return false;
+
+  // Quitar el código de país argentino (+54) si viene incluido.
+  if (digits.startsWith('54')) digits = digits.slice(2);
+  // Quitar el 0 de acceso nacional y/o el 9 de móvil, según corresponda.
+  if (digits.startsWith('0')) digits = digits.slice(1);
+  if (digits.startsWith('9')) digits = digits.slice(1);
+
+  // Debe quedar: código de área (2 a 4 dígitos) + 8 números locales.
+  // Ej: "11" (2) + 8 = 10 dígitos;  código de 4 + 8 = 12 dígitos.
+  return /^\d{2,4}\d{8}$/.test(digits) && digits.length >= 10 && digits.length <= 12;
 }
 
 // Devuelve un objeto { campo: 'mensaje' } con los errores encontrados.
@@ -28,10 +67,12 @@ export function validateCheckout(values) {
   if (!values.email?.trim()) {
     errors.email = 'Completá tu e-mail.';
   } else if (!isValidEmail(values.email)) {
-    errors.email = 'Ingresá un e-mail válido (ej: nombre@correo.com).';
+    errors.email = 'Usá un e-mail de Gmail, Hotmail, Live, Outlook o Yahoo (ej: nombre@gmail.com).';
   }
   if (!values.phone?.trim()) {
     errors.phone = 'Completá tu teléfono.';
+  } else if (!isValidPhone(values.phone)) {
+    errors.phone = 'Ingresá un teléfono válido con prefijo y 8 números (ej: 11 1234 5678).';
   }
   if (values.deliveryMethod === 'domicilio') {
     if (!values.address?.trim()) errors.address = 'Completá la dirección.';
